@@ -6,15 +6,9 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "bootstrap": "^4.5.0",
-    "jquery": "^3.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-hooks-global-state": "^1.0.0",
-    "react-scripts": "3.4.1",
-    "three": "^0.116.1",
-    "three-dragcontrols": "^0.88.2",
-    "tone": "^13.8.25"
+    "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
