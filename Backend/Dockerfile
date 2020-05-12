@@ -18,4 +18,4 @@ COPY . /code
 
 EXPOSE 5000
 
-CMD ["python3", "code/api/app.py"]
+CMD ["python3", "/code/api/app.py"]
