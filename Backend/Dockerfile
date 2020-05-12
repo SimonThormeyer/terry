@@ -1,21 +1,21 @@
 FROM python:3.7
 
-WORKDIR /code
-
 RUN apt-get update -y && \
     apt-get install -y \
     python-pip \
-    python-dev
+    python-dev \
+    git
 
-COPY requirements.txt requirements.txt
+ADD . /code
+
+COPY ./requirements.txt /code/requirements.txt
+
+WORKDIR /code
 
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY . /code
 
 EXPOSE 5000
 
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
-
-CMD /wait && flask run
+CMD ["python3", "/code/api/app.py"]
