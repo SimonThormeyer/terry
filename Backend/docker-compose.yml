@@ -1,0 +1,16 @@
+version: '3.2'
+
+services:
+
+  backend:
+    container_name: SoundGroup-Backend
+    image: backend
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      # code change detection - no need to rebuild image for container
+      - .:/code
+    environment:
+      - FLASK_ENV=local
+      - PORT=5000
