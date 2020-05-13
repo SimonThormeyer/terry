@@ -18,3 +18,4 @@ COPY . /code
 EXPOSE 5000
 
 CMD ["flask", "run"]
+
