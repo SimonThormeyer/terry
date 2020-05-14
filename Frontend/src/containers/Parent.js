@@ -5,7 +5,6 @@ import {Synth} from '../components/toneJS/synth';
 
 
 class Parent extends Component {
-    synth;
 
     constructor(props) {
         super(props);
