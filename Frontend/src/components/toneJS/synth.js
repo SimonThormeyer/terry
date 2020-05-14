@@ -1,7 +1,17 @@
 import Tone from "tone";
 
+/*
 
+    IMPORT:
+    import {Synth} from './synth';
 
+    INSTANTIATE:
+    let synth = new Synth();
+
+    CALL FUNCTION:
+    synth.trigger(C4, "1n");
+
+    */
 
 export class Synth {
 
@@ -16,20 +26,16 @@ export class Synth {
     }
 
     setVolume(value) {
-        console.log(value)
         this.volume.set('volume',value)
     }
 
     setParameter1(value) {
-        console.log(value)
         this.synth.set('detune',value)
     }
 
     trigger(note, length) {
-        console.log(`SYNTH SPIELT ${note}`)
         this.synth.triggerAttackRelease([note], "1n");
 
     }
-
 
 }
