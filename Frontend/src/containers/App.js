@@ -1,15 +1,21 @@
 import Canvas from '../components/threeJS/canvas'
 import Menu from '../components/menu'
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 // import Parent from "./Parent";
 import {MusicCtrl} from '../components/toneJS/musicCtrl';
 
 function App() {
 
+  const [musicCtrlParams, setMusicCtrlParams] = useState({ })
+  const [coordinates, setCoordinates] = useState([ ]);
 
-  let musicCtrl = new MusicCtrl();
+  //only create a new MusicCtrl Object when parameters change that it depends on.
+  let musicCtrl = useMemo(() => musicCtrlFactory(musicCtrlParams), [musicCtrlParams]);
 
-  const [coordinates, setCoordinates] = useState([]);
+  //returns a new MusicCtrl Object depending on the parameters
+  function musicCtrlFactory(params) {
+    return new MusicCtrl()
+  }
 
   //Callback that is passed to Canvas
   const triggerToneWithCoordinates = (dataFromCanvas) => {
