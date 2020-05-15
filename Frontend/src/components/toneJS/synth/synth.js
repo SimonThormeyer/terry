@@ -14,7 +14,7 @@ export class Synth {
 
     triggerSynth(note) {
         console.log('NOTE:' + note)
-        this.polySynth.triggerAttackRelease([this.note], "1n");
+        this.polySynth.triggerAttackRelease(note, "8n");
     }
 }
 

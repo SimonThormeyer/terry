@@ -20,7 +20,6 @@ export class MusicCtrl {
     }
 
     triggerSynth(valueX, valueY) {
-        console.log(valueX,valueY)
         this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
         this.synth.triggerSynth(this.note);
     }
