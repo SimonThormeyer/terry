@@ -1,14 +1,14 @@
 import React, {Component} from "react";
 import Menu from "../components/menu";
 import Canvas from "../components/threeJS/canvas";
-import {Synth} from '../components/toneJS/synth';
+import {MusicCtrl} from '../components/toneJS/musicCtrl';
 
 
 class Parent extends Component {
 
     constructor(props) {
         super(props);
-        this.synth = new Synth();
+        this.musicCtrl = new MusicCtrl();
         this.updateXYCoordinates = this.updateXYCoordinates.bind(this);
         this.state = {
             xyCoordinates: []
@@ -16,7 +16,7 @@ class Parent extends Component {
     }
 
     updateXYCoordinates = (dataFromCanvas) => {
-        this.synth.trigger("C4", "1n");
+        this.musicCtrl.triggerSynth(dataFromCanvas[0], dataFromCanvas[1]);
         console.log(dataFromCanvas[0], dataFromCanvas[1]);
         this.setState({xyCoordinates: dataFromCanvas});
     };
