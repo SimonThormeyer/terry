@@ -1,4 +1,4 @@
-import {IsomorphicLayout, isomorphicLayout} from "./scales/isomorphicLayout";
+import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {Synth} from "./synth/synth";
 
 /*

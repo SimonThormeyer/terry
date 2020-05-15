@@ -1,25 +1,30 @@
 import Canvas from '../components/threeJS/canvas'
 import Menu from '../components/menu'
-import React from 'react';
-import Parent from "./Parent";
+import React, { useState } from 'react';
+// import Parent from "./Parent";
+import {MusicCtrl} from '../components/toneJS/musicCtrl';
 
 function App() {
 
 
+  let musicCtrl = new MusicCtrl();
+
+  const [coordinates, setCoordinates] = useState([]);
+
+  //Callback that is passed to Canvas
+  const triggerToneWithCoordinates = (dataFromCanvas) => {
+
+    musicCtrl.triggerSynth(dataFromCanvas[0], dataFromCanvas[1]);
+    setCoordinates(dataFromCanvas);
+    console.log(`X: ${dataFromCanvas[0]}, Y: ${dataFromCanvas[1]}`);
+    console.log(`X from state: ${coordinates[0]}, Y from state: ${coordinates[1]}`);
+  };
+
 
   return (
     <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-     <Parent/>
+      <Menu />
+      <Canvas updateInfoParent={triggerToneWithCoordinates} />
     </div>
   );
 }
