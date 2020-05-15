@@ -8,9 +8,9 @@ services:
     build: .
     ports:
       - "5000:5000"
+    env_file:
+      - ./.env
     volumes:
       # code change detection - no need to rebuild image for container
       - .:/code
-    environment:
-      - FLASK_ENV=local
-      - PORT=5000
+
