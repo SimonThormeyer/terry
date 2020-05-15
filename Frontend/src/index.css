@@ -1,13 +1,55 @@
+* {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+
+/*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
+#menu {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0 auto;
+  padding: 1vw 0;
+  width: 35vw;
+  border-top-left-radius: 2vw;
+  border-top-right-radius: 2vw;
+}
+
+#playbutton, #randombutton {
+  width: 3vw;
+  height: 3vw;
+  margin-right: 3vw;
+}
+
+#recordbutton {
+  width: 3vw;
+  height: 3vw;
+  margin-left: 3vw;
+}
+
+#loopbutton {
+  width: 5vw;
+  height: 5vw;
+  margin: 0 2vw;
+}
+
+/*++++++++++++++++++++++++++++++++++++++*/
