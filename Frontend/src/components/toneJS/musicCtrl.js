@@ -1,7 +1,5 @@
-import {IsomorphicLayout} from "./scales/isomorphicLayout";
-import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
-import {Soundbed} from "./soundbed/soundbed";
-
+import {IsomorphicLayout, isomorphicLayout} from "./scales/isomorphicLayout";
+import {Synth} from "./synth/synth";
 
 /*
     IMPORT:
@@ -11,43 +9,35 @@ import {Soundbed} from "./soundbed/soundbed";
     let musicCtrl = new musicCtrl();
 
     CALL FUNCTION:
+    musicCtrl.triggerSynth(C4, "1n");
     */
 
 export class MusicCtrl {
-    soundBed;
 
     constructor() {
         this.isomorphicLayout = new IsomorphicLayout()
-        this.synthAndEffects = new SynthAndEffects()
-        this.soundBed = new Soundbed()
+        this.synth = new Synth()
     }
 
     triggerSynth(valueX, valueY) {
         this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
-        this.synthAndEffects.triggerSynth(this.note);
+        this.synth.triggerSynth(this.note);
     }
 
-    startStopSoundbed(){
-        this.soundBed.playPauseSoundbed()
-    }
+
 
     setParameterSynth(valueX, valueY) {
-        this.synthAndEffects.setFilter(valueX, valueY)
-        this.synthAndEffects.setNoteLength(valueY)
-        // this.synthAndEffects.setOscillatorType(valueX)
-        this.synthAndEffects.setSynthADSR(valueY)
+        // hier passiert SYNTH
+        //this.synth.set('detune',valueX)
     }
 
     setParameterEffect(valueX, valueY) {
-        this.synthAndEffects.setDelayFeedback(valueX)
-        this.synthAndEffects.setDelayWet(valueY)
-        this.synthAndEffects.setReverbWet(valueX)
-        this.synthAndEffects.setPanningEffect(valueX,valueY)
+        //this.synth.set('detune',valueX)
     }
 
     setParameterMusic(valueX, valueY) {
-        this.isomorphicLayout.changeScale(valueX);
-        this.isomorphicLayout.changeOctave(valueY);
+        //this.synth.set('detune',valueX)
     }
+
 
 }
