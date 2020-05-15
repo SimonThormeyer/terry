@@ -16,7 +16,7 @@ class Canvas extends Component {
     };
 
     componentDidMount() {
-        onMouseClick = onMouseClick.bind(this);
+        let handleMouseClick = onMouseClick.bind(this);
 
         var scene = new THREE.Scene();
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -31,19 +31,17 @@ class Canvas extends Component {
 
         function onMouseClick(event) {
 
-            // calculate mouse position in normalized device coordinates
-            // (-1 to +1) for both components
-
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
+            mouse.x = event.clientX / window.innerWidth; 
+            mouse.y = event.clientY / window.innerHeight; 
             this.updateXYvalues([mouse.x,mouse.y]);
-            //pay attention 0,0 is in the middle of the screen
+            
 
 
 
         }
 
-        window.addEventListener('click', onMouseClick, false);
+        window.addEventListener('click', handleMouseClick, false);
 
         var cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
