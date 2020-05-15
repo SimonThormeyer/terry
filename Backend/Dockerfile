@@ -3,8 +3,7 @@ FROM python:3.7
 RUN apt-get update -y && \
     apt-get install -y \
     python-pip \
-    python-dev \
-    git
+    python-dev
 
 ADD . /code
 
@@ -18,4 +17,5 @@ COPY . /code
 
 EXPOSE 5000
 
-CMD ["python3", "/code/api/app.py"]
+CMD ["flask", "run"]
+
