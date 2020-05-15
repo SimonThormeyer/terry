@@ -2,7 +2,22 @@ import Canvas from '../components/threeJS/canvas'
 import Menu from '../components/menu'
 import React, { useState, useMemo } from 'react';
 // import Parent from "./Parent";
-import {MusicCtrl} from '../components/toneJS/musicCtrl';
+import { MusicCtrl } from '../components/toneJS/musicCtrl';
+
+//export functions for menu.js
+export const randomFunction = () => {
+  console.log("app js random Function");
+}
+export const loopFunction = () => {
+    console.log("app js loop Function");
+}
+  export const playFunction = () => {
+    console.log("app js play Function");
+  }
+  export const recordFunction = () => {
+    console.log("app js record Function");
+  }
+
 
 function App() {
 
@@ -26,11 +41,15 @@ function App() {
     console.log(`X from state: ${coordinates[0]}, Y from state: ${coordinates[1]}`);
   };
 
+ 
+ 
+
+
 
   return (
     <div className="App">
-      <Menu />
       <Canvas updateInfoParent={triggerToneWithCoordinates} />
+      <Menu />
     </div>
   );
 }
