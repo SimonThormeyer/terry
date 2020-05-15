@@ -17,6 +17,7 @@ function App() {
     musicCtrl.triggerSynth(dataFromCanvas[0], dataFromCanvas[1]);
     setCoordinates(dataFromCanvas);
     console.log(`X: ${dataFromCanvas[0]}, Y: ${dataFromCanvas[1]}`);
+    console.log(`X from state: ${coordinates[0]}, Y from state: ${coordinates[1]}`);
   };
 
 

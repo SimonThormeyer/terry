@@ -2,8 +2,8 @@
 
 export class IsomorphicLayout{
 
-    constructor() {
-    }
+    // constructor() {
+    // }
 
     coordinateToNote(valueX, valueY){
         //console.log('ISO:' + valueX, valueY)
