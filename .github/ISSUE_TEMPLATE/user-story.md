@@ -1,6 +1,6 @@
 ---
 name: User Story
-about: Describe this issue template's purpose here.
+about: Describe a new feature or enhancement and add preconditions ('blocked by') issues, acceptance criteria and associated tasks
 title: ''
 labels: user story
 assignees: ''
@@ -15,6 +15,9 @@ Als BenutzerIn möchte auf eine Eingabeflaeche klicken koennen, damit ein Ton er
 Detaillierte Beschreibung des Inhalts der User-Story:
 Eine klickbare Fläche soll es dem/der BenutzerIn ermöglichen, durch Klicken Töne zu erzeugen, die je nach Position eine andere Frequenz haben.
 Dazu sollen erstmal Sinus-Töne einer bestimmten Frequenz ausgegeben werden und dann (wenn möglich) mithilfe von Tone.js Klaviertöne.
+
+**Voraussetzungen / blocked by**
+- [ ] ein speicherbarer Zustand der Projekte ist vorhanden (#4)
 
 **Akzeptanzkriterien**
 - [ ] wie erkennt man, dass alles so funktioniert, wie es soll?
