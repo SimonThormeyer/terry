@@ -1,5 +1,6 @@
 export class IsomorphicLayout {
 
+
     constructor() {
         this.penta1 = [
             ["E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
@@ -14,15 +15,17 @@ export class IsomorphicLayout {
     }
 
     coordinateToNote(valueX, valueY) {
+        // swapping X&Y to map values to scale
+        this.coordY = valueX
+        this.coordX = valueY
+
         this.rows = this.scale.length
         this.collumns = this.scale[0].length
-        console.log("ROWS: " + this.rows + " COLLUMNS: " + this.collumns)
-        this.x = Math.round((this.rows - 1) * (valueX))
-        this.y = Math.round((this.collumns - 1) * (valueY))
 
-        this.note = this.scale[this.x][this.y]
-        console.log(this.note)
+        this.x = Math.round((this.rows - 1) * ( this.coordX))
+        this.y = Math.round((this.collumns - 1) * (this.coordY))
 
-        return this.note
+        return this.scale[this.x][this.y]
     }
+
 }

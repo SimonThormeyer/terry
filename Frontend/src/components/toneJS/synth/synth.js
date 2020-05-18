@@ -13,7 +13,7 @@ export class Synth {
     }
 
     triggerSynth(note) {
-        this.polySynth.triggerAttackRelease(note, "8n");
+        this.polySynth.triggerAttackRelease(note, "2n");
     }
 }
 
