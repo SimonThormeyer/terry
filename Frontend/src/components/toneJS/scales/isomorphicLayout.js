@@ -21,10 +21,8 @@ export class IsomorphicLayout {
         this.coordY = valueX
         this.coordX = valueY
 
-
         this.rows = this.scale.length
         this.collumns = this.scale[0].length
-
         this.x = Math.round((this.rows - 1) * ( this.coordX))
         this.y = Math.round((this.collumns - 1) * (this.coordY))
 
