@@ -1,5 +1,7 @@
 export class IsomorphicLayout {
 
+    //All rows need to have the same length!
+
 
     constructor() {
         this.penta1 = [
@@ -18,6 +20,7 @@ export class IsomorphicLayout {
         // swapping X&Y to map values to scale
         this.coordY = valueX
         this.coordX = valueY
+
 
         this.rows = this.scale.length
         this.collumns = this.scale[0].length
