@@ -1,8 +1,4 @@
-import React, { Component } from 'react';
-
-
-//import functions from app.js because of handle click 
-import { randomFunction, loopFunction, playFunction, recordFunction } from '../containers/App';
+import React from 'react';
 
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
@@ -18,7 +14,7 @@ class Menu extends React.Component {
         super(props);
         this.state = {
             play: true,
-            loop: true,
+            loop: true, 
             random: true,
             record: true
         };
@@ -37,24 +33,25 @@ class Menu extends React.Component {
    
 //HTML structure with handleClick that toggles and call musicfunctions
     render() {
+        let loopFunctionParameter = this.state.loop ? "start" : "stop";
         return (
             <ul id="menu">
-                <li id="playbutton" onClick={() => { this.handleClick("play"); playFunction() }}>
+                <li id="playbutton" onClick={() => { this.handleClick("play"); this.props.playFunction(); }}>
                     {this.state.play ?
                         <PlayIcon /> :
                         <PauseIcon />}
                 </li>
-                <li id="randombutton" onClick={() => { this.handleClick("random"); randomFunction() }}>
+                <li id="randombutton" onClick={() => { this.handleClick("random"); this.props.randomFunction() }}>
                     {this.state.random ?
                         <RandomIcon /> :
                         <PauseIcon />}
                 </li>
-                <li id="loopbutton" onClick={() => { this.handleClick("loop"); loopFunction() }}>
+                <li id="loopbutton" onClick={() => { this.handleClick("loop"); this.props.loopFunction(loopFunctionParameter) }}>
                     {this.state.loop ?
                         <LooperIcon /> :
                         <StopIcon />}
                 </li>
-                <li id="recordbutton" onClick={() => { this.handleClick("record"); recordFunction() }}>
+                <li id="recordbutton" onClick={() => { this.handleClick("record"); this.props.recordFunction() }}>
                     {this.state.record ?
                         <RecordIcon /> :
                         <StopIcon />}
