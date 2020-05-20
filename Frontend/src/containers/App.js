@@ -53,6 +53,7 @@ function App() {
     }
   }
   const playFunction = () => {
+    musicCtrl.startStopSoundbed()
     console.log("app js play Function");
   }
   const recordFunction = () => {
