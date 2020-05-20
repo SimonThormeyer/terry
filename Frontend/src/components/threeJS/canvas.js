@@ -17,6 +17,8 @@ class Canvas extends Component {
         this.props.updateInfoParent(this.state.xyCoordinates);
     };
 
+
+
     componentDidMount() {
         const width = this.mount.clientWidth;
         const height = this.mount.clientHeight;
@@ -28,20 +30,46 @@ class Canvas extends Component {
 
         //ADD CAMERA
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
 
+        //LIGHT
+        let ambient = new THREE.AmbientLight( 0xffffff, 0.5 );
+        scene.add( ambient );
 
         //ADD RENDERER
         let renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
         this.mount.appendChild(renderer.domElement);
 
         //ADD CUBE
         var geometry = new THREE.BoxGeometry(1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        var material = new THREE.MeshPhongMaterial( { color: 0x808080, dithering: true } );
         var cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
 
+        //BACKGROUND
+        var materialBackground = new THREE.MeshPhongMaterial( { color: 0x9EC2E3, dithering: true } );
+        let plane = new THREE.PlaneBufferGeometry( window.innerWidth, window.innerHeight );
+        let background = new THREE.Mesh( plane, materialBackground );
+        background.position.set( 0, - 5, -1 );
+        background.receiveShadow = true;
+        scene.add( background );
 
+        //SPOT LIGHT
+       let spotLight = new THREE.SpotLight( 0x8E2057, 0.5 );
+        spotLight.position.set( 20, 0, 50 );
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.05;
+        spotLight.decay = 2;
+        spotLight.distance = 200;
+
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 200;
+        scene.add( spotLight );
         let mouse = new THREE.Vector2();
 
         let raycaster = new THREE.Raycaster();
@@ -49,16 +77,28 @@ class Canvas extends Component {
         //CLICK FUNCTION ON CANVAS
         function onMouseClick(event) {
             event.preventDefault();
-            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-            mouse.x = event.clientX / window.innerWidth;
-            mouse.y = event.clientY / window.innerHeight;
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1=
+            this.updateXYvalues([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
+            
 
-            this.updateXYvalues([mouse.x, mouse.y]);
+            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+            raycaster.setFromCamera( mouse, camera );
+
+            let toIntersect = [background];
+            var intersections = raycaster.intersectObjects( toIntersect );
+
+            console.log(intersections[0].point);
+            cube.position.x =intersections[0].point.x;
+            cube.position.y =intersections[0].point.y;
+
         }
 
         this.mount.addEventListener('click', handleMouseClick, false);
 
-        camera.position.z = 5;
+
+
         var animate = function () {
             requestAnimationFrame(animate);
             cube.rotation.x += 0.01;
