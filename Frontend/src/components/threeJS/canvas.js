@@ -6,45 +6,58 @@ class Canvas extends Component {
     constructor(props) {
         super(props);
         this.componentDidMount = this.componentDidMount.bind(this);
+        // create a ref to store the DOM element
         this.state = {
             xyCoordinates: [0, 0]
         }
     }
-    updateXYvalues=(value)=>{
+
+    updateXYvalues = (value) => {
         this.setState({xyCoordinates: [value[0], value[1]]});
         this.props.updateInfoParent(this.state.xyCoordinates);
     };
 
     componentDidMount() {
+        const width = this.mount.clientWidth;
+        const height = this.mount.clientHeight;
+
         let handleMouseClick = onMouseClick.bind(this);
 
+        //ADD SCENE
         var scene = new THREE.Scene();
+
+        //ADD CAMERA
         var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        var renderer = new THREE.WebGLRenderer();
+
+
+        //ADD RENDERER
+        let renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        // use ref as a mount point of the Three.js scene instead of the document.body
         this.mount.appendChild(renderer.domElement);
+
+        //ADD CUBE
         var geometry = new THREE.BoxGeometry(1, 1, 1);
         var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        var cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
 
         let mouse = new THREE.Vector2();
 
+        let raycaster = new THREE.Raycaster();
+
+        //CLICK FUNCTION ON CANVAS
         function onMouseClick(event) {
-
+            event.preventDefault();
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-            mouse.x = event.clientX / window.innerWidth; 
-            mouse.y = event.clientY / window.innerHeight; 
-            this.updateXYvalues([mouse.x,mouse.y]);
-            
+            mouse.x = event.clientX / window.innerWidth;
+            mouse.y = event.clientY / window.innerHeight;
 
-
-
+            this.updateXYvalues([mouse.x, mouse.y]);
         }
 
-        window.addEventListener('click', handleMouseClick, false);
+        this.mount.addEventListener('click', handleMouseClick, false);
 
-        var cube = new THREE.Mesh(geometry, material);
-        scene.add(cube);
         camera.position.z = 5;
         var animate = function () {
             requestAnimationFrame(animate);
@@ -54,10 +67,14 @@ class Canvas extends Component {
         };
         animate();
     }
-
+//==================================================
     render() {
         return (
-            <div ref={ref => (this.mount = ref)}/>
+            <div style={{width: 'window.innerWidth', height: 'window.innerHeight'}}
+                 ref={ref => {
+                     this.mount = ref
+                 }}
+            />
         )
     }
 
