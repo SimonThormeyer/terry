@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  backend:
+    container_name: SoundGroup-Backend
+    image: sg-backend
+    build: ./Backend/
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Backend/.env
+    volumes:
+      - .:/code
+
+  app:
+    container_name: SoundGroup-Frontend
+    image: sg-frontend
+    build: ./Frontend/
+    ports:
+      - "3000:3000"
+    volumes:
+      - yarn-cache
+    tty: true
+
+  yarn-cache:
+    image: busybox
+    volumes:
+      - /root/.yarn-cache
