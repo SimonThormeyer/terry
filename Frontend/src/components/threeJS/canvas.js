@@ -22,7 +22,6 @@ class Canvas extends Component {
 
         const width = this.mount.clientWidth;
         const height = this.mount.clientHeight;
-        const lightBlobs = [];
 
         let handleMouseClick = onMouseClick.bind(this);
 
@@ -43,20 +42,19 @@ class Canvas extends Component {
         renderer.shadowMap.enabled = true;
         this.mount.appendChild(renderer.domElement);
 
-        //ADD SPHERE
+        //FUTURE MOVING EFFEKT
         var geometry = new THREE.SphereGeometry(1, 32, 32);
         var material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
         var cube = new THREE.Mesh(geometry, material);
         cube.position.set(0, 0, 0);
         scene.add(cube);
 
-        //MOVING LIGHT BLOB
+        //MOVING LIGHT BLOB ON CLICK
         let groupBlobs = new THREE.Group();
         let light = new THREE.PointLight(0xFFFFFF, 0.0, 6000);
         light.position.set(0, 0, 0);
         light.castShadow = true;
         groupBlobs.add(light);
-        lightBlobs.push(light);
 
 
         scene.add(groupBlobs);
@@ -91,7 +89,7 @@ class Canvas extends Component {
         //CLICK FUNCTION ON CANVAS
         function onMouseClick(event) {
             event.preventDefault();
-            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1=
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
             this.updateXYvalues([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
 
 
@@ -103,6 +101,7 @@ class Canvas extends Component {
             let toIntersect = [background];
             var intersections = raycaster.intersectObjects(toIntersect);
 
+            //Changing light position and brightness
             light.position.x = intersections[0].point.x;
             light.position.y = intersections[0].point.y;
             light.intensity = 0.7;
@@ -111,17 +110,28 @@ class Canvas extends Component {
 
         this.mount.addEventListener('click', handleMouseClick, false);
 
+        //changing the light intensisty every x milliseconds
+        function refreshLightIntensity() {
+            let x = 3;  // 30 milliseconds
 
+            if (light.intensity > 0.03) {
+                light.intensity -= 0.03;
+            }
+
+            setTimeout(refreshLightIntensity, x * 10);
+        }
+
+        refreshLightIntensity();
         var animate = function () {
             requestAnimationFrame(animate);
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
 
-            if (light.intensity > 0) {
-                light.intensity -= 0.03;
+            /** might be too often
+             if (light.intensity > 0.003) {
+                light.intensity -= 0.003;
             }
-
-
+             **/
             renderer.render(scene, camera);
         };
         animate();
