@@ -1,5 +1,7 @@
 import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {Synth} from "./synth/synth";
+import {Soundbed} from "./soundbed/soundbed";
+
 
 /*
     IMPORT:
@@ -13,17 +15,23 @@ import {Synth} from "./synth/synth";
     */
 
 export class MusicCtrl {
+    soundBed;
 
     constructor() {
         this.isomorphicLayout = new IsomorphicLayout()
         this.synth = new Synth()
+        this.soundBed = new Soundbed()
     }
 
     triggerSynth(valueX, valueY) {
         this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
         this.synth.triggerSynth(this.note);
+
     }
 
+    startStopSoundbed(){
+        this.soundBed.playPauseSoundbed()
+    }
 
 
     setParameterSynth(valueX, valueY) {
