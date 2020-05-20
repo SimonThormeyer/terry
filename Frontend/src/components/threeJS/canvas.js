@@ -18,10 +18,11 @@ class Canvas extends Component {
     };
 
 
-
     componentDidMount() {
+
         const width = this.mount.clientWidth;
         const height = this.mount.clientHeight;
+        const lightBlobs = [];
 
         let handleMouseClick = onMouseClick.bind(this);
 
@@ -29,12 +30,12 @@ class Canvas extends Component {
         var scene = new THREE.Scene();
 
         //ADD CAMERA
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 20;
 
         //LIGHT
-        let ambient = new THREE.AmbientLight( 0xffffff, 0.5 );
-        scene.add( ambient );
+        let ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambient);
 
         //ADD RENDERER
         let renderer = new THREE.WebGLRenderer();
@@ -42,23 +43,34 @@ class Canvas extends Component {
         renderer.shadowMap.enabled = true;
         this.mount.appendChild(renderer.domElement);
 
-        //ADD CUBE
-        var geometry = new THREE.BoxGeometry(1, 1, 1);
-        var material = new THREE.MeshPhongMaterial( { color: 0x808080, dithering: true } );
+        //ADD SPHERE
+        var geometry = new THREE.SphereGeometry(1, 32, 32);
+        var material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
         var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 0, 0);
         scene.add(cube);
 
+        //MOVING LIGHT BLOB
+        let groupBlobs = new THREE.Group();
+        let light = new THREE.PointLight(0xFFFFFF, 0.0, 6000);
+        light.position.set(0, 0, 0);
+        light.castShadow = true;
+        groupBlobs.add(light);
+        lightBlobs.push(light);
+
+
+        scene.add(groupBlobs);
         //BACKGROUND
-        var materialBackground = new THREE.MeshPhongMaterial( { color: 0x9EC2E3, dithering: true } );
-        let plane = new THREE.PlaneBufferGeometry( window.innerWidth, window.innerHeight );
-        let background = new THREE.Mesh( plane, materialBackground );
-        background.position.set( 0, - 5, -1 );
+        var materialBackground = new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true});
+        let plane = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight);
+        let background = new THREE.Mesh(plane, materialBackground);
+        background.position.set(0, -5, -1);
         background.receiveShadow = true;
-        scene.add( background );
+        scene.add(background);
 
         //SPOT LIGHT
-       let spotLight = new THREE.SpotLight( 0x8E2057, 0.5 );
-        spotLight.position.set( 20, 0, 50 );
+        let spotLight = new THREE.SpotLight(0x8E2057, 0.5);
+        spotLight.position.set(20, 0, 50);
         spotLight.angle = Math.PI / 4;
         spotLight.penumbra = 0.05;
         spotLight.decay = 2;
@@ -69,7 +81,9 @@ class Canvas extends Component {
         spotLight.shadow.mapSize.height = 1024;
         spotLight.shadow.camera.near = 10;
         spotLight.shadow.camera.far = 200;
-        scene.add( spotLight );
+        scene.add(spotLight);
+
+
         let mouse = new THREE.Vector2();
 
         let raycaster = new THREE.Raycaster();
@@ -79,34 +93,40 @@ class Canvas extends Component {
             event.preventDefault();
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1=
             this.updateXYvalues([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-            
 
-            mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-            mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-            raycaster.setFromCamera( mouse, camera );
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
 
             let toIntersect = [background];
-            var intersections = raycaster.intersectObjects( toIntersect );
+            var intersections = raycaster.intersectObjects(toIntersect);
 
-            console.log(intersections[0].point);
-            cube.position.x =intersections[0].point.x;
-            cube.position.y =intersections[0].point.y;
+            light.position.x = intersections[0].point.x;
+            light.position.y = intersections[0].point.y;
+            light.intensity = 0.7;
 
         }
 
         this.mount.addEventListener('click', handleMouseClick, false);
 
 
-
         var animate = function () {
             requestAnimationFrame(animate);
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
+
+            if (light.intensity > 0) {
+                light.intensity -= 0.03;
+            }
+
+
             renderer.render(scene, camera);
         };
         animate();
     }
+
 //==================================================
     render() {
         return (
