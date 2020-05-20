@@ -96,7 +96,7 @@ function App() {
           }}>Stop Looper {id}</button>
         )
       })}
-      <Canvas updateInfoParent={triggerToneWithCoordinates} recordMouseMovement={recordMouseMovement} />
+      <Canvas id={"canvas"} updateInfoParent={triggerToneWithCoordinates} recordMouseMovement={recordMouseMovement} />
       <Menu randomFunction={randomFunction} loopFunction={loopFunction} playFunction={playFunction} recordFunction={recordFunction} />
     </div>
   );
