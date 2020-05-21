@@ -1,3 +1,13 @@
+---
+name: Bug fix
+about: Describe a new bug fix
+title: ''
+labels: bug fix
+assignees: ''
+projects: beuthSoundGroup
+
+---
+
 <!--- Provide a general summary of your changes in the Title above -->
 
 <!--- Required --->
