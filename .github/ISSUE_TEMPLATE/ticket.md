@@ -4,6 +4,7 @@ about: Describe this issue template's purpose.
 title: 'Ticketname (User Story #1)'
 labels: ticket
 assignees: ''
+projects: beuthSoundGroup
 ---
 
 <!--- Required --->
@@ -12,7 +13,7 @@ assignees: ''
 Description of the Ticket:
 
 <!--- Required --->
-**Is Part Of Story** #1
+**Is part of story** #1
 
 <!--- Optional --->
 ToDo's:
