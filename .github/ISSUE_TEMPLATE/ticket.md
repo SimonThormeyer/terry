@@ -7,9 +7,10 @@ assignees: ''
 
 ---
 
-Beschreibung des Tickets
+Description of the Ticket:
 
-ist Teil der User-Story #1
 
-Arbeitsschritte
-- [ ]
+**Is Part Of Story** #1
+
+ToDo's:
+- [ ] short Bulletpoints of what you've done or want to do
