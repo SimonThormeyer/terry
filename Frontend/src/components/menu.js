@@ -38,6 +38,7 @@ function Menu(props) {
 
     const playFunction = () =>
     {
+        musicCtrl.startStopSoundbed()
         console.log("menu js play Function");
     }
 
