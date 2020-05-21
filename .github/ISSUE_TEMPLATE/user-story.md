@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-As an User, I want to klick on the Surface, to create a sound.
+As an User, I want to click on the Surface, to create a sound.
 
 **description of the story**
 
