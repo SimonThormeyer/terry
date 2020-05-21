@@ -1,6 +1,6 @@
 ---
-name: Bug fix
-about: Describe a new bug fix
+name: bug fix
+about: describe a new bug fix
 title: ''
 labels: bug fix
 assignees: ''
