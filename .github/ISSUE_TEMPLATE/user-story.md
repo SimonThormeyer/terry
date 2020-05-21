@@ -7,25 +7,25 @@ assignees: ''
 
 ---
 
-Als BenutzerIn möchte auf eine Eingabeflaeche klicken koennen, damit ein Ton erzeugt wird. 
+As an User, I want to klick on the Surface, to create a sound.
 
+**description of the story**
 
-**Beschreibung**
+Detailed Description of the User-Story:
+A clickable surface should allow the User to create sounds by clicks, these sounds trigger a different frequency depending on where the User clicks.
+First it should trigger Sine tones of prearranged Frequencies und after maybe with Tone.js piano sounds
 
-Detaillierte Beschreibung des Inhalts der User-Story:
-Eine klickbare Fläche soll es dem/der BenutzerIn ermöglichen, durch Klicken Töne zu erzeugen, die je nach Position eine andere Frequenz haben.
-Dazu sollen erstmal Sinus-Töne einer bestimmten Frequenz ausgegeben werden und dann (wenn möglich) mithilfe von Tone.js Klaviertöne.
-
-**Voraussetzungen / blocked by**
+**blocked by**
+Please enter here Userstorys or Tickets that blocks this Story
 - [ ] ein speicherbarer Zustand der Projekte ist vorhanden (#4)
 
-**Akzeptanzkriterien**
+**acceptance criteria**
 - [ ] wie erkennt man, dass alles so funktioniert, wie es soll?
 - [x] Ein Click auf die Fläche erzeugt einen Ton
 - [ ] Der Ton ist abhängig von der Position, auf die geklickt wird und einem Notenmodell
 
 
-**Tasks**
+**Tickets or Tasks**
 - [x] Die einzelnen Abrietsschritte als Tickets
 - [x] React-Komponente erstellen (#14 )
 - [x] Eingaben auf dem Viewport einfangen (#14 )
