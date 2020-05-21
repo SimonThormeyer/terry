@@ -1,3 +1,13 @@
+---
+name: Bug
+about: Describe a new bug
+title: ''
+labels: bug
+assignees: ''
+projects: beuthSoundGroup
+
+---
+
 <!--- Provide a general summary of the issue in the Title above -->
 
 <!--- Required --->
