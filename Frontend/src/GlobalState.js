@@ -2,7 +2,7 @@ import { createGlobalState } from 'react-hooks-global-state';
 import { MusicCtrl } from './components/toneJS/musicCtrl';
 
 /*
- USED LIKE THIS IN ANY COMPONENT:
+ USED LIKE THIS IN ANY FUNCTIONAL COMPONENT:
  ============================================================
  import { useGlobalState } from "../GlobalState"
  [variableName, setVariable] = useGlobalState('variableName')

@@ -11,13 +11,13 @@ import { Looper } from '../components/toneJS/Looper'
 
 function Menu(props) {
     
-    // Global state - see GlobalState.js for explanation
+    // Global state - see GlobalState.js for explanation, needed for functional logic of menu buttons 
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
     const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperID'); 
     const [runningLoopers, ] = useGlobalState('runningLoopers');
     const [musicCtrl, ] = useGlobalState('musicCtrl');
     
-    // state of Component 
+    // state of Component (used for appearance of buttons)
     const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
