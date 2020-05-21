@@ -1,10 +1,10 @@
-This is for Bug Fixes **ONLY**!
-
 <!--- Provide a general summary of your changes in the Title above -->
 
+<!--- Required --->
 ### Description
 <!--- Describe your changes in detail -->
 
+<!--- Required --->
 ### Related Issue
 <!--- This project only accepts pull requests related to open issues -->
 <!--- If suggesting a new feature or change, please discuss it in an issue first -->
