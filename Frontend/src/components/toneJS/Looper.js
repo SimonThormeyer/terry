@@ -19,7 +19,6 @@ export class Looper {
     }
 
     play() {
-        console.log('play Looper!');
         // register all events - TODO: evaluate precision of this method
         for(let event of this.events) {
             event.time = event.timestamp - this.startTime; 
