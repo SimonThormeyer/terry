@@ -43,11 +43,22 @@ function App() {
       {Array.from(runningLoopers.keys()).map((id) => {
         // iterate over elements in runningLoopers and create a button for each
         return (
-          <button key={`loopStopButton_${id}`} onClick={() => {
-            runningLoopers.get(id).stop()
-            runningLoopers.delete(id);
-            setRunningLoopers(new Map(runningLoopers));
-          }}>Stop Looper {id}</button>
+          <>
+            <button key={`loopStopButton_${id}`} onClick={() => {
+              runningLoopers.get(id).stop()
+              runningLoopers.delete(id);
+              setRunningLoopers(new Map(runningLoopers));
+            }}>X Looper {id}</button>
+            <button key={`loopMuteButton_${id}`} onClick={() => {
+              runningLoopers.get(id).toggleMute()
+            }}>M Looper {id}</button>
+            <button key={`loopPauseButton_${id}`} onClick={() => {
+              runningLoopers.get(id).pause()
+            }}>|| Looper {id}</button>
+            <button key={`loopPlayButton_${id}`} onClick={() => {
+              runningLoopers.get(id).play()
+            }}>>> Looper {id}</button>
+          </>
         )
       })}
       {/* End of "Looper-Controls" */}

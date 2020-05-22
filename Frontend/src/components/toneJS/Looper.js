@@ -1,12 +1,15 @@
 export class Looper {
-    
+
     constructor(startTime, musicCtrl) {
         this.musicCtrl = musicCtrl;
         this.events = [];
         this.startTime = startTime;
         this.endTime = undefined;
         this.duration = undefined;
-        this.intervals = []
+        this.intervals = [];
+        this.timeouts = [];
+        this.muted = false;
+        this.stopped = true;
     }
 
     addEvents(events) {
@@ -19,25 +22,80 @@ export class Looper {
     }
 
     play() {
-        // register all events - TODO: evaluate precision of this method
-        for(let event of this.events) {
-            event.time = event.timestamp - this.startTime; 
-            let action = (event.type === "canvasClick") ? 
-                () => {this.musicCtrl.triggerSynth(event.x, event.y)} 
-                : () => {console.log(`shiftDot by x: ${event.x}, y: ${event.y}`)};
-            setTimeout(() => { 
-                action();
-                this.intervals.push(setInterval(() => {
-                    action();
-                }, this.duration));
-            }, event.time);
+        if (this.stopped) {
+            // register all events - TODO: evaluate precision of this method
+            console.log(`looper play() - duration: ${this.duration}, events #: ${this.events.length}`)
+            for (let event of this.events) {
+                this._updateEvent(event);
+                console.log(`event time: ${event.time}`)
+                this.timeouts.push(setTimeout(() => {
+                    event.action()
+                    this.intervals.push(setInterval(() => {
+                        event.action();
+                    }, this.duration));
+                }, event.time));
+            }
         }
+        this.stopped = false;
     }
 
     stop() {
-        for(let interval of this.intervals) {
-            clearInterval(interval);
+        if (!this.stopped) {
+            for(let timeout of this.timeouts) {
+                clearTimeout(timeout);
+            }
+            for (let interval of this.intervals) {
+                clearInterval(interval);
+            }
         }
+        this.stopped = true;
+
+    }
+
+    toggleMute() {
+        this.muted = !this.muted;
+        for (let event of this.events) {
+            this._updateEvent(event);
+        }
+    }
+
+    pause() {
+        this.stop()
+        // 1. reorder event times - new starting point is now
+        //current point of time in loop
+        let currentLoopTime = (Date.now() - this.startTime) % this.duration;
+        console.log(`pause() currentLoopTime: ${currentLoopTime}`)
+        for (let event of this.events) {
+            let newTime = event.time - currentLoopTime;
+            if (newTime < 0) { //if events occured already before pause was pressed
+                event.time = newTime + this.duration
+            } else {
+                event.time = newTime;
+            }
+        }
+    }
+
+    //underscore methods are not meant to be used outside of this class
+
+    _simulateCanvasClick(x, y) {
+        this.musicCtrl.triggerSynth(x, y);
+    }
+
+    _updateEvent(event) {
+        //inserts event.time and updates event.action
+        event.time = event.time ? event.time : event.timestamp - this.startTime;
+        let action = (event.type === "canvasClick") ?
+            () => { // simulate a click on canvas
+                if (!this.muted) { // do nothing on canvas if looper is muted
+                    this._simulateCanvasClick(event.x, event.y)
+                }
+            } : //event.type == dotShift: simulate a shift of an effectDot 
+            () => {
+                if (!this.muted) {
+                    console.log(`shiftDot by x: ${event.x}, y: ${event.y}`)
+                }
+            };
+        event.action = action; //save action in event obj
     }
 
 }
