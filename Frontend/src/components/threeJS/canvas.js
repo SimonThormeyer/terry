@@ -17,7 +17,9 @@ class Canvas extends Component {
         this.props.updateInfoParent(this.state.xyCoordinates);
     };
 
+
     componentDidMount() {
+
         const width = this.mount.clientWidth;
         const height = this.mount.clientHeight;
 
@@ -27,19 +29,57 @@ class Canvas extends Component {
         var scene = new THREE.Scene();
 
         //ADD CAMERA
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 20;
 
+        //LIGHT
+        let ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambient);
 
         //ADD RENDERER
         let renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
         this.mount.appendChild(renderer.domElement);
 
-        //ADD CUBE
-        var geometry = new THREE.BoxGeometry(1, 1, 1);
-        var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+        //FUTURE MOVING EFFEKT
+        var geometry = new THREE.SphereGeometry(1, 32, 32);
+        var material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
         var cube = new THREE.Mesh(geometry, material);
+        cube.position.set(0, 0, 0);
         scene.add(cube);
+
+        //MOVING LIGHT BLOB ON CLICK
+        let groupBlobs = new THREE.Group();
+        let light = new THREE.PointLight(0xFFFFFF, 0.0, 6000);
+        light.position.set(0, 0, 0);
+        light.castShadow = true;
+        groupBlobs.add(light);
+
+
+        scene.add(groupBlobs);
+        //BACKGROUND
+        var materialBackground = new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true});
+        let plane = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight);
+        let background = new THREE.Mesh(plane, materialBackground);
+        background.position.set(0, -5, -1);
+        background.receiveShadow = true;
+        scene.add(background);
+
+        //SPOT LIGHT
+        let spotLight = new THREE.SpotLight(0x8E2057, 0.5);
+        spotLight.position.set(20, 0, 50);
+        spotLight.angle = Math.PI / 4;
+        spotLight.penumbra = 0.05;
+        spotLight.decay = 2;
+        spotLight.distance = 200;
+
+        spotLight.castShadow = true;
+        spotLight.shadow.mapSize.width = 1024;
+        spotLight.shadow.mapSize.height = 1024;
+        spotLight.shadow.camera.near = 10;
+        spotLight.shadow.camera.far = 200;
+        scene.add(spotLight);
 
 
         let mouse = new THREE.Vector2();
@@ -50,23 +90,53 @@ class Canvas extends Component {
         function onMouseClick(event) {
             event.preventDefault();
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-            mouse.x = event.clientX / window.innerWidth;
-            mouse.y = event.clientY / window.innerHeight;
+            this.updateXYvalues([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
 
-            this.updateXYvalues([mouse.x, mouse.y]);
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+
+            let toIntersect = [background];
+            var intersections = raycaster.intersectObjects(toIntersect);
+
+            //Changing light position and brightness
+            light.position.x = intersections[0].point.x;
+            light.position.y = intersections[0].point.y;
+            light.intensity = 0.7;
+
         }
 
         this.mount.addEventListener('click', handleMouseClick, false);
 
-        camera.position.z = 5;
+        //changing the light intensisty every x milliseconds
+        function refreshLightIntensity() {
+            let x = 3;  // 30 milliseconds
+
+            if (light.intensity > 0.03) {
+                light.intensity -= 0.03;
+            }
+
+            setTimeout(refreshLightIntensity, x * 10);
+        }
+
+        refreshLightIntensity();
         var animate = function () {
             requestAnimationFrame(animate);
             cube.rotation.x += 0.01;
             cube.rotation.y += 0.01;
+
+            /** might be too often
+             if (light.intensity > 0.003) {
+                light.intensity -= 0.003;
+            }
+             **/
             renderer.render(scene, camera);
         };
         animate();
     }
+
 //==================================================
     render() {
         return (

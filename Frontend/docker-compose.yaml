@@ -1,0 +1,15 @@
+version: '3.2'
+
+services:
+
+  frontend:
+    container_name: SoundGroup-Frontend
+    image: frontend
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      # code change detection - no need to rebuild image for container
+      - .:/app
+      - /app/node_modules
+    tty: true

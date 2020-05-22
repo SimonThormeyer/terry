@@ -4,33 +4,38 @@ about: Describe a new feature or enhancement and add preconditions ('blocked by'
 title: ''
 labels: user story
 assignees: ''
+projects: beuthSoundGroup
 
 ---
+<!--- Required --->
 
-Als BenutzerIn möchte auf eine Eingabeflaeche klicken koennen, damit ein Ton erzeugt wird. 
+As an User, I want to click on the Surface, to create a sound.
 
+<!--- Required --->
+**description of the story**
 
-**Beschreibung**
+Detailed Description of the User-Story:
+A clickable surface should allow the User to create sounds by clicks, these sounds trigger a different frequency depending on where the User clicks.
+First it should trigger Sine tones of prearranged Frequencies und after maybe with Tone.js piano sounds
 
-Detaillierte Beschreibung des Inhalts der User-Story:
-Eine klickbare Fläche soll es dem/der BenutzerIn ermöglichen, durch Klicken Töne zu erzeugen, die je nach Position eine andere Frequenz haben.
-Dazu sollen erstmal Sinus-Töne einer bestimmten Frequenz ausgegeben werden und dann (wenn möglich) mithilfe von Tone.js Klaviertöne.
-
-**Voraussetzungen / blocked by**
+<!--- Optional --->
+**blocked by**
+Please enter here Userstorys or Tickets that blocks this Story
 - [ ] ein speicherbarer Zustand der Projekte ist vorhanden (#4)
 
-**Akzeptanzkriterien**
+<!--- Required --->
+**acceptance criteria**
 - [ ] wie erkennt man, dass alles so funktioniert, wie es soll?
 - [x] Ein Click auf die Fläche erzeugt einen Ton
 - [ ] Der Ton ist abhängig von der Position, auf die geklickt wird und einem Notenmodell
 
-
-**Tasks**
+<!--- Required --->
+**tickets or tasks**
 - [x] Die einzelnen Abrietsschritte als Tickets
 - [x] React-Komponente erstellen (#14 )
 - [x] Eingaben auf dem Viewport einfangen (#14 )
 - [x] Komponente eines Synthesizers erstellen (#17)
 
-
-**Story Points**
+<!--- Required --->
+**story points**
 /estimate 13
