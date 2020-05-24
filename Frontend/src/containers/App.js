@@ -13,6 +13,7 @@ function App() {
   const [musicCtrl,] = useGlobalState('musicCtrl');
   const [listeningLooper,] = useGlobalState('listeningLooper')
 
+
   // ==================== Callbacks for Canvas (can be transferred to Canvas as soon as it is able to use GlobalState) 
   const triggerToneWithCoordinates = (dataFromCanvas) => {
     musicCtrl.triggerSynth(dataFromCanvas[0], dataFromCanvas[1]);
@@ -43,7 +44,7 @@ function App() {
       {Array.from(runningLoopers.keys()).map((id) => {
         // iterate over elements in runningLoopers and create a button for each
         return (
-          <>
+          <div key={`loopcontrolContainer__${id}`}>
             <button key={`loopStopButton_${id}`} onClick={() => {
               runningLoopers.get(id).stop()
               runningLoopers.delete(id);
@@ -58,7 +59,7 @@ function App() {
             <button key={`loopPlayButton_${id}`} onClick={() => {
               runningLoopers.get(id).play()
             }}>>> Looper {id}</button>
-          </>
+          </div>
         )
       })}
       {/* End of "Looper-Controls" */}

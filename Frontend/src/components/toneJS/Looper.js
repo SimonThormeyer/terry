@@ -10,6 +10,7 @@ export class Looper {
         this.timeouts = [];
         this.muted = false;
         this.stopped = true;
+        this.nextEventId = 0;
     }
 
     addEvents(events) {
@@ -26,8 +27,12 @@ export class Looper {
             // register all events - TODO: evaluate precision of this method
             console.log(`looper play() - duration: ${this.duration}, events #: ${this.events.length}`)
             for (let event of this.events) {
+                if(!event.id) {
+                    event.id = this.nextEventId;
+                    this.nextEventId += 1;
+                } 
                 this._updateEvent(event);
-                console.log(`event time: ${event.time}`)
+                console.log(`event id: ${event.id} event time: ${event.time}`)
                 this.timeouts.push(setTimeout(() => {
                     event.action()
                     this.intervals.push(setInterval(() => {
@@ -60,19 +65,24 @@ export class Looper {
     }
 
     pause() {
+        if(!this.stopped) {
         this.stop()
         // 1. reorder event times - new starting point is now
         //current point of time in loop
-        let currentLoopTime = (Date.now() - this.startTime) % this.duration;
-        console.log(`pause() currentLoopTime: ${currentLoopTime}`)
+        //let currentLoopTime = (Date.now() - this.startTime) % this.duration;
+        console.log(`pause() currentLoopTime: ${this.currentLoopTime()}, duration: ${this.duration}`)
         for (let event of this.events) {
-            let newTime = event.time - currentLoopTime;
-            if (newTime < 0) { //if events occured already before pause was pressed
-                event.time = newTime + this.duration
-            } else {
-                event.time = newTime;
-            }
+            
+            let newTime = this.duration - this.currentLoopTime() + event.time;
+            console.log(`event id:${event.id} old time: ${event.time}, new time: ${newTime}`)
+            event.time = newTime;
+
         }
+        }
+    }
+
+    currentLoopTime() {
+        return (Date.now() - this.startTime) % this.duration;
     }
 
     //underscore methods are not meant to be used outside of this class
