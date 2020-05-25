@@ -10,7 +10,7 @@ export class Looper {
         this.timeouts = [];
         this.muted = false;
         this.stopped = true;
-        this.nextEventId = 0;
+        this.nextEventId = 1;
     }
 
     addEvents(events) {
@@ -27,10 +27,10 @@ export class Looper {
             // register all events - TODO: evaluate precision of this method
             console.log(`looper play() - duration: ${this.duration}, events #: ${this.events.length}`)
             for (let event of this.events) {
-                if(!event.id) {
+                if (!event.id) {
                     event.id = this.nextEventId;
                     this.nextEventId += 1;
-                } 
+                }
                 this._updateEvent(event);
                 console.log(`event id: ${event.id} event time: ${event.time}`)
                 this.timeouts.push(setTimeout(() => {
@@ -46,7 +46,7 @@ export class Looper {
 
     stop() {
         if (!this.stopped) {
-            for(let timeout of this.timeouts) {
+            for (let timeout of this.timeouts) {
                 clearTimeout(timeout);
             }
             for (let interval of this.intervals) {
@@ -65,25 +65,29 @@ export class Looper {
     }
 
     pause() {
-        if(!this.stopped) {
-        this.stop()
-        // 1. reorder event times - new starting point is now
-        //current point of time in loop
-        //let currentLoopTime = (Date.now() - this.startTime) % this.duration;
-        console.log(`pause() currentLoopTime: ${this.currentLoopTime()}, duration: ${this.duration}`)
-        for (let event of this.events) {
-            
-            let newTime = this.duration - this.currentLoopTime() + event.time;
-            console.log(`event id:${event.id} old time: ${event.time}, new time: ${newTime}`)
-            event.time = newTime;
+        if (!this.stopped) {
+            let currentTime = Date.now()
+            this.stop()
+            // calculate new event times - new starting point is now
+            let pauseTime = (currentTime - this.startTime) % this.duration; // this is correct only for the first time
+            this.startTime = this.startTime - pauseTime;
+            console.log(`pause Time: ${pauseTime}`)
+            for (let event of this.events) {
+                let oldTime = event.time; //only for debugging
+                if(event.time >= pauseTime) {
+                    event.time = event.time -pauseTime;
+                } else if (event.time < pauseTime) {
+                    event.time = event.time + this.duration - pauseTime;
+                }
+                console.log(`event id:${event.id} old time: ${oldTime}, new time: ${event.time}`)
+                console.assert(event.time <= this.duration, 'wrong event time');
+               
 
-        }
+            }
         }
     }
 
-    currentLoopTime() {
-        return (Date.now() - this.startTime) % this.duration;
-    }
+
 
     //underscore methods are not meant to be used outside of this class
 
@@ -92,8 +96,12 @@ export class Looper {
     }
 
     _updateEvent(event) {
-        //inserts event.time and updates event.action
-        event.time = event.time ? event.time : event.timestamp - this.startTime;
+        //inserts event.time and updates event.action: if looper is muted, do nothing!
+        // event.time = event.time >= 0 ? event.time : event.timestamp - this.startTime;
+        if(!(event.time >= 0)) {
+            console.log(`inserting event time`)
+            event.time = event.timestamp - this.startTime;
+        }
         let action = (event.type === "canvasClick") ?
             () => { // simulate a click on canvas
                 if (!this.muted) { // do nothing on canvas if looper is muted
