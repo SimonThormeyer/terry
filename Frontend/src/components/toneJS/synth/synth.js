@@ -1,17 +1,15 @@
 import Tone from "tone";
+import {Effects} from "../effects/effects";
 
 export class Synth {
 
     constructor() {
-        this.limiter = new Tone.Limiter(-1).toMaster()
-        this.volume = new Tone.Volume(-12).connect(this.limiter);
-        this.delay = new Tone.PingPongDelay(0.2, 0.7).connect(this.volume)
-        this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay);
+        this.effects = new Effects()
         this.polySynth = new Tone.PolySynth(8, Tone.FMSynth, {
             oscillator: {
                 type: "sine",
             }
-        }).connect(this.filter);
+        }).connect(this.effects.filter);
     }
 
     triggerSynth(note) {
