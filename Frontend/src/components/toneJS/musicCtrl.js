@@ -1,6 +1,8 @@
 import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {Synth} from "./synth/synth";
 import {Soundbed} from "./soundbed/soundbed";
+import {Effects} from "./effects/effects";
+
 
 
 /*
@@ -21,6 +23,7 @@ export class MusicCtrl {
         this.isomorphicLayout = new IsomorphicLayout()
         this.synth = new Synth()
         this.soundBed = new Soundbed()
+        this.effect = new Effects()
     }
 
     triggerSynth(valueX, valueY) {
@@ -40,11 +43,11 @@ export class MusicCtrl {
     }
 
     setParameterEffect(valueX, valueY) {
-        //this.synth.set('detune',valueX)
+        this.effect.setFeedback()
     }
 
     setParameterMusic(valueX, valueY) {
-        //this.synth.set('detune',valueX)
+        //this.isomorphicLayout.set('detune',valueX)
     }
 
 
