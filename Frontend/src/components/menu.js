@@ -35,11 +35,24 @@ function Menu(props) {
   const [runningLoopers, ] = useGlobalState('runningLoopers');
   const [musicCtrl, ] = useGlobalState('musicCtrl');
 
+
   // state of Component (used for appearance of buttons)
   const [play, setPlay] = useState(true)
   const [random, setRandom] = useState(true)
   const [loop, setLoop] = useState(true)
   const [record, setRecord] = useState(true)
+
+//     const loopFunction = (startLoop) => {
+//         if (startLoop) {
+//             setListeningLooper(new Looper(performance.now(), musicCtrl));
+//         } else {
+//             listeningLooper.stopRecording(performance.now());
+//             setNextLooperID(nextLooperID + 1);
+//             runningLoopers.set(nextLooperID, listeningLooper);
+//             setListeningLooper(undefined)
+//         }
+//     }
+
 
 
   const loopFunction = (startLoop) => {
