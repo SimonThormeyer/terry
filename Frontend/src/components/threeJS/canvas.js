@@ -1,6 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 import {useGlobalState} from "../../GlobalState.js"
+import DragControls from "three-dragcontrols";
+
+//import DragControls from 'three'
+
 
 function Canvas(props) {
 
@@ -16,6 +20,23 @@ function Canvas(props) {
         musicCtrl.triggerSynth(value[0], value[1]);
     };
 
+    const effectSphereDrag = (value) => {
+        //do something
+        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
+        //musicCtrl.....
+    };
+
+    const synthSphereDrag = (value) => {
+        //do something
+        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
+        //musicCtrl.....
+    };
+
+    const musikSphereDrag = (value) => {
+        //do something
+        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
+        //musicCtrl.....
+    };
     // init globe
     useEffect(() => {
         // get current instances
@@ -32,7 +53,7 @@ function Canvas(props) {
         camera.position.z = 20;
 
         //LIGHT
-        let ambient = new THREE.AmbientLight(0xffffff, 0.5);
+        let ambient = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambient);
 
         //ADD RENDERER
@@ -41,12 +62,27 @@ function Canvas(props) {
         renderer.shadowMap.enabled = true;
         mount.current.appendChild(renderer.domElement);
 
-        //FUTURE MOVING EFFEKT
-        var geometry = new THREE.SphereGeometry(1, 32, 32);
-        var material = new THREE.MeshPhongMaterial({color: 0x808080, dithering: true});
-        var cube = new THREE.Mesh(geometry, material);
-        cube.position.set(0, 0, 0);
-        scene.add(cube);
+        // MOVING EFFEKT
+        let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
+        let materialEffect = new THREE.MeshPhongMaterial({color: 0x25D4D4, dithering: true});
+        let effectSphere = new THREE.Mesh(geometryEffect, materialEffect);
+        effectSphere.position.set(0, 0, 0);
+        scene.add(effectSphere);
+
+        // MOVING SYNTH
+        let geometrySynth = new THREE.SphereGeometry(1, 32, 32);
+        let materialSynth = new THREE.MeshPhongMaterial({color: 0xD4D425, dithering: true});
+        let synthSphere = new THREE.Mesh(geometrySynth, materialSynth);
+        synthSphere.position.set(-10, 0, 0);
+        scene.add(synthSphere);
+
+        // MOVING MUSIK
+        let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
+        let materialMusik = new THREE.MeshPhongMaterial({color: 0xD425D4, dithering: true});
+        let musikSphere = new THREE.Mesh(geometryMusik, materialMusik);
+        musikSphere.position.set(10, 0, 0);
+        scene.add(musikSphere);
+
 
         //MOVING LIGHT BLOB ON CLICK
         let groupBlobs = new THREE.Group();
@@ -81,6 +117,55 @@ function Canvas(props) {
         scene.add(spotLight);
 
 
+        //DRAGGING DOTS
+        let controls = new DragControls([effectSphere, synthSphere, musikSphere], camera, renderer.domElement);
+        let dragging = false;
+        controls.addEventListener('dragstart', function (event) {
+            dragging = true;
+            event.object.material.emissive.set(0xaaaaaa);
+
+        });
+
+
+        //Called every drag
+        controls.addEventListener('drag', function (event) {
+            let pos = event.object.position.clone();
+            pos.project(camera);
+            if (event.object === effectSphere) {
+                effectSphereDrag(pos);
+            } else if (event.object === synthSphere) {
+                synthSphereDrag(pos);
+            } else if (event.object === musikSphere) {
+                musikSphereDrag(pos);
+            }
+
+        });
+
+        //only on drag end
+        controls.addEventListener('dragend', function (event) {
+            dragging = false;
+            event.object.material.emissive.set(0x000000);
+            let pos = event.object.position.clone();
+            pos.project(camera);
+            pos.x = (pos.x / window.innerWidth) + window.innerWidth / 2;
+            pos.y = -(pos.y * window.innerHeight / 2) + window.innerHeight / 2;
+            pos.normalize();
+
+            if (event.object === effectSphere) {
+                effectSphereDrag(pos);
+                console.log("dragged effect dot");
+            } else if (event.object === synthSphere) {
+                synthSphereDrag(pos);
+                console.log("dragged synth dot");
+            }
+            else if (event.object === musikSphere) {
+                musikSphereDrag(pos);
+                console.log("dragged musik dot");
+            }
+
+
+        });
+
         let mouse = new THREE.Vector2();
 
         let raycaster = new THREE.Raycaster();
@@ -88,26 +173,27 @@ function Canvas(props) {
         //CLICK FUNCTION ON CANVAS
         function onMouseClick(event) {
             event.preventDefault();
-            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-            canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
+            if (!dragging) {
+                // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
+                canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
+                raycaster.setFromCamera(mouse, camera);
 
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                let toIntersect = [background, effectSphere];
+                let intersections = raycaster.intersectObjects(toIntersect);
 
-            raycaster.setFromCamera(mouse, camera);
+                //Changing light position and brightness
+                light.position.x = intersections[0].point.x;
+                light.position.y = intersections[0].point.y;
+                light.intensity = 0.7;
+            }
 
-            let toIntersect = [background];
-            var intersections = raycaster.intersectObjects(toIntersect);
-
-            //Changing light position and brightness
-            light.position.x = intersections[0].point.x;
-            light.position.y = intersections[0].point.y;
-            light.intensity = 0.7;
 
         }
 
-        mount.current.addEventListener('click', handleMouseClick, false);
+        mount.current.addEventListener('mousedown', handleMouseClick, false);
 
         //changing the light intensisty every x milliseconds
         function refreshLightIntensity() {
@@ -123,8 +209,8 @@ function Canvas(props) {
         refreshLightIntensity();
         var animate = function () {
             requestAnimationFrame(animate);
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
+            effectSphere.rotation.x += 0.01;
+            effectSphere.rotation.y += 0.01;
 
             /** might be too often
              if (light.intensity > 0.003) {
