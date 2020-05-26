@@ -11,6 +11,7 @@ export class Looper {
         this.muted = false;
         this.stopped = true;
         this.nextEventId = 1;
+        this.playStartTime = undefined;
     }
 
     addEvents(events) {
@@ -22,8 +23,13 @@ export class Looper {
         this.duration = this.endTime - this.startTime;
     }
 
+    getCurrentTime() {
+        return (Date.now() - this.playStartTime) % this.duration;
+    }
+
     play() {
         if (this.stopped) {
+            this.playStartTime = Date.now();
             // register all events - TODO: evaluate precision of this method
             console.log(`looper play() - duration: ${this.duration}, events #: ${this.events.length}`)
             for (let event of this.events) {
@@ -66,11 +72,9 @@ export class Looper {
 
     pause() {
         if (!this.stopped) {
-            let currentTime = Date.now()
             this.stop()
             // calculate new event times - new starting point is now
-            let pauseTime = (currentTime - this.startTime) % this.duration; // this is correct only for the first time
-            this.startTime = this.startTime - pauseTime;
+            let pauseTime = this.getCurrentTime(); 
             console.log(`pause Time: ${pauseTime}`)
             for (let event of this.events) {
                 let oldTime = event.time; //only for debugging
@@ -79,10 +83,7 @@ export class Looper {
                 } else if (event.time < pauseTime) {
                     event.time = event.time + this.duration - pauseTime;
                 }
-                console.log(`event id:${event.id} old time: ${oldTime}, new time: ${event.time}`)
-                console.assert(event.time <= this.duration, 'wrong event time');
-               
-
+                console.log(`event id:${event.id} old time: ${oldTime}, new time: ${event.time}`);
             }
         }
     }
