@@ -38,10 +38,8 @@ export class MusicCtrl {
         this.soundBed.playPauseSoundbed()
     }
 
-
     setParameterSynth(valueX, valueY) {
-        // hier passiert SYNTH
-        //this.synth.set('detune',valueX)
+        this.synth.setDetune(valueX)
     }
 
     setParameterEffect(valueX, valueY) {

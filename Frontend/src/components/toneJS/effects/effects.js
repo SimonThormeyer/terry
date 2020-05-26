@@ -3,20 +3,24 @@ import Tone from "tone";
 export class Effects {
 
     constructor() {
+
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.volume = new Tone.Volume(-12).connect(this.limiter);
-        this.delay = new Tone.PingPongDelay(0.2, 0.7).connect(this.volume)
-        this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay);
+        this.delay = new Tone.PingPongDelay().connect(this.volume)
+        this.start = new Tone.Volume(-12).connect(this.limiter);
 
     }
 
     setDelay(value) {
-        //setting value to 0.9 to avoid extreme feedbacking
-        this.feebackValue = value*0.9
-        console.log(this.feebackValue)
-        console.log(this.delay)
-        this.delay.set('feedback', this.feebackValue);
-        this.delay.set('wet',value)
+        this.delay = new Tone.PingPongDelay(8n).chain(this.volume)
+        this.delay.wet.value = (value * 50) + 50
+        //this.delay.set("wet",(value * 50) + 50)
+        //console.log((value * 50) + 50)
+
+        //console.log(this.delay)
+
+        //this.delay.set('feedback', this.feebackValue);
+        //this.delay.set('wet',value)
 
     }
 }

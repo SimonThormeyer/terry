@@ -22,12 +22,14 @@ function Canvas(props) {
     };
 
     const effectSphereDrag = (value) => {
+        musicCtrl.setParameterEffect(value.x,value.y)
         //do something
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
         //musicCtrl.....
     };
 
     const synthSphereDrag = (value) => {
+        musicCtrl.setParameterSynth(value.x, value.y)
         //do something
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
         //musicCtrl.....
