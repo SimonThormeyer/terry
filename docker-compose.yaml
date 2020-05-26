@@ -19,10 +19,11 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - yarn-cache
+      - .:/src
+      # - yarn-cache
     tty: true
 
-  yarn-cache:
-    image: busybox
-    volumes:
-      - /root/.yarn-cache
+  # yarn-cache:
+  #   image: busybox
+  #   volumes:
+  #     - /root/.yarn-cache
