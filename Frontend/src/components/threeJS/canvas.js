@@ -9,7 +9,8 @@ import DragControls from "three-dragcontrols";
 function Canvas(props) {
 
     const [musicCtrl,] = useGlobalState('musicCtrl');
-
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
     //  const canvasRef = useRef<HTMLCanvasElement>();
     const mount = useRef(null);
     const [size, setSize] = useState([0, 0]);
@@ -40,8 +41,6 @@ function Canvas(props) {
     // init globe
     useEffect(() => {
         // get current instances
-        const width = mount.clientWidth;
-        const height = mount.clientHeight;
 
         let handleMouseClick = onMouseClick.bind(this);
 
@@ -57,8 +56,8 @@ function Canvas(props) {
         scene.add(ambient);
 
         //ADD RENDERER
-        let renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
+       const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(width,height);
         renderer.shadowMap.enabled = true;
         mount.current.appendChild(renderer.domElement);
 
@@ -157,8 +156,7 @@ function Canvas(props) {
             } else if (event.object === synthSphere) {
                 synthSphereDrag(pos);
                 console.log("dragged synth dot");
-            }
-            else if (event.object === musikSphere) {
+            } else if (event.object === musikSphere) {
                 musikSphereDrag(pos);
                 console.log("dragged musik dot");
             }
@@ -225,13 +223,7 @@ function Canvas(props) {
     }, [mount]);
 
 
-    /**
-     // update size
-     useEffect(() => {
-        const renderer = rendererRef.current;
-        renderer.setSize(width, height);
-    }, [height, width]);
-     **/
+
     //=================
     return (
         <div style={{width: 'window.innerWidth', height: 'window.innerHeight'}}
