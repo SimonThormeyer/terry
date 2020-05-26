@@ -26,10 +26,9 @@ function Menu(props) {
 
     const loopFunction = (startLoop) => {
         if (startLoop) {
-            setListeningLooper(new Looper(Date.now(), musicCtrl));
+            setListeningLooper(new Looper(performance.now(), musicCtrl));
         } else {
-            listeningLooper.stopRecording(Date.now());
-            listeningLooper.play();
+            listeningLooper.stopRecording(performance.now());
             setNextLooperID(nextLooperID + 1);
             runningLoopers.set(nextLooperID, listeningLooper);
             setListeningLooper(undefined)
