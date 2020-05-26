@@ -24,11 +24,13 @@ export class MusicCtrl {
         this.synth = new Synth()
         this.soundBed = new Soundbed()
         this.effect = new Effects()
+
     }
 
     triggerSynth(valueX, valueY) {
         this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
         this.synth.triggerSynth(this.note);
+        this.setParameterEffect(1,0)
 
     }
 
@@ -43,12 +45,15 @@ export class MusicCtrl {
     }
 
     setParameterEffect(valueX, valueY) {
-        this.effect.setFeedback()
+        this.effect.setDelay(valueX)
+
     }
 
     setParameterMusic(valueX, valueY) {
         //this.isomorphicLayout.set('detune',valueX)
     }
+
+
 
 
 }

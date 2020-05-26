@@ -10,7 +10,13 @@ export class Effects {
 
     }
 
-    setFeedback() {
-        this.delay.set('feedback', 0.2);
+    setDelay(value) {
+        //setting value to 0.9 to avoid extreme feedbacking
+        this.feebackValue = value*0.9
+        console.log(this.feebackValue)
+        console.log(this.delay)
+        this.delay.set('feedback', this.feebackValue);
+        this.delay.set('wet',value)
+
     }
 }
