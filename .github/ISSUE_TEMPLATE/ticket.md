@@ -1,15 +1,20 @@
 ---
 name: Ticket
-about: Describe this issue template's purpose here.
+about: Describe this issue template's purpose.
 title: 'Ticketname (User Story #1)'
 labels: ticket
 assignees: ''
-
+projects: beuthSoundGroup
 ---
 
-Beschreibung des Tickets
+<!--- Required --->
+<!--- Create a Branch like in branchname! -->
+<!---  create branchname: ticketnumber_ticket_ticketname   -->
+Description of the Ticket:
 
-ist Teil der User-Story #1
+<!--- Required --->
+**Is part of story** #1
 
-Arbeitsschritte
-- [ ]
+<!--- Optional --->
+ToDo's:
+- [ ] short Bulletpoints of what you've done or want to do
