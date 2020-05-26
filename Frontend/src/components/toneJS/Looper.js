@@ -11,7 +11,9 @@ export class Looper {
         this.muted = false;
         this.stopped = true;
         this.nextEventId = 1;
+        this.pauseTime = 0;
         this.playStartTime = undefined;
+        this.mainLoopTimeout = undefined;
     }
 
     addEvents(events) {
@@ -21,15 +23,19 @@ export class Looper {
     stopRecording(endTime) {
         this.endTime = endTime;
         this.duration = this.endTime - this.startTime;
+        this.play();
     }
 
     getCurrentTime() {
-        return (Date.now() - this.playStartTime) % this.duration;
+        if (this.stopped) {
+            return this.pauseTime;
+        }
+        return (performance.now() - this.playStartTime) % this.duration;
     }
 
     play() {
         if (this.stopped) {
-            this.playStartTime = Date.now();
+            this.playStartTime = performance.now();
             // register all events - TODO: evaluate precision of this method
             console.log(`looper play() - duration: ${this.duration}, events #: ${this.events.length}`)
             for (let event of this.events) {
@@ -38,29 +44,39 @@ export class Looper {
                     this.nextEventId += 1;
                 }
                 this._updateEvent(event);
-                console.log(`event id: ${event.id} event time: ${event.time}`)
-                this.timeouts.push(setTimeout(() => {
-                    event.action()
-                    this.intervals.push(setInterval(() => {
-                        event.action();
-                    }, this.duration));
-                }, event.time));
+                console.log(`event id: ${event.id} event time: ${event.time}`);
             }
-        }
-        this.stopped = false;
+            this.stopped = false;
+            this._repeatLoop();
+        } 
     }
+
+
+    _repeatLoop() {
+        console.log(`DURATION: ${this.duration}`)
+        this.timeouts = [];
+        for (let event of this.events) {
+            this.timeouts.push(
+                setTimeout(() => {
+                event.action();
+            }, event.time)
+            );
+        }
+        this.mainLoopTimeout = setTimeout(() => this._repeatLoop(), this.duration);
+    }
+ 
 
     stop() {
         if (!this.stopped) {
             for (let timeout of this.timeouts) {
                 clearTimeout(timeout);
             }
+            clearTimeout(this.mainLoopTimeout);
             for (let interval of this.intervals) {
                 clearInterval(interval);
             }
+            this.stopped = true;
         }
-        this.stopped = true;
-
     }
 
     toggleMute() {
@@ -74,16 +90,13 @@ export class Looper {
         if (!this.stopped) {
             this.stop()
             // calculate new event times - new starting point is now
-            let pauseTime = this.getCurrentTime(); 
-            console.log(`pause Time: ${pauseTime}`)
+            this.pauseTime = (performance.now() - this.playStartTime) % this.duration;
             for (let event of this.events) {
-                let oldTime = event.time; //only for debugging
-                if(event.time >= pauseTime) {
-                    event.time = event.time -pauseTime;
-                } else if (event.time < pauseTime) {
-                    event.time = event.time + this.duration - pauseTime;
+                if (event.time >= this.pauseTime) {
+                    event.time = event.time - this.pauseTime;
+                } else {
+                    event.time = event.time + this.duration - this.pauseTime;
                 }
-                console.log(`event id:${event.id} old time: ${oldTime}, new time: ${event.time}`);
             }
         }
     }
@@ -99,7 +112,7 @@ export class Looper {
     _updateEvent(event) {
         //inserts event.time and updates event.action: if looper is muted, do nothing!
         // event.time = event.time >= 0 ? event.time : event.timestamp - this.startTime;
-        if(!(event.time >= 0)) {
+        if (!(event.time >= 0)) {
             console.log(`inserting event time`)
             event.time = event.timestamp - this.startTime;
         }

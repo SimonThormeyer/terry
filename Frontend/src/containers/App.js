@@ -21,7 +21,7 @@ function App() {
     if (listeningLooper) { //if there is a looper currently recording actions
       listeningLooper.addEvents(
         {
-          timestamp: Date.now(),
+          timestamp: performance.now(),
           type: "canvasClick",
           x: dataFromCanvas[0],
           y: dataFromCanvas[1]
