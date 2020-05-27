@@ -12,6 +12,7 @@ export class Looper {
         this.pauseTime = 0;
         this.playStartTime = undefined;
         this.mainLoopTimeout = undefined;
+        this._simulateCanvasClick = undefined;
     }
 
     addEvents(events) {
@@ -91,9 +92,9 @@ export class Looper {
     }
 
     //underscore methods are not meant to be used outside of this class
-    _simulateCanvasClick(x, y) {
-        this.musicCtrl.triggerSynth(x, y);
-    }
+    // _simulateCanvasClick(x, y) {
+    //     this.musicCtrl.triggerSynth(x, y);
+    // }
 
     _updateEvent(event) {
         //inserts event.time and updates event.action: if looper is muted, do nothing!
@@ -104,7 +105,7 @@ export class Looper {
         let action = (event.type === "canvasClick") ?
             () => { // simulate a click on canvas
                 if (!this.muted) { // do nothing on canvas if looper is muted
-                    this._simulateCanvasClick(event.x, event.y)
+                    this._simulateCanvasClick([event.x, event.y])
                 }
             } : //event.type == dotShift: simulate a shift of an effectDot 
             () => {

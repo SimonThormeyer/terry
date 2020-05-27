@@ -1,6 +1,6 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import {useGlobalState} from "../../GlobalState.js"
+import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 
 //import DragControls from 'three'
@@ -10,8 +10,8 @@ function Canvas(props) {
 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
-    const [width, ] = useState(window.innerWidth);
-    const [height, ] = useState(window.innerHeight);
+    const [width,] = useState(window.innerWidth);
+    const [height,] = useState(window.innerHeight);
     //  const canvasRef = useRef<HTMLCanvasElement>();
     const mount = useRef(null);
 
@@ -24,15 +24,34 @@ function Canvas(props) {
     const raycaster = useRef(new THREE.Raycaster());
     const light = useRef(new THREE.PointLight(0xFFFFFF, 0.0, 6000));
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));
-    const materialBackground = useRef(new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true}));
+    const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0x9EC2E3, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));
 
 
-    const canvasClick = useCallback((value) => {
+    const canvasClick = useCallback((value, playback = false) => {
+
+        //give canvasClick to Looper
+        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
+            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        }
+
+        mouse.current.x = (value[0]) * 2 - 1;
+        mouse.current.y = -(value[1]) * 2 + 1;
+
+        raycaster.current.setFromCamera(mouse.current, camera.current);
+
+        let toIntersect = [background.current];
+        let intersections = raycaster.current.intersectObjects(toIntersect);
+
+        //Changing light position and brightness
+        light.current.position.x = intersections[0].point.x;
+        light.current.position.y = intersections[0].point.y;
+        light.current.intensity = 0.7;
+
         //  setCoordinates([value[0], value[1]]);
         musicCtrl.triggerSynth(value[0], value[1]);
-        if (listeningLooper) {
+        if (listeningLooper && !playback) {
             console.log("adding event");//if there is a looper currently recording actions
             listeningLooper.addEvents(
                 {
@@ -46,26 +65,15 @@ function Canvas(props) {
     }, [musicCtrl, listeningLooper]);
 
     //CLICK FUNCTION ON CANVAS
-    const onMouseClick = useCallback( (event) => {
+    const onMouseClick = useCallback((event) => {
         console.log("click on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
             canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-            mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-            raycaster.current.setFromCamera(mouse.current, camera.current);
-
-            let toIntersect = [background.current];
-            let intersections = raycaster.current.intersectObjects(toIntersect);
-
-            //Changing light position and brightness
-            light.current.position.x = intersections[0].point.x;
-            light.current.position.y = intersections[0].point.y;
-            light.current.intensity = 0.7;
         }
-    },[canvasClick]);
+    }, [canvasClick]);
 
     const oldOnMouseClick = useRef(onMouseClick);
 
@@ -118,21 +126,21 @@ function Canvas(props) {
 
         // MOVING EFFEKT
         let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
-        let materialEffect = new THREE.MeshPhongMaterial({color: 0x25D4D4, dithering: true});
+        let materialEffect = new THREE.MeshPhongMaterial({ color: 0x25D4D4, dithering: true });
         let effectSphere = new THREE.Mesh(geometryEffect, materialEffect);
         effectSphere.position.set(0, 0, 0);
         scene.add(effectSphere);
 
         // MOVING SYNTH
         let geometrySynth = new THREE.SphereGeometry(1, 32, 32);
-        let materialSynth = new THREE.MeshPhongMaterial({color: 0xD4D425, dithering: true});
+        let materialSynth = new THREE.MeshPhongMaterial({ color: 0xD4D425, dithering: true });
         let synthSphere = new THREE.Mesh(geometrySynth, materialSynth);
         synthSphere.position.set(-10, 0, 0);
         scene.add(synthSphere);
 
         // MOVING MUSIK
         let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
-        let materialMusik = new THREE.MeshPhongMaterial({color: 0xD425D4, dithering: true});
+        let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD425D4, dithering: true });
         let musikSphere = new THREE.Mesh(geometryMusik, materialMusik);
         musikSphere.position.set(10, 0, 0);
         scene.add(musikSphere);
@@ -278,12 +286,12 @@ function Canvas(props) {
     }, [mount, height, width]);
 
 
-    
+
 
     //=================
     return (
-        <div style={{width: 'window.innerWidth', height: 'window.innerHeight'}}
-             ref={mount}
+        <div style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
+            ref={mount}
         />
     )
 }
