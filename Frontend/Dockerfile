@@ -1,17 +1,20 @@
-FROM node:latest
+FROM node:10-slim
 
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+WORKDIR /app
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN npm install -g nodemon
 
-ARG NODE_ENV
-ENV NODE_ENV $NODE_ENV
+COPY package*.json ./
 
-COPY . /usr/src/app
+RUN npm ci \
+ && npm cache clean --force \
+ && mv /app/node_modules /node_modules
+
+COPY . .
+
+ENV PORT 3000
 
 EXPOSE 3000
 
-ENTRYPOINT ["sh", "./entrypoint.sh"]
+CMD ["node", "index.js"]
 
-CMD ["yarn", "start"]
