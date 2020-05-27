@@ -244,31 +244,36 @@ function Canvas(props) {
 
     }, [mount, height, width]);
 
-    useEffect(() => {
-        //CLICK FUNCTION ON CANVAS
-        function onMouseClick(event) {
-            console.log("click on canvas");
-            event.preventDefault();
-            if (!dragging.current) {
-                // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-                canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-                mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-                raycaster.current.setFromCamera(mouse.current, camera.current);
+    //CLICK FUNCTION ON CANVAS
+    const onMouseClick = useCallback( (event) => {
+        console.log("click on canvas");
+        event.preventDefault();
+        if (!dragging.current) {
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
+            canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
+            mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-                let toIntersect = [background.current];
-                let intersections = raycaster.current.intersectObjects(toIntersect);
+            raycaster.current.setFromCamera(mouse.current, camera.current);
 
-                //Changing light position and brightness
-                light.current.position.x = intersections[0].point.x;
-                light.current.position.y = intersections[0].point.y;
-                light.current.intensity = 0.7;
-            }
+            let toIntersect = [background.current];
+            let intersections = raycaster.current.intersectObjects(toIntersect);
+
+            //Changing light position and brightness
+            light.current.position.x = intersections[0].point.x;
+            light.current.position.y = intersections[0].point.y;
+            light.current.intensity = 0.7;
         }
+    },[canvasClick]);
 
-        mount.current.addEventListener('mousedown', onMouseClick, false);
-    }, [canvasClick, mount]);
+  const handleMouseClick=(event)=>{
+      onMouseClick(event);
+    }
+    useEffect(() => {
+
+        mount.current.addEventListener('mousedown', handleMouseClick, false);
+    }, [ mount]);
 
     //=================
     return (
