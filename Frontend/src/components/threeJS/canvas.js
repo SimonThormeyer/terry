@@ -75,13 +75,26 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
+    const onTouch = useCallback((event) => {
+        console.log("touch on canvas");
+        event.preventDefault();
+        if (!dragging.current) {
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
+            canvasClick([event.touches[0].clientX / window.innerWidth, event.touches[0].clientY / window.innerHeight]);
+
+        }
+    }, [canvasClick]);
+
     const oldOnMouseClick = useRef(onMouseClick);
+    const oldOnTouch = useRef(onTouch);
 
     useEffect(() => {
         mount.current.removeEventListener('mousedown', oldOnMouseClick.current)
+        mount.current.removeEventListener('touchstart', oldOnTouch.current)
         mount.current.addEventListener('mousedown', onMouseClick, false);
+        mount.current.addEventListener('touchstart', onTouch, false);
         oldOnMouseClick.current = onMouseClick;
-    }, [onMouseClick]);
+    }, [onMouseClick, onTouch]);
 
     const effectSphereDrag = (value) => {
         musicCtrl.setParameterEffect(value.x,value.y)
