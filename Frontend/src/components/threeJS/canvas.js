@@ -253,6 +253,12 @@ function Canvas(props) {
                 light.current.intensity = 0.7;
             }
         }
+    },[canvasClick]);
+
+  const handleMouseClick=(event)=>{
+      onMouseClick(event);
+    }
+    useEffect(() => {
 
     
 
