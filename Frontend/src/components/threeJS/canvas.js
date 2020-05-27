@@ -10,13 +10,13 @@ function Canvas(props) {
 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
-    const [width, ] = useState(window.innerWidth);
-    const [height, ] = useState(window.innerHeight);
+    const [width, setWidth] = useState(window.innerWidth);
+    const [height, setHeight] = useState(window.innerHeight);
     //  const canvasRef = useRef<HTMLCanvasElement>();
     const mount = useRef(null);
 
-    // const [size, setSize] = useState([0, 0]);
-    // const [xyCoordinates, setCoordinates] = useState(true)
+    const [size, setSize] = useState([0, 0]);
+    const [xyCoordinates, setCoordinates] = useState(true)
 
     ///refs
     const dragging = useRef(false);
@@ -32,8 +32,7 @@ function Canvas(props) {
     const canvasClick = useCallback((value) => {
         //  setCoordinates([value[0], value[1]]);
         musicCtrl.triggerSynth(value[0], value[1]);
-        if (listeningLooper) {
-            console.log("adding event");//if there is a looper currently recording actions
+        if (listeningLooper) { //if there is a looper currently recording actions
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
@@ -44,36 +43,6 @@ function Canvas(props) {
             )
         }
     }, [musicCtrl, listeningLooper]);
-
-    //CLICK FUNCTION ON CANVAS
-    const onMouseClick = useCallback( (event) => {
-        console.log("click on canvas");
-        event.preventDefault();
-        if (!dragging.current) {
-            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-            canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-            mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.current.setFromCamera(mouse.current, camera.current);
-
-            let toIntersect = [background.current];
-            let intersections = raycaster.current.intersectObjects(toIntersect);
-
-            //Changing light position and brightness
-            light.current.position.x = intersections[0].point.x;
-            light.current.position.y = intersections[0].point.y;
-            light.current.intensity = 0.7;
-        }
-    },[canvasClick]);
-
-    const oldOnMouseClick = useRef(onMouseClick);
-
-    useEffect(() => {
-        mount.current.removeEventListener('mousedown', oldOnMouseClick.current)
-        mount.current.addEventListener('mousedown', onMouseClick, false);
-        oldOnMouseClick.current = onMouseClick;
-    }, [onMouseClick]);
 
     const effectSphereDrag = (value) => {
         musicCtrl.setParameterEffect(value.x,value.y)
@@ -277,6 +246,12 @@ function Canvas(props) {
 
     }, [mount, height, width]);
 
+                //Changing light position and brightness
+                light.current.position.x = intersections[0].point.x;
+                light.current.position.y = intersections[0].point.y;
+                light.current.intensity = 0.7;
+            }
+        }
 
     
 
