@@ -1,21 +1,18 @@
 FROM python:3.7
 
+WORKDIR /code
+
 RUN apt-get update -y && \
     apt-get install -y \
     python-pip \
     python-dev
 
-ADD . /code
-
-COPY ./requirements.txt /code/requirements.txt
-
-WORKDIR /code
+COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY . /code
+COPY . .
 
 EXPOSE 5000
 
 CMD ["flask", "run"]
-

@@ -5,6 +5,5 @@ import os
 app = Flask(__name__)
 CORS(app)
 
-from .routes import projects
+from api.routes import projects
 app.register_blueprint(projects, url_prefix=os.environ['URL_PREFIX'])
-
