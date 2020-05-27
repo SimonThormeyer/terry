@@ -10,12 +10,12 @@ function App() {
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
 
   // can be removed as soon as canvas doesn't need callbacks anymore
-  const [musicCtrl,] = useGlobalState('musicCtrl');
-  const [listeningLooper,] = useGlobalState('listeningLooper')
+  //const [musicCtrl,] = useGlobalState('musicCtrl');
+  //const [listeningLooper,] = useGlobalState('listeningLooper')
 
 
   // ==================== Callbacks for Canvas (can be transferred to Canvas as soon as it is able to use GlobalState) 
-  const triggerToneWithCoordinates = (dataFromCanvas) => {
+  /**const triggerToneWithCoordinates = (dataFromCanvas) => {
     musicCtrl.triggerSynth(dataFromCanvas[0], dataFromCanvas[1]);
     console.log(`X: ${dataFromCanvas[0]}, Y: ${dataFromCanvas[1]}`);
     if (listeningLooper) { //if there is a looper currently recording actions
@@ -34,7 +34,7 @@ function App() {
     if (listeningLooper) { //if there is a looper currently recording actions
       listeningLooper.addEvents(eventArray);
     }
-  }
+  }**/
   // ======================================== (End callbacks canvas)
 
 
@@ -63,7 +63,7 @@ function App() {
         )
       })}
       {/* End of "Looper-Controls" */}
-      <Canvas updateInfoParent={triggerToneWithCoordinates} recordMouseMovement={recordMouseMovement} />
+      <Canvas />
       <Menu />
     </div>
   );

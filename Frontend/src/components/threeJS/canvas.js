@@ -32,7 +32,8 @@ function Canvas(props) {
     const canvasClick = useCallback((value) => {
         //  setCoordinates([value[0], value[1]]);
         musicCtrl.triggerSynth(value[0], value[1]);
-        if (listeningLooper) { //if there is a looper currently recording actions
+        if (listeningLooper) {
+            console.log("adding event");//if there is a looper currently recording actions
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
