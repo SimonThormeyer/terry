@@ -15,16 +15,14 @@ services:
   app:
     container_name: SoundGroup-Frontend
     image: sg-frontend
-    command: nodemon server.js
     build: ./Frontend/
     ports:
       - "3000:3000"
     volumes:
-      - ./Frontend:/app
-      # - yarn-cache
+      - yarn-cache
     tty: true
 
-  # yarn-cache:
-  #   image: busybox
-  #   volumes:
-  #     - /root/.yarn-cache
+  yarn-cache:
+    image: busybox
+    volumes:
+      - /root/.yarn-cache
