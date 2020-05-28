@@ -39,7 +39,7 @@ export class MusicCtrl {
     }
 
     setParameterSynth(valueX, valueY) {
-        this.synth.setDetune(valueX)
+        this.synth.setSynthValues(valueX)
     }
 
     setParameterEffect(valueX, valueY) {

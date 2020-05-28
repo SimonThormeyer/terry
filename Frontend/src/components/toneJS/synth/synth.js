@@ -1,12 +1,9 @@
 import Tone from "tone";
-import {Effects} from "../effects/effects";
 
 export class Synth {
 
     constructor() {
-        this.effects = new Effects()
-        this.filter = new Tone.Filter(400, 'lowpass', -12).chain(this.effects.start, Tone.Master)
-        //this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.effects.delay);
+        this.filter = new Tone.Filter(400, 'lowpass', -12).toMaster()
         this.polySynth = new Tone.PolySynth(8, Tone.FMSynth, {
             oscillator: {
                 type: "sine",
@@ -19,8 +16,12 @@ export class Synth {
         this.polySynth.triggerAttackRelease(note, "16n");
     }
 
-    setDetune(value){
-        this.polySynth.set("detune", (value+1) * 500)
+    setSynthValues(value){
+        let calculatedFrequency = (value+1) * 5000
+        console.log("BEFORE: " + this.filter.frequency.value)
+        //this.polySynth.set("detune", (value+1) * 500)
+        this.filter.frequency.value = calculatedFrequency
+        console.log("AFTER: " + this.filter.frequency.value)
     }
 }
 
