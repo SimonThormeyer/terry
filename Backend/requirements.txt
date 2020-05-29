@@ -1,5 +1,6 @@
 Flask
 Flask-Cors
+Flask-PyMongo
 flask-api
 datetime
 pymongo
