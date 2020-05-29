@@ -47,7 +47,8 @@ export class SynthAndEffects {
     // EFFECT FUNCTIONS
     setDelayFeedback(value) {
         console.log(this.delayCounter)
-        let valueIntoNormalRange = (((value + 1) / 2))
+        //set between 0 - 0.9 to avoid endless feedback
+        let valueIntoNormalRange = (((value + 1) / 2)*0.9)
         // console.log("value: " + valueIntoNormalRange)
         this.delay.feedback.value = valueIntoNormalRange
         // console.log("FEEDBACK: " + this.delay.wet.value)

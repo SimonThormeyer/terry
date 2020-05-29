@@ -204,7 +204,7 @@ function Canvas(props) {
             pos.x = (pos.x / window.innerWidth) + window.innerWidth / 2;
             pos.y = -(pos.y * window.innerHeight / 2) + window.innerHeight / 2;
             pos.normalize();
-
+            /*
             if (event.object === effectSphere) {
                 effectSphereDrag(pos);
                 console.log("dragged effect dot");
@@ -215,6 +215,7 @@ function Canvas(props) {
                 musikSphereDrag(pos);
                 console.log("dragged musik dot");
             }
+             */
 
 
         });
