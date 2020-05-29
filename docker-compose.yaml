@@ -24,7 +24,18 @@ services:
       # - yarn-cache
     tty: true
 
-  # yarn-cache:
-  #   image: busybox
-  #   volumes:
-  #     - /root/.yarn-cache
+  mongo:
+    container_name: SoundGroup-MongoDB
+    image: mongo
+    # enviroment:
+    #   - MONGO_INITDB_DATABASE=put_name_here
+    #   - MONGO_INITDB_ROOT_USERNAME=put_username_here
+    #   - MONGO_INITDB_ROOT_PASSWORD=put_pw_here
+    volumes:
+      - ./init-file_where_init
+      - mongodata:/usr/share/mongodb/data
+    ports:
+      - "27017-27019:27017-27019"
+
+volumes: # Define seperate volume for Elasticsearch data
+  mongodata:
