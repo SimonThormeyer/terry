@@ -5,19 +5,15 @@ export class SynthAndEffects {
     constructor() {
 
         // Settings
-        this.noteLengthOptions = ["64n", "32n", "16n", "8n", "4n", "2n", "1n"]
-        this.waveforms = ["sine6", "triangle6"]
+        this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
+        this.waveforms = ["sine", "saw", "pulse"]
         this.noteLength = this.noteLengthOptions[2]
-
 
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
-        this.volume = new Tone.Volume(-5).connect(this.limiter);
-        this.reverb = new Tone.Reverb(2).connect(this.volume)
-        this.pan = new Tone.Panner(1).connect(this.reverb)
-        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
-
+        this.volume = new Tone.Volume(-12).connect(this.limiter);
+        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.volume)
 
         //Synth
         this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
@@ -26,96 +22,44 @@ export class SynthAndEffects {
                 type: "sine",
             }
         }).connect(this.filter);
-
-        //LFOs
-        this.panLfo = new Tone.LFO(5, 0, 1);
-        this.panLfo.connect(this.pan.pan);
-        this.panLfo.start()
-
-        //UTILITY
-        this.delayCounter = 0
-        this.reverbCounter = 0
-
-        // INITIALISING
-        this.reverb.generate() //reverb needs to be initialised
-        this.reverb.wet.value = 0.1
     }
 
     //SYNTH FUNCTIONS
     triggerSynth(note) {
-        this.polySynth.triggerAttackRelease([note, "G5", "E6"], this.noteLength);
+        this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
-    setFilter(valueX, valueY) {
-        let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
+    setFilter(value) {
+        let calculatedFrequency = (value + 1) / 2 * 5000
+        // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
-        // compensate volume when the filter opens up
-        this.volume.volume.value = ((-1) * (this._normalizeRange(valueX)) * 5) - 5
-
+        // console.log("AFTER: " + this.filter.frequency.value)
     }
 
     setNoteLength(value) {
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-
-    }
-
-    setSynthADSR(value) {
-        this.polySynth.set({
-            "envelope": {
-                "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
-                "attack": (this._normalizeRange(value) * 0.2)
-            }
-        });
-    }
-
-    setOscillatorType(value) {
-        let numberOfWaveformOptions = this.waveforms.length - 1
-        let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
-        let waveform = this.waveforms[position]
-        this.polySynth.set(
-            {
-                oscillator: {
-                    type: waveform
-
-                }
-            })
+        // console.log("Notelength: " + position)
     }
 
 
     // EFFECT FUNCTIONS
-    //Panning
-    setPanningEffect(valueX, valueY) {
-        this.panLfo.set("max", this._normalizeRange(valueX)*this._normalizeRange(valueX))
-        this.panLfo.frequency.value = this._normalizeRange(valueY) * 8
-
-    }
-
-    //Delay
     setDelayFeedback(value) {
-        if (this.delayCounter % 35) {
-            this.delay.feedback.value = (this._normalizeRange(value)) * 0.9
-        }
-        this.delayCounter++
+        console.log(this.delayCounter)
+        //set between 0 - 0.9 to avoid endless feedback
+        let valueIntoNormalRange = (((value + 1) / 2)*0.9)
+        // console.log("value: " + valueIntoNormalRange)
+        this.delay.feedback.value = valueIntoNormalRange
+        // console.log("FEEDBACK: " + this.delay.wet.value)
     }
 
     setDelayWet(value) {
-        this.delay.wet.value = this._normalizeRange(value)
-    }
-
-    //Reverb
-    setReverbWet(value) {
-        if (this.reverbCounter % 50) {
-            this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
-        }
-        this.reverbCounter++
-    }
-
-
-    //INTERNAL FUNCTIONS
-    _normalizeRange(value) {
-        return ((value + 1) / 2)
+        console.log(this.delayCounter)
+        let valueIntoNormalRange = (((value + 1) / 2))
+        // console.log("value: " + valueIntoNormalRange)
+        this.delay.wet.value = valueIntoNormalRange
+        // console.log("FEEDBACK: " + this.delay.wet.value)
     }
 
 }
