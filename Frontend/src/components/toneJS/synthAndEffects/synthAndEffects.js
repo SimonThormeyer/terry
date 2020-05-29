@@ -11,7 +11,6 @@ export class SynthAndEffects {
         this.noteLength = this.noteLengthOptions[2]
 
         // INSTRUMENT_CHAIN
-
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.volume = new Tone.Volume(-12).connect(this.limiter);
@@ -29,23 +28,22 @@ export class SynthAndEffects {
 
 
     //SYNTH FUNCTIONS
-
     triggerSynth(note) {
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
     setFilter(value){
         let calculatedFrequency = (value+1)/2 * 5000
-        console.log("BEFORE: " + this.filter.frequency.value)
+        // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
-        console.log("AFTER: " + this.filter.frequency.value)
+        // console.log("AFTER: " + this.filter.frequency.value)
     }
 
     setNoteLength(value){
         let numberOfLengthOptions = this.noteLengthOptions.length-1
         let position = Math.round(((value+1)/2)*numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-        console.log("Notelength: " + position)
+        // console.log("Notelength: " + position)
     }
 
 
@@ -53,13 +51,10 @@ export class SynthAndEffects {
     setDelay(value) {
         console.log(this.delayCounter)
         let valueIntoNormalRange = (((value + 1) / 2))
-        console.log("value: " + valueIntoNormalRange)
+        // console.log("value: " + valueIntoNormalRange)
         this.delay.feedback.value = valueIntoNormalRange
-        console.log("FEEDBACK: " + this.delay.wet.value)
+        // console.log("FEEDBACK: " + this.delay.wet.value)
 
-
-        //this.delay.set('feedback', this.feebackValue);
-        //this.delay.set('wet',value)
 
     }
 
