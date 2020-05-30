@@ -46,7 +46,8 @@ export class MusicCtrl {
     }
 
     setParameterMusic(valueX, valueY) {
-        //this.isomorphicLayout.set('detune',valueX)
+        this.isomorphicLayout.changeScale(valueX);
+        //this.isomorphicLayout.changeOctave(valueY);
     }
 
 

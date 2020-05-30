@@ -20,8 +20,25 @@ export class IsomorphicLayout {
             ["C2", "D2", "E2", "F#2", "G2", "A2", "B2", "C3"]
         ]
 
+        this.major7 = [
+            ["E4", "G4", "B4", "C5", "E5", "G5", "B5", "C6"],
+            ["B3", "C4", "E4", "G4", "B4", "C5", "E5", "G5"],
+            ["E3", "G3", "B3", "C4", "E4", "G4", "B4", "C5"],
+            ["G2", "B2", "C3", "E3", "G3", "B3", "C4", "E4"],
+            ["C2", "E2", "G2", "B2", "C3", "E3", "G3", "B3"]
+        ]
+        
+        this.major6 = [
+            ["E4", "G4", "A4", "C5", "E5", "G5", "A5", "C6"],
+            ["A3", "C4", "E4", "G4", "A4", "C5", "E5", "G5"],
+            ["E3", "G3", "A3", "C4", "E4", "G4", "A4", "C5"],
+            ["G2", "A2", "C3", "E3", "G3", "A3", "C4", "E4"],
+            ["C2", "E2", "G2", "A2", "C3", "E3", "G3", "A3"]
+        ]
 
-        this.scale = this.penta1
+        this.scales = [this.major7, this.major6, this.penta1, this.lydian]
+
+        this.scale = this.penta1;
     }
 
     coordinateToNote(valueX, valueY) {
@@ -37,4 +54,9 @@ export class IsomorphicLayout {
         return this.scale[this.x][this.y]
     }
 
+    changeScale(value) {
+        let lengthOfScales = this.scales.length - 1;
+        let normalizeValue = (value + 1) / 2;
+        this.scale = this.scales[Math.round(normalizeValue * lengthOfScales)];
+    }
 }
