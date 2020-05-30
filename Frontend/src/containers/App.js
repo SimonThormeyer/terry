@@ -6,10 +6,6 @@ import Loopcontrols from "./loopcontrols";
 
 
 function App() {
-
- 
-
-
   
 
   return (
