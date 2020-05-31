@@ -1,3 +1,4 @@
+/******GENERAL**********/
 * {
   list-style: none;
   margin: 0;
@@ -15,8 +16,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
+
 #menu {
   background-color: white;
   display: flex;
@@ -52,4 +53,97 @@ code {
   margin: 0 2vw;
 }
 
-/*++++++++++++++++++++++++++++++++++++++*/
+
+/*+++++++++++LOOPICONS++++++++++++++++++++*/
+
+.progress-ring {
+  width: 4vw;
+  height: 4vw;
+  transform: rotateY(-180deg) rotateZ(-90deg);
+  margin-left: 1vw;
+}
+
+.progress-ring__circle {
+  stroke: black;
+  stroke-width: 0.25vw;
+  stroke-dasharray: 11vw;
+  stroke-dashoffset: 0vw;
+  fill: rgba(255, 255, 255, 0.6);
+  r: 1.76vw;
+  cx: 50%;
+  cy: 50%;
+}
+
+/***ANIMATION LOOPICONS***/
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: -11vw;
+  }
+  to {
+    stroke-dashoffset: 0vw;
+  }
+}
+
+/****STYLING LOOPICONS****/
+
+.loopcontrols {
+  position: fixed;
+}
+
+.loop {
+  float: left;
+  margin: 2vw 0 0 1.5vw;
+  transition: 0.2s;
+}
+
+@keyframes slide {
+  from {
+    margin-left: 1.5vw;
+  }
+  to {
+    margin-left: -5vw;
+  }
+}
+
+/*******three icons to interact with the loop******/
+
+.loop ul {
+  height: 100%;
+  position: fixed;
+  z-index: 999999999999;
+  margin-left: -0.25vw;
+  ;
+}
+
+.loop ul li {
+  cursor: pointer;
+  float: left;
+  height: 2vw;
+  width: 2vw;
+}
+
+
+
+.loopPausePlay {
+  margin-top: -0.5vw;
+  margin-right: 0.2vw;
+  display: none;
+}
+
+.loopDelete {
+  margin-top: -0.5vw;
+  margin-left: 0.2vw;
+  display: none;
+}
+
+.loopMute {
+  margin-top: -1.2vw;
+  display: none;
+}
+
+/***hover over loopicon and you'll see three buttons to interact with loops**/
+
+.loop:hover>ul li {
+  display: block;
+}
