@@ -1,9 +1,10 @@
 from Backend.api import proj_col
 
 
-def insert_ProjectWithProjectNameFromUser(user_ID,project_name):
+def insert_ProjectWithProjectNameFromUser(user_ID,project_name, project):
     proj = {"project_name": project_name,
-            "user_ID": user_ID}
+            "user_ID": user_ID,
+            "project": project}
     res = proj_col.insert_one(proj)
     return res 
 
@@ -31,11 +32,13 @@ def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
 
 
 # TODO: projekt muss hier noch mit rein 
-def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name):
+def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name, project):
     query = {"project_name": project_name,
             "user_ID": user_ID}
     newValue = { "$set": {"project_name": project_name,
-            "user_ID": user_ID} }      
+            "user_ID": user_ID, "project": project} }     
+    res = proj_col.update_one(query, newValue)      
+    return res   
 
 # idk ob wir das brauchen
 def query_AllProjects():
