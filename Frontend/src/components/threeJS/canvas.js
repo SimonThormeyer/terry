@@ -25,6 +25,7 @@ function Canvas(props) {
     const lightForRegularClick = useRef(new THREE.PointLight(0xFFFFFF, 0.0, 6000));
     const looperLights = useRef([new THREE.PointLight(0x3577B2, 0.0, 6000),
         new THREE.PointLight(0x3577B2, 0.0, 6000),
+        new THREE.PointLight(0x3577B2, 0.0, 6000),
         new THREE.PointLight(0x3577B2, 0.0, 6000)]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));
     const materialBackground = useRef(new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true}));
@@ -32,12 +33,12 @@ function Canvas(props) {
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));
 
 
+    let counter = 0;
     const canvasClick = useCallback((value, playback = false) => {
 
         //give canvasClick to Looper
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
             listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-            console.log("looper calls canvas click");
         }
         mouse.current.x = (value[0]) * 2 - 1;
         mouse.current.y = -(value[1]) * 2 + 1;
@@ -47,10 +48,16 @@ function Canvas(props) {
         let toIntersect = [background.current];
         let intersections = raycaster.current.intersectObjects(toIntersect);
         if (playback) {
-            console.log("looper playback")
-            looperLights.current[0].position.x = intersections[0].point.x;
-            looperLights.current[0].position.y = intersections[0].point.y;
-            looperLights.current[0].intensity = 0.7;
+            looperLights.current[counter].position.x = intersections[0].point.x;
+            looperLights.current[counter].position.y = intersections[0].point.y;
+            looperLights.current[counter].intensity = 0.5;
+            if(counter >=  looperLights.current.length-1){
+                counter = 0;
+            }
+            else{
+                counter ++;
+            }
+
         } else {
             //Changing lightForRegularClick position and brightness
             lightForRegularClick.current.position.x = intersections[0].point.x;
@@ -61,7 +68,7 @@ function Canvas(props) {
 
         musicCtrl.triggerSynth(value[0], value[1]);
         if (listeningLooper && !playback) {
-            console.log("adding event");//if there is a looper currently recording actions
+           // console.log("adding event");//if there is a looper currently recording actions
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
@@ -75,7 +82,7 @@ function Canvas(props) {
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
-        console.log("click on canvas");
+       // console.log("click on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
@@ -86,7 +93,7 @@ function Canvas(props) {
 
     //Touch on display (mobile/tablet)
     const onTouch = useCallback((event) => {
-        console.log("touch on canvas");
+       // console.log("touch on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
