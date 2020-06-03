@@ -35,11 +35,13 @@ export class Looper {
         const _repeatLoop = () => {
             this.timeouts = [];
             for (let event of this.events) {
-                this.timeouts.push(
-                    setTimeout(() => {
-                        event.action();
-                    }, event.time)
-                );
+                if (event.action) {
+                    this.timeouts.push(
+                        setTimeout(() => {
+                            event.action();
+                        }, event.time)
+                    );
+                }
             }
 
             this.mainLoopTimeout = setTimeout(() => _repeatLoop(), this.duration);
