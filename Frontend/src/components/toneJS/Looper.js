@@ -93,6 +93,31 @@ export class Looper {
         }
     }
 
+    //exports all relevant Looper information
+    getLooper() {
+        let exportedEvents = []
+        // calculate new event times - new starting point is now
+        let currentTime = this.getCurrentTime();
+        for (let event of this.events) {
+            let exportedEvent = JSON.parse(JSON.stringify(event));
+            if (event.time >= currentTime) {
+                exportedEvent.time = event.time - currentTime;
+            } else {
+                exportedEvent.time = event.time + this.duration - currentTime;
+            }
+            exportedEvents.push(exportedEvent);
+        }
+        return {
+            'duration': this.duration,
+            'muted': this.muted,
+            'events': exportedEvents,
+            'stopped': this.stopped,
+            'playStartTime': this.playStartTime,
+            'pauseTime': this.pauseTime,
+            'currentTime': currentTime
+        }
+    }
+
     //underscore methods are not meant to be used outside of this class
     // _simulateCanvasClick(x, y) {
     //     this.musicCtrl.triggerSynth(x, y);

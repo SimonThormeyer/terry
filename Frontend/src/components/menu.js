@@ -16,11 +16,11 @@ function Menu(props) {
 
     // Global state - see GlobalState.js for explanation, needed for functional logic of menu buttons 
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
-    const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperID');
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
 
     // state of Component (used for appearance of buttons)
+    const [nextLooperID, setNextLooperID] = useState(1); 
     const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
