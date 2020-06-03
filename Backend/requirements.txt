@@ -4,3 +4,4 @@ Flask-PyMongo
 flask-api
 datetime
 pymongo
+flask-mongoengine
