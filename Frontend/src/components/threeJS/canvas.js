@@ -31,9 +31,9 @@ function Canvas(props) {
     const materialBackground = useRef(new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true}));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));
+    const counter = useRef(0);
 
 
-    let counter = 0;
     const canvasClick = useCallback((value, playback = false) => {
 
         //give canvasClick to Looper
@@ -52,10 +52,10 @@ function Canvas(props) {
             looperLights.current[counter].position.y = intersections[0].point.y;
             looperLights.current[counter].intensity = 0.5;
             if(counter >=  looperLights.current.length-1){
-                counter = 0;
+                counter.current = 0;
             }
             else{
-                counter ++;
+                counter.current ++;
             }
 
         } else {
@@ -113,21 +113,22 @@ function Canvas(props) {
         oldOnMouseClick.current = onMouseClick;
     }, [onMouseClick, onTouch]);
 
-    const effectSphereDrag = (value) => {
+    const effectSphereDrag = useCallback((value) => {
         musicCtrl.setParameterEffect(value.x, value.y)
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
-    };
+    },[musicCtrl]);
 
-    const synthSphereDrag = (value) => {
+    const synthSphereDrag = useCallback((value) => {
         musicCtrl.setParameterSynth(value.x, value.y)
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
-    };
+    },[musicCtrl]);
 
-    const musikSphereDrag = (value) => {
+    const musikSphereDrag = useCallback((value) => {
         //do something
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
         //musicCtrl.....
-    };
+    },[]);
+    //[musicCtrl]
 
 
     //CREATING SCENE
@@ -301,7 +302,7 @@ function Canvas(props) {
         animate();
 
 
-    }, [mount, height, width]);
+    }, [mount, height, width,effectSphereDrag,musikSphereDrag,synthSphereDrag]);
 
 
     //=================
