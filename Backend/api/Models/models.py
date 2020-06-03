@@ -10,5 +10,3 @@ class Project(db.Document):
     user_ID = db.StringField(max_length=5,required=True, unique=True,primary_key = True)
     project_name = db.StringField(max_length=255,required=True)
     projectJSON = db.EmbeddedDocumentField(Project_doc)
-
-
