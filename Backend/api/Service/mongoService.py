@@ -1,48 +1,45 @@
-from Backend.api import proj_col
+# from Backend.api import proj_col
+from Backend.api import db
+from Backend.api.Models import Project
 
 
 def insert_ProjectWithProjectNameFromUser(user_ID,project_name, project):
+    #TODO: Error handling when the req dont validate
     proj = {"project_name": project_name,
             "user_ID": user_ID,
             "project": project}
-    res = proj_col.insert_one(proj)
-    return res 
+    project = Project(proj).save()
+    res = project
+    return res
 
 def query_ProjectsFromUser(user_ID):
-    query = {"user_ID": user_ID}
-    res = proj_col.find(query)
-    return res 
+    res = Project.objects.get(user_ID=user_ID)
+    return res
 
 def query_ProjectWithProjectName(project_name):
-    query = {"project_name": project_name}
-    res = proj_col.find(query)
-    return res 
+    res = Project.objects.get(project_name=project_name)
+    return res
 
 def query_ProjectWithProjectNameFromUser(user_ID,project_name):
-    query = {"project_name": project_name,
-            "user_ID": user_ID}
-    res = proj_col.find(query)
-    return res 
+
+    res = Project.objects.get(project_name=project_name,user_ID=user_ID)
+    return res
 
 def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
-    query = {"project_name": project_name,
-            "user_ID": user_ID}
-    res = proj_col.delete_one(query)
-    return res 
+
+    res = Project.objects.get(project_name=project_name,user_ID=user_ID).delete()
+    return res
 
 
-# TODO: projekt muss hier noch mit rein 
-def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name, project):
-    query = {"project_name": project_name,
-            "user_ID": user_ID}
-    newValue = { "$set": {"project_name": project_name,
-            "user_ID": user_ID, "project": project} }     
-    res = proj_col.update_one(query, newValue)      
+def update_ProjectWithProjectNameFromUser(user_ID,project_name, project):
+    newProj = {"project_name": project_name,
+            "user_ID": user_ID, "project": project}
+    res = Project.objects.get(project_name=project_name,user_ID=user_ID).update(newProj)
     return res   
 
 # idk ob wir das brauchen
 def query_AllProjects():
-    return proj_col.find()
+    return Project.objects().to_json()
 
 
 # Limit results with .limit()
