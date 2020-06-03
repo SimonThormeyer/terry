@@ -48,10 +48,10 @@ function Canvas(props) {
         let toIntersect = [background.current];
         let intersections = raycaster.current.intersectObjects(toIntersect);
         if (playback) {
-            looperLights.current[counter].position.x = intersections[0].point.x;
-            looperLights.current[counter].position.y = intersections[0].point.y;
-            looperLights.current[counter].intensity = 0.5;
-            if(counter >=  looperLights.current.length-1){
+            looperLights.current[counter.current].position.x = intersections[0].point.x;
+            looperLights.current[counter.current].position.y = intersections[0].point.y;
+            looperLights.current[counter.current].intensity = 0.5;
+            if(counter.current >=  looperLights.current.length-1){
                 counter.current = 0;
             }
             else{
