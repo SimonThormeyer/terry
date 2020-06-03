@@ -1,5 +1,5 @@
-from Backend.api.service import mongoService as mS
-from Backend.api.routes import responses
+from api.service import mongoService as mS
+from api.routes import responses
 # from Backend.api import proj_col
 
 def post_ProjectWithProjectNameFromUser(user_ID, project_name, project):
