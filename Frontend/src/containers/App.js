@@ -1,7 +1,6 @@
 import Canvas from '../components/threeJS/canvas'
 import Menu from '../components/menu'
 import React from 'react';
-import { useGlobalState } from "../GlobalState"
 import Loopcontrols from "./loopcontrols";
 
 
