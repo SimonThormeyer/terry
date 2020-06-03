@@ -1,7 +1,7 @@
 from . import projects
 from flask import request
-from Backend.api.routes.responses import Standard200Response
-import Backend.api.controller.mongoController as Controller
+from .responses import Standard200Response
+import api.controller.mongoController as Controller
 
 
 @projects.route('/test', methods=['GET'])

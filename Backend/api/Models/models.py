@@ -1,5 +1,8 @@
-from Backend.api import db
+from api import db
 import datetime
+
+class Project_doc(db.DynamicDocument):
+    someVar = 1
 
 
 class Project(db.Document):
@@ -8,14 +11,4 @@ class Project(db.Document):
     project_name = db.StringField(max_length=255,required=True)
     projectJSON = db.EmbeddedDocumentField(Project_doc)
 
-class Project_doc(db.DynamicDocument):
 
-
-# db.DynamicDocument : allows unvalidated dynamic objects
-
-# class Page(Document):
-#     comments = ListField(EmbeddedDocumentField(Comment))
-
-# comment1 = Comment(content='Good work!')
-# comment2 = Comment(content='Nice article!')
-# page = Page(comments=[comment1, comment2])
