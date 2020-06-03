@@ -1,6 +1,6 @@
 # from Backend.api import proj_col
 from api import db
-from api.Models.models import Project
+from api.models.models import Project
 
 
 def insert_ProjectWithProjectNameFromUser(user_ID,project_name, project):
