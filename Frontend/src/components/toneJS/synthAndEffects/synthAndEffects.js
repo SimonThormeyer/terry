@@ -5,7 +5,7 @@ export class SynthAndEffects {
     constructor() {
 
         // Settings
-        this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
+        this.noteLengthOptions = ["64n", "32n", "16n", "8n", "4n", "2n", "1n"]
         this.waveforms = ["sine", "triangle"]
         this.noteLength = this.noteLengthOptions[2]
 
@@ -13,7 +13,9 @@ export class SynthAndEffects {
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.volume = new Tone.Volume(-12).connect(this.limiter);
-        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.volume)
+        this.reverb = new Tone.Reverb(1.5).connect(this.volume)
+        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.reverb)
+
 
         //Synth
         this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
@@ -22,6 +24,13 @@ export class SynthAndEffects {
                 type: "sine",
             }
         }).connect(this.filter);
+
+        //UTILITY
+        this.delayCounter = 0
+
+
+        // INITIALISING
+        this.reverb.generate()
     }
 
     //SYNTH FUNCTIONS
@@ -30,7 +39,7 @@ export class SynthAndEffects {
     }
 
     setFilter(value) {
-        let calculatedFrequency = (value + 1) / 2 * 5000
+        let calculatedFrequency = (value + 1) / 2 * 2000
         // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
         // console.log("AFTER: " + this.filter.frequency.value)
@@ -57,21 +66,28 @@ export class SynthAndEffects {
 
 
     // EFFECT FUNCTIONS
+    //Delay
     setDelayFeedback(value) {
-        console.log(this.delayCounter)
-        //set between 0 - 0.9 to avoid endless feedback
-        let valueIntoNormalRange = (((value + 1) / 2) * 0.9)
-        // console.log("value: " + valueIntoNormalRange)
-        this.delay.feedback.value = valueIntoNormalRange
-        // console.log("FEEDBACK: " + this.delay.wet.value)
+        if (this.delayCounter % 10) {
+            this.delay.feedback.value = (this._normalizeRange(value)) * 0.9
+        }
+        this.delayCounter++
     }
 
     setDelayWet(value) {
         console.log(this.delayCounter)
-        let valueIntoNormalRange = (((value + 1) / 2))
-        // console.log("value: " + valueIntoNormalRange)
-        this.delay.wet.value = valueIntoNormalRange
-        // console.log("FEEDBACK: " + this.delay.wet.value)
+        this.delay.wet.value = this._normalizeRange(value)
+    }
+
+    //Reverb
+    setDelayDecay(value) {
+        this.delay.wet.value = this._normalizeRange(value)
+    }
+
+
+    //INTERNAL FUNCTIONS
+    _normalizeRange(value) {
+        return ((value + 1) / 2)
     }
 
 }
