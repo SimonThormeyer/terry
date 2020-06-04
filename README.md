@@ -1,3 +1,13 @@
+# Terry
+Clone via `git clone`
+
+Start via `docker-compose up --build` 
+
+## Have a try
+[Live Demo of Terry](http://80.190.117.183:3000)
+
+## Description
+
 **Terry ist ein “music creation playground”, der zum musikalischen Experimentieren einlädt. Er soll als WebApp über einen Browser nutzbar sein.**
 
 Durch **Klicken** auf dem Laptop oder **Drücken** auf einem Touchscreen können Töne ausgegeben werden, die je nach Eingabe verschieden klingen. Außerdem lassen sich mit **drei einfachen Steuerelementen** __Klänge, Soundeffekte und musikalische Stimmungen__ verändern.
