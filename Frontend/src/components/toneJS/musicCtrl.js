@@ -36,13 +36,14 @@ export class MusicCtrl {
         this.synthAndEffects.setFilter(valueX)
         this.synthAndEffects.setNoteLength(valueY)
         this.synthAndEffects.setOscillatorType(valueX)
+        this.synthAndEffects.setSynthADSR(valueY)
     }
 
     setParameterEffect(valueX, valueY) {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
         this.synthAndEffects.setReverbWet(valueY)
-        this.synthAndEffects.setReverbDecay(valueX)
+        this.synthAndEffects.setReverbWet(valueX)
     }
 
     setParameterMusic(valueX, valueY) {

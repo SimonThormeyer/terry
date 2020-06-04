@@ -9,13 +9,13 @@ export class SynthAndEffects {
         this.waveforms = ["sine", "triangle"]
         this.noteLength = this.noteLengthOptions[2]
 
+
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.volume = new Tone.Volume(-12).connect(this.limiter);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.reverb)
-
 
         //Synth
         this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
@@ -29,9 +29,9 @@ export class SynthAndEffects {
         this.delayCounter = 0
         this.reverbCounter = 0
 
-
         // INITIALISING
-        this.reverb.generate()
+        this.reverb.generate() //reverb needs to be initialised
+        this.reverb.wet.value = 0.1
     }
 
     //SYNTH FUNCTIONS
@@ -40,9 +40,12 @@ export class SynthAndEffects {
     }
 
     setFilter(value) {
-        let calculatedFrequency = (value + 1) / 2 * 2000
+        let calculatedFrequency = (value + 1) / 2 * 1500
         // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
+        this.volume.volume.value = 1 - this._normalizeRange(value)
+
+
         // console.log("AFTER: " + this.filter.frequency.value)
     }
 
@@ -50,7 +53,16 @@ export class SynthAndEffects {
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-        // console.log("Notelength: " + position)
+
+    }
+
+    setSynthADSR(value){
+        this.polySynth.set({
+            "envelope" : {
+                "sustain" : this._normalizeRange(value),
+                "attack" : (this._normalizeRange(value) * this._normalizeRange(value)) * 0.4
+            }
+        });
     }
 
     setOscillatorType(value) {
@@ -69,7 +81,7 @@ export class SynthAndEffects {
     // EFFECT FUNCTIONS
     //Delay
     setDelayFeedback(value) {
-        if (this.delayCounter % 10) {
+        if (this.delayCounter % 35) {
             this.delay.feedback.value = (this._normalizeRange(value)) * 0.9
         }
         this.delayCounter++
@@ -81,12 +93,10 @@ export class SynthAndEffects {
 
     //Reverb
     setReverbWet(value) {
-        this.reverb.wet.value = this._normalizeRange(value)
-    }
-
-    setReverbDecay(value) {
-        console.log("HI")
-        this.reverb.decay.value =((this._normalizeRange(value))*10)
+        if (this.reverbCounter % 35) {
+            this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
+        }
+        this.reverbCounter++
     }
 
 
