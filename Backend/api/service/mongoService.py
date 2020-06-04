@@ -15,14 +15,16 @@ def query_ProjectsFromUser(user_ID):
     projects = []
     for post in posts.find(query):
         projects.append(post)
-    return projects
+    projects.reverse()    
+    return dumps(projects)
 
 def query_ProjectWithProjectName(project_name):
     query = {'project_name': project_name}
     projects = []
     for post in posts.find(query):
         projects.append(post)
-    return projects
+    projects.reverse()    
+    return dumps(projects)
 
 
 def query_ProjectWithProjectNameFromUser(user_ID,project_name):
@@ -31,7 +33,8 @@ def query_ProjectWithProjectNameFromUser(user_ID,project_name):
     projects = []
     for post in posts.find(query):
         projects.append(post)
-    return projects
+    projects.reverse()    
+    return dumps(projects)
 
 
 
