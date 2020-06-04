@@ -2,8 +2,8 @@ from api.service import mongoService as mS
 from api.routes import responses
 # from Backend.api import proj_col
 
-def post_ProjectWithProjectNameFromUser(user_ID, project_name, project):
-    res = mS.insert_ProjectWithProjectNameFromUser(user_ID, project_name, project)
+def post_ProjectWithProjectNameFromUser(project):
+    res = mS.insert_ProjectWithProjectNameFromUser(project)
     return responses.Standard200Response(res)
 
 def get_ProjectsFromUser(user_ID):
@@ -35,9 +35,8 @@ def update_ProjectWithProjectNameFromUser(user_ID,project_name, project):
     res = mS.update_ProjectWithProjectNameFromUser(user_ID, project_name, project)
     return responses.Standard200Response(res)  
 
-# idk ob wir das brauchen
 def get_AllProjects():
     res = mS.query_AllProjects()
     if res.count == 0:
         return responses.Standard404ErrorResponse
-    return responses.Standard200Response(res)
+    return str(res)

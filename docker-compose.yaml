@@ -9,6 +9,9 @@ services:
       - "5000:5000"
     env_file:
       - ./Backend/.env
+    environment: 
+      - WAIT_HOSTS=mongo:27017
+      - MONGO_HOST=mongo  
     volumes:
       - .:/code
 
@@ -21,21 +24,15 @@ services:
       - "3000:3000"
     volumes:
       - ./Frontend:/app
-      # - yarn-cache
     tty: true
 
   mongo:
     container_name: SoundGroup-MongoDB
     image: mongo
-    # enviroment:
-    #   - MONGO_INITDB_DATABASE=put_name_here
-    #   - MONGO_INITDB_ROOT_USERNAME=put_username_here
-    #   - MONGO_INITDB_ROOT_PASSWORD=put_pw_here
     volumes:
-      - ./init-file_where_init
       - mongodata:/usr/share/mongodb/data
     ports:
-      - "27017-27019:27017-27019"
+      - "27017:27017"
 
-volumes: # Define seperate volume for Elasticsearch data
+volumes:
   mongodata:
