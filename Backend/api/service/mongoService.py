@@ -31,9 +31,13 @@ def query_ProjectWithProjectNameFromUser(user_ID,project_name):
     query = {'project_name': project_name,
             'user_ID': user_ID}
     projects = []
+    # da mit der user id nur ein Post gefunden werden soll, kann man auch nur find_one benutzten,
+    # da davon auszugehen ist das nur ein Objekt existiert
+    # also:
+    # posts.find_one() ?
     for post in posts.find(query):
         projects.append(post)
-    projects.reverse()    
+    projects.reverse()
     return dumps(projects)
 
 

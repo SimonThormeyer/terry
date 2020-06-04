@@ -14,9 +14,6 @@ mongo_host = os.environ['MONGO_HOST']
 mongo = PyMongo(app, uri='mongodb://mongo:27017/Projects')
 db = mongo.db
 proj_col = db['Projects']
-# mongo = PyMongo(app)
-# db = mongo.db
-# proj_col = db['Projects']
 
 
 
