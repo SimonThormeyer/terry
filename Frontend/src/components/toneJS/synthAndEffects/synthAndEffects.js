@@ -6,7 +6,7 @@ export class SynthAndEffects {
 
         // Settings
         this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
-        this.waveforms = ["sine", "saw", "pulse"]
+        this.waveforms = ["sine", "triangle"]
         this.noteLength = this.noteLengthOptions[2]
 
         // INSTRUMENT_CHAIN
@@ -43,12 +43,24 @@ export class SynthAndEffects {
         // console.log("Notelength: " + position)
     }
 
+    setOscillatorType(value) {
+        let numberOfWaveformOptions = this.waveforms.length - 1
+        let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
+        let waveform = this.waveforms[position]
+        this.polySynth.set(
+            {
+                oscillator: {
+                    type: waveform
+                }
+            })
+    }
+
 
     // EFFECT FUNCTIONS
     setDelayFeedback(value) {
         console.log(this.delayCounter)
         //set between 0 - 0.9 to avoid endless feedback
-        let valueIntoNormalRange = (((value + 1) / 2)*0.9)
+        let valueIntoNormalRange = (((value + 1) / 2) * 0.9)
         // console.log("value: " + valueIntoNormalRange)
         this.delay.feedback.value = valueIntoNormalRange
         // console.log("FEEDBACK: " + this.delay.wet.value)
