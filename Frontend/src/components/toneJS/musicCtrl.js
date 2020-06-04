@@ -41,6 +41,8 @@ export class MusicCtrl {
     setParameterEffect(valueX, valueY) {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
+        this.synthAndEffects.setReverbWet(valueY)
+        this.synthAndEffects.setReverbDecay(valueX)
     }
 
     setParameterMusic(valueX, valueY) {

@@ -13,7 +13,7 @@ export class SynthAndEffects {
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.volume = new Tone.Volume(-12).connect(this.limiter);
-        this.reverb = new Tone.Reverb(1.5).connect(this.volume)
+        this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.reverb)
 
 
@@ -27,6 +27,7 @@ export class SynthAndEffects {
 
         //UTILITY
         this.delayCounter = 0
+        this.reverbCounter = 0
 
 
         // INITIALISING
@@ -75,13 +76,17 @@ export class SynthAndEffects {
     }
 
     setDelayWet(value) {
-        console.log(this.delayCounter)
         this.delay.wet.value = this._normalizeRange(value)
     }
 
     //Reverb
-    setDelayDecay(value) {
-        this.delay.wet.value = this._normalizeRange(value)
+    setReverbWet(value) {
+        this.reverb.wet.value = this._normalizeRange(value)
+    }
+
+    setReverbDecay(value) {
+        console.log("HI")
+        this.reverb.decay.value =((this._normalizeRange(value))*10)
     }
 
 
