@@ -33,7 +33,7 @@ export class MusicCtrl {
     }
 
     setParameterSynth(valueX, valueY) {
-        this.synthAndEffects.setFilter(valueX)
+        this.synthAndEffects.setFilter(valueX, valueY)
         this.synthAndEffects.setNoteLength(valueY)
         this.synthAndEffects.setOscillatorType(valueX)
         this.synthAndEffects.setSynthADSR(valueY)
@@ -44,6 +44,7 @@ export class MusicCtrl {
         this.synthAndEffects.setDelayWet(valueY)
         this.synthAndEffects.setReverbWet(valueY)
         this.synthAndEffects.setReverbWet(valueX)
+        this.synthAndEffects.setPanningEffect(valueX,valueY)
     }
 
     setParameterMusic(valueX, valueY) {
