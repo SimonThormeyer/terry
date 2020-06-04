@@ -8,7 +8,7 @@ Start via `docker-compose up --build`
 
 ## Description
 
-**Terry ist ein “music creation playground”, der zum musikalischen Experimentieren einlädt. Er soll als WebApp über einen Browser nutzbar sein.**
+**Terry ist ein “music creation playground”, der zum musikalischen Experimentieren einlädt. Er ist als WebApp über einen Browser nutzbar.**
 
 Durch **Klicken** auf dem Laptop oder **Drücken** auf einem Touchscreen können Töne ausgegeben werden, die je nach Eingabe verschieden klingen. Außerdem lassen sich mit **drei einfachen Steuerelementen** __Klänge, Soundeffekte und musikalische Stimmungen__ verändern.
 Die getätigte Eingabe von Tönen sowie das Verschieben der Steuerelemente lassen sich über die **Looper-Funktion** speichern und automatisieren, sodass besonders interessante Eingaben mit anderen Eingaben gemischt und überlagert werden oder einfach immer wieder angehört werden können. Dies ermöglicht es, mit einfachen Mitteln komplexe und sich organisch bewegende Klänge zu erzeugen und mit diesen spielerisch zu experimentieren.
