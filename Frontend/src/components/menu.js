@@ -6,8 +6,8 @@ import { ReactComponent as RecordIcon } from '../img/record.svg';
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as StopIcon } from '../img/stop.svg';
 import { ReactComponent as DownloadIcon } from '../img/download.svg';
-import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
+import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { useGlobalState } from "../GlobalState"
 import { Looper } from '../components/toneJS/Looper'
 
@@ -55,9 +55,9 @@ function Menu(props) {
     const downloadOverlayOnFunction = () => {
         console.log("menu js downlaodOverlayOn Function");
         var divOverlay = document.getElementById("overlay");
+
+       
         divOverlay.style.display = "block";
-
-
         var underlay = document.getElementById("underlay");
         underlay.style.display = "block";
 
@@ -117,7 +117,7 @@ function Menu(props) {
                         <LogoIcon id="logoIcon" />
                     </li>
                     <li>
-                        <p>Save your Track?</p>
+                        <p>Download your Track?</p>
                     </li>
                     <li>
                         <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction() }} />
@@ -125,9 +125,8 @@ function Menu(props) {
                 </ul>
             </div>
         </>
-
-
     );
-}
+    }
+
 
 export default Menu;
