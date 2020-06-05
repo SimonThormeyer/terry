@@ -18,7 +18,7 @@ class Project():
         self.project = project
 
     def to_json(self):
-        if not check_ProjectName(self.project_name):
+        if not check_ProjectName(self.user_ID, self.project_name):
             return Standard400ErrorResponse('Oooops, project_name already in use')
         elif len(self.user_ID) > 5 or len(self.project_name) > 255:
             return Standard400ErrorResponse('Oooops, user_ID (5) or project_name (255) too long')

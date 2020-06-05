@@ -28,8 +28,8 @@ def query_ProjectWithProjectName(project_name):
 
 
 def query_ProjectWithProjectNameFromUser(user_ID,project_name):
-    query = {'project_name': project_name,
-            'user_ID': user_ID}
+    query = {'user_ID': user_ID,
+            'project_name': project_name}
     projects = []
     for post in posts.find(query):
         projects.append(post)
@@ -39,16 +39,16 @@ def query_ProjectWithProjectNameFromUser(user_ID,project_name):
 
 
 def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
-    query = {'project_name': project_name,
-            'user_ID': user_ID}
+    query = {'user_ID': user_ID,
+            'project_name': project_name}
     res = posts.delete_one(query)
     return res 
 
 
 # TODO: projekt muss hier noch mit rein 
 def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name):
-    query = {'project_name': project_name,
-            'user_ID': user_ID}
+    query = {'user_ID': user_ID,
+            'project_name': project_name}
     newValue = { '$set': {'project_name': project_name,
             'user_ID': user_ID} }      
 
@@ -61,8 +61,9 @@ def query_AllProjects():
     projects.reverse()    
     return dumps(projects)
 
-def check_ProjectName(project_name):
-    query = {'project_name': project_name}
+def check_ProjectName(user_ID, project_name):
+    query = {'user_ID': user_ID,
+            'project_name': project_name}
     if posts.count_documents(query) > 0:
         return False
     else: return True    
