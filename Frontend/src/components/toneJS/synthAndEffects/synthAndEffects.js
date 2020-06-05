@@ -6,7 +6,7 @@ export class SynthAndEffects {
 
         // Settings
         this.noteLengthOptions = ["64n", "32n", "16n", "8n", "4n", "2n", "1n"]
-        this.waveforms = ["sine", "triangle"]
+        this.waveforms = ["sine6", "triangle6"]
         this.noteLength = this.noteLengthOptions[2]
 
 
@@ -51,12 +51,14 @@ export class SynthAndEffects {
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
+
+
     setFilter(valueX, valueY) {
         let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
         this.filter.frequency.value = calculatedFrequency
         // compensate volume when the filter opens up
         this.volume.volume.value = ((-1) * (this._normalizeRange(valueX)) * 5) - 5
-        t
+
     }
 
     setNoteLength(value) {
@@ -83,6 +85,7 @@ export class SynthAndEffects {
             {
                 oscillator: {
                     type: waveform
+
                 }
             })
     }
@@ -91,8 +94,8 @@ export class SynthAndEffects {
     // EFFECT FUNCTIONS
     //Panning
     setPanningEffect(valueX, valueY) {
-        this.panLfo.set("max", this._normalizeRange(valueX))
-        this.panLfo.frequency.value = this._normalizeRange(valueY) * 10
+        this.panLfo.set("max", this._normalizeRange(valueX)*this._normalizeRange(valueX))
+        this.panLfo.frequency.value = this._normalizeRange(valueY) * 8
 
     }
 
@@ -110,7 +113,7 @@ export class SynthAndEffects {
 
     //Reverb
     setReverbWet(value) {
-        if (this.reverbCounter % 1) {
+        if (this.reverbCounter % 50) {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
         this.reverbCounter++
