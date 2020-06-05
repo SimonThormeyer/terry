@@ -1,17 +1,18 @@
 import React from 'react';
+import axios from 'axios';
 import { useGlobalState } from "../GlobalState";
-import {decycle} from "cycle";
 
 function SaveProjectButton() {
 
-    const [runningLoopers, ] = useGlobalState('runningLoopers');
+    const [runningLoopers,] = useGlobalState('runningLoopers');
 
     let userID = 1;
     let projectName = `projectName`;
+    let backendUrl = `http://localhost:5000`;
 
     let getGlobalState = () => {
         let loopers = [];
-        for(let looper of Array.from(runningLoopers.values())) {
+        for (let looper of Array.from(runningLoopers.values())) {
             loopers.push(looper.getLooper());
         }
         return {
@@ -19,26 +20,34 @@ function SaveProjectButton() {
         }
     }
 
-    let saveProject = async () => {
-        console.log((getGlobalState()));
-        const response = await fetch(`/projects/user/${userID}/project/${projectName}`, {
-            method: 'POST', 
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(getGlobalState()),
-        })
-        if(response.ok) {
-            console.log(`successfully saved project to Database.`);
-        } else {
-            console.error(`${response.status} ${response.statusText}`);
-        }
+    let saveProject = () => {
+        axios
+
+            // // Anfang Test GET
+            // .get(`${backendUrl}/projects/test`)
+            // .then(res =>{
+            //     console.log(res.statusText);
+            // }) 
+            // //Ende Test-Get
+
+            // Anfang POST
+            .post(`${backendUrl}/projects/user/${userID}/project/${projectName}`, getGlobalState())
+            .then(res => {
+                console.log(`successful: ${res.statusText}`)
+            }) 
+            // Ende Post
+
+            .catch(err => {
+                err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
+            })
+
     }
 
+
     return (
-            <button onClick={async () => saveProject() }>
-                Save Project
-            </button>
+        <button onClick={() => saveProject()}>
+            Save Project
+        </button>
     )
 }
 
