@@ -80,9 +80,16 @@ export class IsomorphicLayout {
         //      
         //}
 
-        this.scale = this.penta1;
+        this.currentArray = [
+            ["E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
+            ["A3", "C4", "D4", "E4", "G4", "A4", "C4", "D4"],
+            ["D3", "E3", "G3", "A3", "C4", "D4", "E4", "G4"],
+            ["G2", "A2", "C3", "D3", "E3", "G3", "A3", "C4"],
+            ["C2", "D2", "E2", "G2", "A2", "C3", "D3", "E3"]
+        ]
 
-        this.octave = 2;
+        this.scale = this.currentArray;
+
     }
 
     coordinateToNote(valueX, valueY) {
@@ -90,13 +97,10 @@ export class IsomorphicLayout {
         this.coordY = valueX
         this.coordX = valueY
 
-        this.rows = this.scale.length - 8
+        this.rows = this.scale.length
         this.collumns = this.scale[0].length
-        this.x = Math.round((this.rows - 1) * (this.coordX)) + this.octave
+        this.x = Math.round((this.rows - 1) * (this.coordX))
         this.y = Math.round((this.collumns - 1) * (this.coordY))
-
-        console.log("x: " + this.x);
-        //console.log("y: " + this.y)
 
         return this.scale[this.x][this.y]
     }
@@ -108,7 +112,13 @@ export class IsomorphicLayout {
     }
 
     changeOctave(value) {
-        let numberOfSteps = 5;
-        this.octave = Math.round(value * numberOfSteps);
+        let normalizeInvertedValue = 1 - (value + 1)/2;
+        let highestNoteInArray = Math.round(normalizeInvertedValue * 5);
+        let n = 0;
+        for(let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
+            this.currentArray[n] = this.lydian[i]; 
+            n++;
+        }
+        console.log(this.currentArray);
     }
 }
