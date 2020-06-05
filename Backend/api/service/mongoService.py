@@ -8,7 +8,7 @@ posts = db.posts
 def insert_ProjectWithProjectNameFromUser(project):
     post = posts.insert_one(project).inserted_id
     res = 'inserted with ObjectID ' + str(post)
-    return res
+    return dumps(res)
 
 def query_ProjectsFromUser(user_ID):
     query = {'user_ID': user_ID}
@@ -30,15 +30,8 @@ def query_ProjectWithProjectName(project_name):
 def query_ProjectWithProjectNameFromUser(user_ID,project_name):
     query = {'user_ID': user_ID,
             'project_name': project_name}
-    projects = []
-    # da mit der user id nur ein Post gefunden werden soll, kann man auch nur find_one benutzten,
-    # da davon auszugehen ist das nur ein Objekt existiert
-    # also:
-    # posts.find_one() ?
-    for post in posts.find(query):
-        projects.append(post)
-    projects.reverse()
-    return dumps(projects)
+    proj = posts.find_one(query)
+    return dumps(proj)
 
 
 
@@ -47,14 +40,6 @@ def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
             'project_name': project_name}
     res = posts.delete_one(query)
     return res 
-
-
-# TODO: projekt muss hier noch mit rein 
-def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name):
-    query = {'user_ID': user_ID,
-            'project_name': project_name}
-    newValue = { '$set': {'project_name': project_name,
-            'user_ID': user_ID} }      
 
 
 def query_AllProjects():
@@ -71,3 +56,11 @@ def check_ProjectName(user_ID, project_name):
     if posts.count_documents(query) > 0:
         return False
     else: return True    
+
+
+# # TODO: projekt muss hier noch mit rein 
+# def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name, newProject):
+#     query = {'user_ID': user_ID,
+#             'project_name': project_name}
+#     newValue = { '$set': {'project_name': project_name,
+#             'user_ID': user_ID} }      
