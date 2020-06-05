@@ -11,7 +11,6 @@ import {Soundbed} from "./soundbed/soundbed";
     let musicCtrl = new musicCtrl();
 
     CALL FUNCTION:
-    musicCtrl.triggerSynth(C4, "1n");
     */
 
 export class MusicCtrl {
@@ -42,7 +41,6 @@ export class MusicCtrl {
     setParameterEffect(valueX, valueY) {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
-        this.synthAndEffects.setReverbWet(valueY)
         this.synthAndEffects.setReverbWet(valueX)
         this.synthAndEffects.setPanningEffect(valueX,valueY)
     }
