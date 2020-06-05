@@ -10,8 +10,8 @@ function Canvas(props) {
 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
-    const [width, ] = useState(window.innerWidth);
-    const [height, ] = useState(window.innerHeight);
+    const [width,] = useState(window.innerWidth);
+    const [height,] = useState(window.innerHeight);
     //  const canvasRef = useRef<HTMLCanvasElement>();
     const mount = useRef(null);
 
@@ -22,18 +22,53 @@ function Canvas(props) {
     const dragging = useRef(false);
     const mouse = useRef(new THREE.Vector2());
     const raycaster = useRef(new THREE.Raycaster());
-    const light = useRef(new THREE.PointLight(0xFFFFFF, 0.0, 6000));
+    const lightForRegularClick = useRef(new THREE.PointLight(0xFFFFFF, 0.0, 6000));
+    const looperLights = useRef([new THREE.PointLight(0x3577B2, 0.0, 6000),
+        new THREE.PointLight(0x3577B2, 0.0, 6000),
+        new THREE.PointLight(0x3577B2, 0.0, 6000),
+        new THREE.PointLight(0x3577B2, 0.0, 6000)]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));
     const materialBackground = useRef(new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true}));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));
+    const counter = useRef(0);
 
 
-    const canvasClick = useCallback((value) => {
-        //  setCoordinates([value[0], value[1]]);
+    const canvasClick = useCallback((value, playback = false) => {
+
+        //give canvasClick to Looper
+        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
+            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        }
+        mouse.current.x = (value[0]) * 2 - 1;
+        mouse.current.y = -(value[1]) * 2 + 1;
+
+        raycaster.current.setFromCamera(mouse.current, camera.current);
+
+        let toIntersect = [background.current];
+        let intersections = raycaster.current.intersectObjects(toIntersect);
+        if (playback) {
+            looperLights.current[counter.current].position.x = intersections[0].point.x;
+            looperLights.current[counter.current].position.y = intersections[0].point.y;
+            looperLights.current[counter.current].intensity = 0.5;
+            if(counter.current >=  looperLights.current.length-1){
+                counter.current = 0;
+            }
+            else{
+                counter.current ++;
+            }
+
+        } else {
+            //Changing lightForRegularClick position and brightness
+            lightForRegularClick.current.position.x = intersections[0].point.x;
+            lightForRegularClick.current.position.y = intersections[0].point.y;
+            lightForRegularClick.current.intensity = 0.7;
+        }
+
+
         musicCtrl.triggerSynth(value[0], value[1]);
-        if (listeningLooper) {
-            console.log("adding event");//if there is a looper currently recording actions
+        if (listeningLooper && !playback) {
+           // console.log("adding event");//if there is a looper currently recording actions
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
@@ -46,62 +81,64 @@ function Canvas(props) {
     }, [musicCtrl, listeningLooper]);
 
     //CLICK FUNCTION ON CANVAS
-    const onMouseClick = useCallback( (event) => {
-        console.log("click on canvas");
+    const onMouseClick = useCallback((event) => {
+       // console.log("click on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
             canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-            mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-            raycaster.current.setFromCamera(mouse.current, camera.current);
-
-            let toIntersect = [background.current];
-            let intersections = raycaster.current.intersectObjects(toIntersect);
-
-            //Changing light position and brightness
-            light.current.position.x = intersections[0].point.x;
-            light.current.position.y = intersections[0].point.y;
-            light.current.intensity = 0.7;
         }
-    },[canvasClick]);
+    }, [canvasClick]);
+
+    //Touch on display (mobile/tablet)
+    const onTouch = useCallback((event) => {
+       // console.log("touch on canvas");
+        event.preventDefault();
+        if (!dragging.current) {
+            // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
+            canvasClick([event.touches[0].clientX / window.innerWidth, event.touches[0].clientY / window.innerHeight]);
+
+        }
+    }, [canvasClick]);
 
     const oldOnMouseClick = useRef(onMouseClick);
+    const oldOnTouch = useRef(onTouch);
 
     useEffect(() => {
         mount.current.removeEventListener('mousedown', oldOnMouseClick.current)
+        mount.current.removeEventListener('touchstart', oldOnTouch.current)
         mount.current.addEventListener('mousedown', onMouseClick, false);
+        mount.current.addEventListener('touchstart', onTouch, false);
         oldOnMouseClick.current = onMouseClick;
-    }, [onMouseClick]);
+    }, [onMouseClick, onTouch]);
 
-    const effectSphereDrag = (value) => {
+    const effectSphereDrag = useCallback((value) => {
+        musicCtrl.setParameterEffect(value.x, value.y)
+        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
+    },[musicCtrl]);
+
+    const synthSphereDrag = useCallback((value) => {
+        musicCtrl.setParameterSynth(value.x, value.y)
+        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
+    },[musicCtrl]);
+
+    const musikSphereDrag = useCallback((value) => {
         //do something
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
         //musicCtrl.....
-    };
+    },[]);
+    //[musicCtrl]
 
-    const synthSphereDrag = (value) => {
-        //do something
-        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
-        //musicCtrl.....
-    };
 
-    const musikSphereDrag = (value) => {
-        //do something
-        //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
-        //musicCtrl.....
-    };
-    // init globe
+    //CREATING SCENE
     useEffect(() => {
         // get current instances
-
 
         //ADD SCENE
         var scene = new THREE.Scene();
 
         //ADD CAMERA
-        // var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.current.position.z = 20;
 
         //LIGHT
@@ -138,17 +175,17 @@ function Canvas(props) {
 
         //MOVING LIGHT BLOB ON CLICK
         let groupBlobs = new THREE.Group();
-        //  let light = new THREE.PointLight(0xFFFFFF, 0.0, 6000);
-        light.current.position.set(0, 0, 0);
-        light.current.castShadow = true;
-        groupBlobs.add(light.current);
-
-
+        lightForRegularClick.current.position.set(0, 0, 0);
+        lightForRegularClick.current.castShadow = true;
+        groupBlobs.add(lightForRegularClick.current);
         scene.add(groupBlobs);
+
+        //ADD LOPING LIGHTS
+        for (let i = 0; i < looperLights.current.length ; i++) {
+            scene.add(looperLights.current[i]);
+        }
+
         //BACKGROUND
-        //  var materialBackground = new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true});
-        // let plane = new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight);
-        //let background = new THREE.Mesh(plane, materialBackground);
         background.current.position.set(0, -5, -1);
         background.current.receiveShadow = true;
         scene.add(background.current);
@@ -197,31 +234,10 @@ function Canvas(props) {
         controls.addEventListener('dragend', function (event) {
             dragging.current = false;
             event.object.material.emissive.set(0x000000);
-            let pos = event.object.position.clone();
-            pos.project(camera.current);
-            pos.x = (pos.x / window.innerWidth) + window.innerWidth / 2;
-            pos.y = -(pos.y * window.innerHeight / 2) + window.innerHeight / 2;
-            pos.normalize();
-
-            if (event.object === effectSphere) {
-                effectSphereDrag(pos);
-                console.log("dragged effect dot");
-            } else if (event.object === synthSphere) {
-                synthSphereDrag(pos);
-                console.log("dragged synth dot");
-            } else if (event.object === musikSphere) {
-                musikSphereDrag(pos);
-                console.log("dragged musik dot");
-            }
-
-
         });
 
-        // let mouse = new THREE.Vector2();
 
-        //   let raycaster = new THREE.Raycaster();
-
-        //CLICK FUNCTION ON CANVAS
+        // OLD CLICK FUNCTION ON CANVAS
         /**  function onMouseClick(event) {
             event.preventDefault();
             if (!dragging) {
@@ -235,36 +251,50 @@ function Canvas(props) {
                 let toIntersect = [background, effectSphere];
                 let intersections = raycaster.intersectObjects(toIntersect);
 
-                //Changing light position and brightness
-                light.position.x = intersections[0].point.x;
-                light.position.y = intersections[0].point.y;
-                light.intensity = 0.7;
+                //Changing lightForRegularClick position and brightness
+                lightForRegularClick.position.x = intersections[0].point.x;
+                lightForRegularClick.position.y = intersections[0].point.y;
+                lightForRegularClick.intensity = 0.7;
             }
 
 
         }**/
 
 
-        //changing the light intensisty every x milliseconds
+        //changing the lightForRegularClick intensisty every x milliseconds
         function refreshLightIntensity() {
             let x = 3;  // 30 milliseconds
 
-            if (light.current.intensity > 0.03) {
-                light.current.intensity -= 0.03;
+            if (lightForRegularClick.current.intensity > 0.03) {
+                lightForRegularClick.current.intensity -= 0.03;
             }
 
             setTimeout(refreshLightIntensity, x * 10);
         }
 
         refreshLightIntensity();
+
+        function looperLightIntensity(){
+            let x = 3;  // 30 milliseconds
+            for (let i = 0; i < looperLights.current.length ; i++) {
+                if (looperLights.current[i].intensity > 0.03) {
+                    looperLights.current[i].intensity -= 0.03;
+                }
+            }
+
+            setTimeout(looperLightIntensity, x * 10);
+        }
+        looperLightIntensity();
+
+
         var animate = function () {
             requestAnimationFrame(animate);
             effectSphere.rotation.x += 0.01;
             effectSphere.rotation.y += 0.01;
 
             /** might be too often
-             if (light.intensity > 0.003) {
-                light.intensity -= 0.003;
+             if (lightForRegularClick.intensity > 0.003) {
+                lightForRegularClick.intensity -= 0.003;
             }
              **/
             renderer.render(scene, camera.current);
@@ -272,10 +302,8 @@ function Canvas(props) {
         animate();
 
 
-    }, [mount, height, width]);
+    }, [mount, height, width,effectSphereDrag,musikSphereDrag,synthSphereDrag]);
 
-
-    
 
     //=================
     return (

@@ -6,10 +6,6 @@ from api.routes.responses import Standard400ErrorResponse
 
 
 class Project():
-#     timestamp = proj_col.DateTimeField(default=datetime.datetime.now)
-#     user_ID = proj_col.StringField(max_length=5,required=True, unique=True,primary_key = True)
-#     project_name = proj_col.StringField(max_length=255,required=True)
-    # projectJSON = db.EmbeddedDocumentField(Project_doc)
 
     def __init__(self, user_ID, project_name, project):
         self.timestamp: str = str(datetime.datetime.now())
