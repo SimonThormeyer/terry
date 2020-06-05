@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102 101">
+    <defs>
+        <style>.b{fill:#282828;} .a{fill:#fff;}</style>
+    </defs>
+    <g id="a626f2a1-6e5c-42e5-ba39-f73dcc290c30" data-name="Ebene 2">
+        <g id="b4c3ccc3-0581-4743-9e50-e388d9183b3d" data-name="Ebene 1">
+            <ellipse id="aa485d46-69af-4b46-a618-281785e7a8a4" data-name="Ellipse 11" class="b" cx="51" cy="50.5" rx="51" ry="50.5"/>
+            <g id="f809d427-4a87-488e-bf64-0abd23bb2105" data-name="download">
+                <path id="ab68ca46-c926-4da7-aa84-b7df308e01ed" data-name="Pfad 9" class="a" d="M66.8,41.91H61.34V24.73A3.44,3.44,0,0,0,57.9,21.3H44.16a3.44,3.44,0,0,0-3.44,3.43V41.91H35.26a3.45,3.45,0,0,0-2.44,5.88L48.59,63.56a3.43,3.43,0,0,0,4.84,0h0L69.2,47.79a3.44,3.44,0,0,0-2.4-5.88ZM27,76.27a3.44,3.44,0,0,0,3.44,3.43H71.64a3.44,3.44,0,0,0,0-6.87H30.42A3.45,3.45,0,0,0,27,76.27Z"/>
+            </g>
+        </g>
+    </g>
+</svg>
