@@ -3,7 +3,6 @@ from flask import request
 from .responses import Standard200Response
 import api.controller.mongoController as Controller
 from api.models.models import Project
-from flask_api import status
 
 
 @projects.route('/test', methods=['GET'])
@@ -38,6 +37,7 @@ def get_withUserAndProject(user_ID, project_name):
 def post_withUserAndProject(user_ID, project_name):
     proj = request.get_json()
     project = Project(user_ID, project_name, proj).to_json()
+    # Check if project is a HTTP 400 Status Code
     if isinstance(project, tuple):
         return project
     else: 

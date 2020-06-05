@@ -1,25 +1,24 @@
-from api.service import mongoService as mS
+from api.service import mongoService as Service
 from api.routes import responses
-# from Backend.api import proj_col
 
 def post_ProjectWithProjectNameFromUser(project):
-    res = mS.insert_ProjectWithProjectNameFromUser(project)
+    res = Service.insert_ProjectWithProjectNameFromUser(project)
     return responses.Standard200Response(res)
 
 def get_ProjectsFromUser(user_ID):
-    res = mS.query_ProjectsFromUser(user_ID)
+    res = Service.query_ProjectsFromUser(user_ID)
     if res.count == 0:
         return responses.Standard404ErrorResponse
     return responses.Standard200Response(res)
 
 def get_ProjectWithProjectName(project_name):
-    res = mS.query_ProjectWithProjectName(project_name)
+    res = Service.query_ProjectWithProjectName(project_name)
     if res.count == 0:
         return responses.Standard404ErrorResponse
     return responses.Standard200Response(res)
 
 def get_ProjectWithProjectNameFromUser(user_ID,project_name):
-    res = mS.query_ProjectWithProjectNameFromUser(user_ID,project_name)
+    res = Service.query_ProjectWithProjectNameFromUser(user_ID,project_name)
     if res.count == 0:
         return responses.Standard404ErrorResponse
     return responses.Standard200Response(res)
@@ -27,16 +26,16 @@ def get_ProjectWithProjectNameFromUser(user_ID,project_name):
 def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
     query = {"project_name": project_name,
             "user_ID": user_ID}
-    res = mS.delete_ProjectWithProjectNameFromUser(user_ID,project_name)
+    res = Service.delete_ProjectWithProjectNameFromUser(user_ID,project_name)
     return responses.Standard200Response(res)
 
 
 def update_ProjectWithProjectNameFromUser(user_ID,project_name, project):
-    res = mS.update_ProjectWithProjectNameFromUser(user_ID, project_name, project)
+    res = Service.update_ProjectWithProjectNameFromUser(user_ID, project_name, project)
     return responses.Standard200Response(res)  
 
 def get_AllProjects():
-    res = mS.query_AllProjects()
+    res = Service.query_AllProjects()
     if res.count == 0:
         return responses.Standard404ErrorResponse
     return str(res)

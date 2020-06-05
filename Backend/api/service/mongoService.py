@@ -1,6 +1,4 @@
-# from Backend.api import proj_col
-from api import db, app
-import json
+from api import db
 from bson.json_util import dumps
 
 posts = db.posts
@@ -43,12 +41,12 @@ def delete_ProjectWithProjectNameFromUser(user_ID,project_name):
 
 
 def query_AllProjects():
-    allProjects = posts.find()
     projects = []
-    for post in allProjects:
+    for post in posts.find():
         projects.append(post)
     projects.reverse()    
     return dumps(projects)
+
 
 def check_ProjectName(user_ID, project_name):
     query = {'user_ID': user_ID,
@@ -57,10 +55,3 @@ def check_ProjectName(user_ID, project_name):
         return False
     else: return True    
 
-
-# # TODO: projekt muss hier noch mit rein 
-# def update_ProjectWithProjectNameFromUser(user_ID,project_name, newUser_ID, newProject_name, newProject):
-#     query = {'user_ID': user_ID,
-#             'project_name': project_name}
-#     newValue = { '$set': {'project_name': project_name,
-#             'user_ID': user_ID} }      

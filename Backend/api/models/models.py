@@ -1,4 +1,5 @@
-import datetime
+from datetime import datetime, timezone
+import pytz
 import json
 from api.service.mongoService import check_ProjectName
 from api.routes.responses import Standard400ErrorResponse
@@ -8,7 +9,8 @@ from api.routes.responses import Standard400ErrorResponse
 class Project():
 
     def __init__(self, user_ID, project_name, project):
-        self.timestamp: str = str(datetime.datetime.now())
+        local_tz = pytz.timezone('Europe/Berlin')
+        self.timestamp: str = datetime.now(local_tz).strftime("%d.%m.%Y, %H:%M:%S")
         self.user_ID: str = user_ID
         self.project_name: str = project_name
         self.project = project

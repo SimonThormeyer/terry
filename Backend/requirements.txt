@@ -4,5 +4,6 @@ Flask-PyMongo
 MongoEngine
 flask-api
 datetime
+pytz
 pymongo
 flask-mongoengine

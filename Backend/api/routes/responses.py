@@ -1,5 +1,4 @@
 from flask_api import status
-from flask import jsonify
 from bson.json_util import dumps
 
 
