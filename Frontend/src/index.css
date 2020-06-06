@@ -86,6 +86,7 @@ body {
 .loopcontrols {
   position: absolute;
   max-width: 92.5%;
+  height: 0;
 }
 
 .loop {
