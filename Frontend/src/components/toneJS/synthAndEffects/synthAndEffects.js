@@ -16,8 +16,9 @@ export class SynthAndEffects {
         this.volume = new Tone.Volume(-5).connect(this.limiter);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.reverb)
-
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
+
+
         //Synth
         this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
         this.polySynth = new Tone.PolySynth(8, Tone.FMSynth, {
@@ -30,12 +31,6 @@ export class SynthAndEffects {
         this.panLfo = new Tone.LFO(5, 0, 1);
         this.panLfo.connect(this.pan.pan);
         this.panLfo.start()
-
-
-
-        // INITIALISING
-        this.reverb.generate() //reverb needs to be initialised
-        this.reverb.wet.value = 0.1
 
         //UTILITY
         this.delayCounter = 0
@@ -50,8 +45,6 @@ export class SynthAndEffects {
     triggerSynth(note) {
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
-
-
 
     setFilter(valueX, valueY) {
         let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
@@ -72,7 +65,7 @@ export class SynthAndEffects {
         this.polySynth.set({
             "envelope": {
                 "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
-                "attack": (this._normalizeRange(value) * this._normalizeRange(value)) * 0.2
+                "attack": (this._normalizeRange(value) * 0.2)
             }
         });
     }
