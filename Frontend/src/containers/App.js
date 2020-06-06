@@ -3,6 +3,7 @@ import Menu from '../components/menu'
 import React from 'react';
 import SaveProjectButton from "../components/SaveProjectButton"
 import Loopcontrols from "./loopcontrols";
+import SideMenu from '../components/sidemenu';
 
 
 function App() {
@@ -10,7 +11,8 @@ function App() {
 
   return (
     <div className="App">
-      <SaveProjectButton/>
+      <SideMenu />
+      {/*<SaveProjectButton />*/}
       <Loopcontrols/>
       <Canvas />
       <Menu />
