@@ -31,7 +31,7 @@ function SideMenu(props) {
     }
 
 
-    const saveProjectOverlayFunction = () => {
+    const saveProjectOverlayOnOffFunction = () => {
 
         var saveOverlay = document.getElementById("saveOverlay")
         var saveUnderlay = document.getElementById("saveUnderlay")
@@ -52,9 +52,28 @@ function SideMenu(props) {
 
     }
 
+    const openProjectOverlayOnOffFunction = () => {
+
+        var openOverlay = document.getElementById("openOverlay");
+        var openUnderlay = document.getElementById("saveUnderlay");
+
+
+        if (openOverlay.style.display == "block") {
+
+            openOverlay.style.display = "none";
+            openUnderlay.style.display = "none";
+        }
+        else {
+            openOverlay.style.display = "block";
+            openUnderlay.style.display = "block";
+        }
+    }
+
     const helpProjectFunction = () => {
         console.log("sidemenu help function");
     }
+
+
 
 
 
@@ -67,8 +86,8 @@ function SideMenu(props) {
             </div>
 
             <div id="sideMenuIcons">
-                <OpenIcon id="openIcon" onClick={() => { sideMenuOnOffFunction(); openProjectOverlayFunction() }} />
-                <SaveIcon id="saveIcon" onClick={() => { sideMenuOnOffFunction(); saveProjectOverlayFunction() }} />
+                <OpenIcon id="openIcon" onClick={() => { sideMenuOnOffFunction(); openProjectOverlayOnOffFunction() }} />
+                <SaveIcon id="saveIcon" onClick={() => { sideMenuOnOffFunction(); saveProjectOverlayOnOffFunction() }} />
                 <Helpicon id="helpIcon" onClick={() => { sideMenuOnOffFunction(); helpProjectFunction() }} />
             </div>
 
@@ -76,7 +95,7 @@ function SideMenu(props) {
             <div id="saveOverlay">
                 <ul>
                     <li>
-                        <DeleteIcon id="closeSaveOverlay" onClick={() => { saveProjectOverlayFunction() }} />
+                        <DeleteIcon id="closeSaveOverlay" onClick={() => { saveProjectOverlayOnOffFunction() }} />
                     </li>
                     <li id="headerSave">
                         <p>Save your Track?</p>
@@ -91,6 +110,23 @@ function SideMenu(props) {
                         </form>
                     </li>
                 </ul>
+            </div>
+
+            <div id="openOverlay">
+
+                <DeleteIcon id="closeOpenOverlay" onClick={() => { openProjectOverlayOnOffFunction() }} />
+
+                <p id="headerOpen">Open a Track?</p>
+                <form>
+                    <label for="usernameProject" id="findProject">Find a project</label>
+                    <input name="usernameProject" id="usernameProject" ></input>
+                </form>
+                <ul id="databaseTable">
+                    <li> Fred Frosch - Froschkonzert </li>
+                    <li> chanbut - cooleMusic  </li>
+                    <li> Johannes123 - Schöne Entspannungsmusik zum Einschlafen </li>
+                </ul>
+
             </div>
         </>
     );

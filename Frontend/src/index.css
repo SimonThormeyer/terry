@@ -351,7 +351,7 @@ body {
 }
 
 #saveButton {
-  background-color: aquamarine;
+  background-color: #2fecfd;
   border-radius: 2vw;
   border: none;
   font-size: 1.25vw;
@@ -396,7 +396,7 @@ body {
 }
 
 #labelProjectname {
-  margin-top: 1.125vw;
+  margin-top: 1.02vw;
 }
 
 #closeSaveOverlay {
@@ -405,4 +405,82 @@ body {
   cursor: pointer;
   margin-left: 17.5vw;
   margin-top: 2vw;
+}
+
+/***********OPEN PROJECT OVERLAY****************/
+
+#openOverlay {
+  position: absolute;
+  display: none;
+  opacity: 0;
+  animation: overlayAnimation 2s ease 0.25s forwards;
+  width: 40vw;
+  height: 90%;
+  background-color: rgba(255, 255, 255);
+  margin-top: 5vh;
+  margin-left: 30%;
+  top: 0;
+  align-items: center;
+  border-radius: 2vw;
+  z-index: 999999999999999999999;
+}
+
+#closeOpenOverlay {
+  width: 2vw;
+  height: 2vw;
+  cursor: pointer;
+  margin-left: 38.6vw;
+  margin-top: -0.6vw;
+}
+
+#headerOpen {
+  font-size: 1.75vw;
+  text-align: center;
+}
+
+#usernameProject {
+  margin-top: 2vw;
+  margin-left: calc(2vw - 1px);
+  width: 34vw;
+  height: 2.2vw;
+  border: solid 1px #a5a4a4;
+  border-radius: 2.2vw;
+  padding: 0.5vw 1vw;
+  font-size: 1vw;
+}
+
+#databaseTable {
+  width: 34vw;
+  margin-top: 1.5vw;
+  margin-left: 2vw;
+  padding: 0 1vw;
+  font-size: 1.15vw;
+  height: calc(85vh - 10.9vw);
+  overflow-y: scroll;
+}
+
+/*#databaseTable::before {
+  content: "";
+  position: absolute;
+  right: 2vw;
+  width: 5vw;
+  height: 20vh;
+  background: linear-gradient(to left, white, white 20%, rgba(0,0,0,0));
+}*/
+
+#databaseTable li {
+  margin-bottom: 1.2vw;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+#findProject {
+  position: absolute;
+  margin-left: 4vw;
+  margin-top: 1.32vw;
+  font-size: 1vw;
+  background-color: white;
+  padding: 0 0.2vw;
+  color: #a5a4a4;
 }
