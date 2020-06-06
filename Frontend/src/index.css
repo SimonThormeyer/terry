@@ -84,9 +84,8 @@ body {
 /****STYLING LOOPICONS****/
 
 .loopcontrols {
-  position: fixed;
-  left: 0;
-  width: 92.5%;
+  position: absolute;
+  max-width: 92.5%;
 }
 
 .loop {
