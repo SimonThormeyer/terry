@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
     
-function SaveProjectButton(loopers, username, projectname) {
+function SaveProject(loopers, username, projectname) {
 
         const runningLoopers = loopers;
          
@@ -22,13 +22,6 @@ function SaveProjectButton(loopers, username, projectname) {
         
         axios
 
-            // // Anfang Test GET
-            // .get(`${backendUrl}/projects/test`)
-            // .then(res =>{
-            //     console.log(res.statusText);
-            // }) 
-            // //Ende Test-Get
-
             // Anfang POST
             .post(`${backendUrl}/projects/user/${userID}/project/${projectName}`, getGlobalState())
             .then(res => {
@@ -45,4 +38,4 @@ function SaveProjectButton(loopers, username, projectname) {
  }
 
 
-export default SaveProjectButton;
+export default SaveProject;

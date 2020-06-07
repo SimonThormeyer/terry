@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 
+
 function OpenProject() {
 
 
@@ -11,7 +12,7 @@ function OpenProject() {
 
     const items = [];
 
-    //get Request to get all Projects
+    //get Request to get all Projects of all users
     useEffect(() => {
 
         axios
@@ -35,30 +36,13 @@ function OpenProject() {
             let username = data[index].user_ID;
             let projectname = data[index].project_name;
             let listElement = username + " - " + projectname;
-            items.push(<li key={index} onClick={() => { openProjectFunction(index); openProjectOverlayOnOffFunction() }} >{listElement}</li>)
+            items.push(<li key={index} onClick={() => { openProjectFunction(index)}} >{listElement}</li>)
         }
 
     }
 
-//close the overlay when open a project
-    const openProjectOverlayOnOffFunction = () => {
 
-        var openOverlay = document.getElementById("openOverlay");
-        var openUnderlay = document.getElementById("saveUnderlay");
-
-
-        if (openOverlay.style.display === "block") {
-
-            openOverlay.style.display = "none";
-            openUnderlay.style.display = "none";
-        }
-        else {
-            openOverlay.style.display = "block";
-            openUnderlay.style.display = "block";
-        }
-    }
-
-    //open project and reconstruct to play music
+    //open project and reconstruct loopers to play music
     const openProjectFunction = (project_id) => {
         let project = data[project_id].project;
 
