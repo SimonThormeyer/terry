@@ -5,6 +5,7 @@ import { ReactComponent as Helpicon } from '../img/help.svg';
 import { ReactComponent as OpenIcon } from '../img/open.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import SaveProjectButton from '../components/SaveProjectButton';
+import OpenProject from '../components/OpenProject';
 import { useGlobalState } from "../GlobalState";
 
 
@@ -80,6 +81,37 @@ function SideMenu() {
         }
     }
 
+    const findProject = () => {
+        var input, filter, ul, li, projectLi, i, txtValue;
+        input = document.getElementById('usernameProject');
+       
+            filter = input.value.toUpperCase();
+            ul = document.getElementById("databaseTable");
+            li = ul.getElementsByTagName('li');
+
+            for (i = 0; i < li.length; i++) {
+                projectLi = li[i];
+                txtValue = projectLi.textContent || projectLi.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    li[i].style.display = "";
+                } else {
+                    li[i].style.display = "none";
+                }
+            }  
+    }
+
+
+
+    const preventSubmit = function (e) {
+        var key = e.charCode || e.keyCode || 0;
+        if (key == 13) {
+            e.preventDefault();
+        }
+    }
+
+
+
+
     const helpProjectFunction = () => {
         console.log("sidemenu help function");
     }
@@ -97,7 +129,7 @@ function SideMenu() {
             </div>
 
             <div id="sideMenuIcons">
-                <OpenIcon id="openIcon" onClick={() => { sideMenuOnOffFunction(); openProjectOverlayOnOffFunction() }} />
+                <OpenIcon id="openIcon" onClick={() => { sideMenuOnOffFunction(); openProjectOverlayOnOffFunction()}} />
                 <SaveIcon id="saveIcon" onClick={() => { sideMenuOnOffFunction(); saveProjectOverlayOnOffFunction() }} />
                 <Helpicon id="helpIcon" onClick={() => { sideMenuOnOffFunction(); helpProjectFunction() }} />
             </div>
@@ -130,12 +162,10 @@ function SideMenu() {
                 <p id="headerOpen">Open a Track?</p>
                 <form>
                     <label for="usernameProject" id="findProject">Find a project</label>
-                    <input name="usernameProject" id="usernameProject" ></input>
+                    <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
                 </form>
                 <ul id="databaseTable">
-                    <li> Fred Frosch - Froschkonzert </li>
-                    <li> chanbut - cooleMusic  </li>
-                    <li> Johannes123 - Schöne Entspannungsmusik zum Einschlafen </li>
+                    <OpenProject />
                 </ul>
 
             </div>
