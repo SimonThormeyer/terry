@@ -99,7 +99,7 @@ export class IsomorphicLayout {
         let normalizeInvertedValue = 1 - (value + 1)/2;
         let highestNoteInArray = Math.round(normalizeInvertedValue * 5);
         let n = 0;
-        if(this.controlValue != highestNoteInArray) {
+        if(this.controlValue !== highestNoteInArray) {
             this.controlValue = highestNoteInArray;
             for(let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
                 this.currentArray[n] = this.scale[i]; 

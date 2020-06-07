@@ -127,8 +127,7 @@ function Canvas(props) {
         musicCtrl.setParameterMusic(value.x, value.y)
         //Niklas = value.x / value.y sind die neuen coordinaten [-1 , 1]
         //musicCtrl.....
-    },[]);
-    //[musicCtrl]
+    },[musicCtrl]);
 
 
     //CREATING SCENE
