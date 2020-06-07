@@ -73,6 +73,7 @@ export class IsomorphicLayout {
             ["C2", "D2", "E2", "G2", "A2", "C3", "D3", "E3"]
         ]
         this.scale = this.currentArray;
+        this.controlValue = 0;
     }
 
     coordinateToNote(valueX, valueY) {
@@ -98,9 +99,12 @@ export class IsomorphicLayout {
         let normalizeInvertedValue = 1 - (value + 1)/2;
         let highestNoteInArray = Math.round(normalizeInvertedValue * 5);
         let n = 0;
-        for(let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
-            this.currentArray[n] = this.scale[i]; 
-            n++;
+        if(this.controlValue != highestNoteInArray) {
+            this.controlValue = highestNoteInArray;
+            for(let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
+                this.currentArray[n] = this.scale[i]; 
+                n++;
+            }
         }
     }
 }
