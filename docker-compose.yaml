@@ -1,0 +1,38 @@
+version: '3'
+services:
+
+  backend:
+    container_name: SoundGroup-Backend
+    image: sg-backend
+    build: ./Backend/
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Backend/.env
+    environment: 
+      - WAIT_HOSTS=mongo:27017
+      - MONGO_HOST=mongo  
+    volumes:
+      - .:/code
+
+  app:
+    container_name: SoundGroup-Frontend
+    image: sg-frontend
+    command: nodemon server.js
+    build: ./Frontend/
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Frontend:/app
+    tty: true
+
+  mongo:
+    container_name: SoundGroup-MongoDB
+    image: mongo
+    volumes:
+      - mongodata:/usr/share/mongodb/data
+    ports:
+      - "27017:27017"
+
+volumes:
+  mongodata:

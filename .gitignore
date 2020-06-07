@@ -1,4 +1,8 @@
 site-packages/
+
+### Pycharm ###
+*/venv/
+
 __pycache__
 ### Logs ###
 */logs/
