@@ -12,7 +12,6 @@ import {Recorder} from "./recorder/recorder";
     let musicCtrl = new musicCtrl();
 
     CALL FUNCTION:
-    musicCtrl.triggerSynth(C4, "1n");
     */
 
 export class MusicCtrl {
@@ -36,13 +35,17 @@ export class MusicCtrl {
     }
 
     setParameterSynth(valueX, valueY) {
-        this.synthAndEffects.setFilter(valueX)
+        this.synthAndEffects.setFilter(valueX, valueY)
         this.synthAndEffects.setNoteLength(valueY)
+        this.synthAndEffects.setOscillatorType(valueX)
+        this.synthAndEffects.setSynthADSR(valueY)
     }
 
     setParameterEffect(valueX, valueY) {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
+        this.synthAndEffects.setReverbWet(valueX)
+        this.synthAndEffects.setPanningEffect(valueX,valueY)
     }
 
     setParameterMusic(valueX, valueY) {
