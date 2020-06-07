@@ -1,16 +1,18 @@
 import Tone from "tone";
+import {Recorder} from "../recorder/recorder";
 
 export class SynthAndEffects {
 
     constructor() {
 
         // Settings
-        this.noteLengthOptions = ["64n", "32n", "16n", "8n", "4n", "2n", "1n"]
-        this.waveforms = ["sine6", "triangle6"]
+        this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
+        this.waveforms = ["sine", "saw", "pulse"]
         this.noteLength = this.noteLengthOptions[2]
 
         // INSTRUMENT_CHAIN
         //Effects
+
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.recorder = new Recorder()
         this.limiter.connect(this.recorder)
