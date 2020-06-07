@@ -4146,6 +4146,10 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
+"event-target-shim@github:cpmsmith/event-target-shim#sentry-infinite-recursion":
+  version "5.0.1"
+  resolved "https://codeload.github.com/cpmsmith/event-target-shim/tar.gz/23edc5119c377c09bfa8ba090e07268fe1402951"
+
 eventemitter3@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.0.tgz#d65176163887ee59f386d64c82610b696a4a74eb"
@@ -6793,6 +6797,14 @@ move-concurrently@^1.0.1:
     mkdirp "^0.5.1"
     rimraf "^2.5.4"
     run-queue "^1.0.3"
+
+mp3-mediarecorder@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/mp3-mediarecorder/-/mp3-mediarecorder-4.0.3.tgz#8b7bb3cbf6bae288ef3726212587d49fd9a8ff51"
+  integrity sha512-RRAeJ2vmCShbwbkow2ej46ITTnZQjqo0xVw6AokuuE9RbMdx8Px25ymksrMBsK75E18npglKoRGhADAfBNd2vQ==
+  dependencies:
+    event-target-shim "github:cpmsmith/event-target-shim#sentry-infinite-recursion"
+    vmsg "0.3.6"
 
 ms@2.0.0:
   version "2.0.0"
@@ -10310,6 +10322,11 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
+
+vmsg@0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/vmsg/-/vmsg-0.3.6.tgz#a1bf0e0de3179918cd7e8a0cc41c6da813860878"
+  integrity sha512-nDv5WMk+Z3srbrGWwXuMiGo4GugOarsxcKgIjLJu6uRAUrmvSkRG9RxRphDtK+xUk11LqdKFeSjhozTbuqRyXw==
 
 w3c-hr-time@^1.0.1:
   version "1.0.2"

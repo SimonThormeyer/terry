@@ -1,5 +1,5 @@
 import Tone from "tone";
-import {Recorder} from "./recorder/recorder";
+import {Recorder} from "../recorder/recorder";
 
 export class SynthAndEffects {
 
@@ -12,10 +12,11 @@ export class SynthAndEffects {
 
         // INSTRUMENT_CHAIN
         //Effects
-
         this.limiter = new Tone.Limiter(-1).toMaster()
+
         this.recorder = new Recorder()
         this.limiter.connect(this.recorder)
+
         this.volume = new Tone.Volume(-12).connect(this.limiter);
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.volume)
 

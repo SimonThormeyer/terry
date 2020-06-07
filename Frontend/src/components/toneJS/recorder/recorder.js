@@ -1,13 +1,19 @@
-import MediaRecorder from 'media-stream-library';
+import * as Tone from "tone"
 
 
 export class Recorder {
 
     constructor() {
-        this.audioContext = new AudioContext()
-        this.destination = this.audioContext.createMediaStreamDestination()
-        this.recorder = new MediaRecorder(this.destination.stream)
+        this.context  = Tone.context;
+        this.destination = this.context.createMediaStreamDestination()
+        this.recorder =  new Mp3MediaRecorder(this.destination.stream)
     }
 
+    startRecording(){
+        this.recorder.start()
+    }
 
+    stopRecording(){
+        this.recorder.stop()
+    }
 }
