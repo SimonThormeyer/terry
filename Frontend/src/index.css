@@ -415,9 +415,9 @@ body {
   opacity: 0;
   animation: overlayAnimation 2s ease 0.25s forwards;
   width: 40vw;
-  height: 90%;
+  height: 28vw;
   background-color: rgba(255, 255, 255);
-  margin-top: 5vh;
+  margin-top: 2vw;
   margin-left: 30%;
   top: 0;
   align-items: center;
@@ -450,29 +450,43 @@ body {
 }
 
 #databaseTable {
-  width: 34vw;
+  width: 37vw;
   margin-top: 1.5vw;
-  margin-left: 2vw;
-  padding: 0 1vw;
+  margin-left: 1.5vw;
   font-size: 1.15vw;
-  height: calc(85vh - 10.9vw);
+  height: 16vw;
   overflow-y: scroll;
 }
 
-/*#databaseTable::before {
+#databaseTable::before {
   content: "";
   position: absolute;
-  right: 2vw;
-  width: 5vw;
-  height: 20vh;
-  background: linear-gradient(to left, white, white 20%, rgba(0,0,0,0));
-}*/
+  right: 1.5vw;
+  width: 3vw;
+  height: 16vw;
+  background: linear-gradient(to left, white, rgba(0, 0, 0, 0));
+}
+
+#databaseTable::after {
+  content: "";
+  position: absolute;
+  top: 10.5vw;
+  left: 1.5vw;
+  width: 3vw;
+  height: 16.5vw;
+  background: linear-gradient(to right, white, rgba(0, 0, 0, 0));
+}
 
 #databaseTable li {
-  margin-bottom: 1.2vw;
+  padding: 0.6vw 0 0.6vw 2vw;
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  display: block;
+}
+
+#databaseTable li:hover {
+  background-color: #f1f1f1;
 }
 
 #findProject {

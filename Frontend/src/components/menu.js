@@ -35,7 +35,7 @@ function Menu(props) {
             setNextLooperID(nextLooperID + 1);
             runningLoopers.set(nextLooperID, listeningLooper);
             setRunningLoopers(new Map(runningLoopers));
-            setListeningLooper(undefined)
+            setListeningLooper(undefined);
         }
     }
 

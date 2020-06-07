@@ -2,92 +2,76 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 
 
-
 function OpenProject() {
 
 
-    const [rows, setRows] = useState([])
+    const [rows, setRows] = useState([]);
 
-    let backendUrl = `http://localhost:5000`;
+
 
     const items = [];
-    
 
+    //get Request to get all Projects
     useEffect(() => {
+
         axios
-            // // Anfang Test GET
-            .get(`${backendUrl}/projects/all`)
+            .get(`http://localhost:5000/projects/all`)
             .then(res => {
                 console.log(res.statusText);
                 setRows(res);
             })
-            // //Ende Test-Get
-
             .catch(err => {
                 err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
             })
-    
-    }, [])
-/*
-    function getAll() {
-        try {
-            const response = axios.get(`${backendUrl}/projects/all`);
-            return response;
-        } catch (err) {
-            err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
-        }
-    }
 
-    console.log(getAll())
-    let database = getAll()
-    console.log(database);
-
-*/
-   /* useEffect(() => {
-        // Fetch the data when the component is mounted
-        axios
-            .get(`url here`)
-            .then(res => {
-                // Store the response (the rows) in the state variable.
-                setRows(res)
-            })
     }, [])
 
-    /*
-     * On the initial mount nothing will be rendered, when the rows variable
-     * is updated a re-render will be triggered and your rows can be rendered.
-     */
-  /*  return (
-        <div>
-            {rows.map(row => <tr>A row!</tr>)}
-        </div>
-    );
-} */
 
- 
     var data = rows.data
-    console.log(data)
 
-    if (data != undefined) {
+    //loop to get username and projectname from database and save it in a list and create a hmtl li tag
+    if (data !== undefined) {
         for (let index = 0; index < data.length; index++) {
             let username = data[index].user_ID;
             let projectname = data[index].project_name;
             let listElement = username + " - " + projectname;
-            items.push(<li >{listElement}</li>)
+            items.push(<li key={index} onClick={() => { openProjectFunction(index); openProjectOverlayOnOffFunction() }} >{listElement}</li>)
         }
-        console.log(items);
+
+    }
+
+//close the overlay when open a project
+    const openProjectOverlayOnOffFunction = () => {
+
+        var openOverlay = document.getElementById("openOverlay");
+        var openUnderlay = document.getElementById("saveUnderlay");
+
+
+        if (openOverlay.style.display === "block") {
+
+            openOverlay.style.display = "none";
+            openUnderlay.style.display = "none";
+        }
+        else {
+            openOverlay.style.display = "block";
+            openUnderlay.style.display = "block";
+        }
+    }
+
+    //open project and reconstruct to play music
+    const openProjectFunction = (project_id) => {
+        let project = data[project_id].project;
+
+        console.log("open project Function")
 
     }
 
     return (
         <>
-           {items}
+            {items}
         </>
     )
 
-
-
 }
-
 
 export default OpenProject;
