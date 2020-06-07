@@ -2,25 +2,26 @@ import React from 'react';
 import axios from 'axios';
 import { useGlobalState } from "../GlobalState";
 
-function SaveProjectButton() {
 
-    const [runningLoopers,] = useGlobalState('runningLoopers');
+    
+function SaveProjectButton(loopers, username, projectname) {
 
-    let userID = 1;
-    let projectName = `projectName`;
-    let backendUrl = `http://localhost:5000`;
+        const runningLoopers = loopers;
+         
+        let userID = username;
+        let projectName = projectname;
+        let backendUrl = `http://localhost:5000`;
 
-    let getGlobalState = () => {
-        let loopers = [];
-        for (let looper of Array.from(runningLoopers.values())) {
-            loopers.push(looper.getLooper());
+        let getGlobalState = () => {
+            let loopers = [];
+            for (let looper of Array.from(runningLoopers.values())) {
+                loopers.push(looper.getLooper());
+            }
+            return {
+                loopers: loopers
+            }
         }
-        return {
-            loopers: loopers
-        }
-    }
-
-    let saveProject = () => {
+        
         axios
 
             // // Anfang Test GET
@@ -41,14 +42,9 @@ function SaveProjectButton() {
                 err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
             })
 
-    }
+    
+   
+ }
 
-
-    return (
-        <button onClick={() => saveProject()}>
-            Save Project
-        </button>
-    )
-}
 
 export default SaveProjectButton;

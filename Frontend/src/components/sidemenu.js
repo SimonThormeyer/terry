@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { useGlobalState } from "../GlobalState"
-import { Looper } from '../components/toneJS/Looper';
 import { ReactComponent as SideMenuIcon } from '../img/sidemenu.svg';
 import { ReactComponent as SaveIcon } from '../img/save.svg';
 import { ReactComponent as Helpicon } from '../img/help.svg';
 import { ReactComponent as OpenIcon } from '../img/open.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
+import SaveProjectButton from '../components/SaveProjectButton';
+import { useGlobalState } from "../GlobalState";
 
 
 
-function SideMenu(props) {
 
+function SideMenu() {
+
+    const [runningLoopers,] = useGlobalState('runningLoopers');
 
     const sideMenuOnOffFunction = () => {
         var sideMenuIcons = document.getElementById("sideMenuIcons");
@@ -49,7 +51,16 @@ function SideMenu(props) {
     }
 
     const saveProjectFunction = () => {
+        var username = document.getElementById("username").value;
+        var projectname = document.getElementById("projectname").value;
+        if (username === "" || projectname === "") {
+           
+    
+        } else {
 
+            SaveProjectButton(runningLoopers, username, projectname);
+            alert("Project successfully saved!");
+        }
     }
 
     const openProjectOverlayOnOffFunction = () => {
@@ -103,11 +114,11 @@ function SideMenu(props) {
                     <li>
                         <form>
                             <label for="username" id="labelUsername">Username</label>
-                            <input name="username" id="username" maxlength="255" required></input>
+                            <input name="username" id="username" maxlength="5" required></input>
                             <label for="projectname" id="labelProjectname">Project name</label>
-                            <input name="projectname" id="projectname" maxlength="255" required></input>
-                            <button type="submit" id="saveButton" onClick={() => { saveProjectFunction() }}>Save</button>
+                            <input name="projectname" id="projectname" maxlength="255" required></input>  
                         </form>
+                        <button id="saveButton" onClick={() => { saveProjectFunction() }}>Save</button>
                     </li>
                 </ul>
             </div>
