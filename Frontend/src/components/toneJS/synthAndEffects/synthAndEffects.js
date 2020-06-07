@@ -9,10 +9,13 @@ export class SynthAndEffects {
         this.waveforms = ["sine6", "triangle6"]
         this.noteLength = this.noteLengthOptions[2]
 
-
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
+        this.recorder = new Recorder()
+        this.limiter.connect(this.recorder)
+        this.volume = new Tone.Volume(-12).connect(this.limiter);
+        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.volume)
         this.volume = new Tone.Volume(-5).connect(this.limiter);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.reverb)
@@ -43,44 +46,21 @@ export class SynthAndEffects {
 
     //SYNTH FUNCTIONS
     triggerSynth(note) {
-        this.polySynth.triggerAttackRelease([note, "G5", "E6"], this.noteLength);
+        this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
-    setFilter(valueX, valueY) {
-        let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
+    setFilter(value) {
+        let calculatedFrequency = (value + 1) / 2 * 5000
+        // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
-        // compensate volume when the filter opens up
-        this.volume.volume.value = ((-1) * (this._normalizeRange(valueX)) * 5) - 5
-
+        // console.log("AFTER: " + this.filter.frequency.value)
     }
 
     setNoteLength(value) {
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-
-    }
-
-    setSynthADSR(value) {
-        this.polySynth.set({
-            "envelope": {
-                "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
-                "attack": (this._normalizeRange(value) * 0.2)
-            }
-        });
-    }
-
-    setOscillatorType(value) {
-        let numberOfWaveformOptions = this.waveforms.length - 1
-        let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
-        let waveform = this.waveforms[position]
-        this.polySynth.set(
-            {
-                oscillator: {
-                    type: waveform
-
-                }
-            })
+        // console.log("Notelength: " + position)
     }
 
 
