@@ -43,7 +43,7 @@ export class SynthAndEffects {
 
     //SYNTH FUNCTIONS
     triggerSynth(note) {
-        this.polySynth.triggerAttackRelease(note, this.noteLength);
+        this.polySynth.triggerAttackRelease([note, "G5", "E6"], this.noteLength);
     }
 
     setFilter(valueX, valueY) {
