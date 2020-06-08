@@ -5,7 +5,7 @@ import { ReactComponent as PlayIcon } from '../img/play.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as MuteIcon } from '../img/mute.svg';
 import { ReactComponent as VolumeIcon } from '../img/volume.svg';
-import UseEventListener from "./../UseEventListener"
+import useEventListener from "./../UseEventListener"
 
 
 function Loopicon({ id }) {
@@ -17,22 +17,6 @@ function Loopicon({ id }) {
   const [play, setPlay] = useState(true);
   const [mute, setMute] = useState(false);
 
-
-  const handleKeyDown = useCallback(
-    (event) => {
-      // start/stop muting with Number Keys
-      let keyNumber = event.keyCode - 48
-      if (id < 10 && id === keyNumber) { 
-        if (runningLoopers.get(keyNumber)) {
-          runningLoopers.get(keyNumber).toggleMute();
-          setMute(!mute);
-        }
-      }
-    },
-    [mute]
-  );
-
-  UseEventListener("keydown", handleKeyDown);
 
   //pause progress ring animation
   const animationPause = () => {
@@ -47,16 +31,18 @@ function Loopicon({ id }) {
   }
 
   //if the loop is muted the icon is transparent
-  const muteLook = () => {
+  const muteLook = useCallback(
+   () => {
     var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
     loopId.style.opacity = 0.6;
-  }
+  }, [id])
 
   //if the loop is not muted the icon is not transparent
-  const unmuteLook = () => {
+  const unmuteLook = useCallback(
+  () => {
     var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
     loopId.style.opacity = 1;
-  }
+  }, [id])
 
   //slides the loopicons if the user deletes one 
   const slide = () => {
@@ -94,6 +80,30 @@ function Loopicon({ id }) {
       animation: 'countdown ' + duration + 's linear infinite forwards'
     };
   };
+
+
+
+  //----------- KEY-BINDINGS ------------
+  const handleKeyDown = useCallback(
+    (event) => {
+      // start/stop muting with Number Keys
+      let keyNumber = event.keyCode - 48
+      if (id < 10 && id === keyNumber) { 
+        if (runningLoopers.get(keyNumber)) {
+          runningLoopers.get(keyNumber).toggleMute();
+          setMute(!mute);
+          if(!mute) {
+            muteLook();
+          } else {
+            unmuteLook();
+          }
+        }
+      }
+    },
+    [mute, id, runningLoopers, muteLook, unmuteLook]
+  );
+
+  useEventListener("keydown", handleKeyDown);
 
 
   return (
