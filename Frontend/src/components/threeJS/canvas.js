@@ -27,11 +27,30 @@ function Canvas(props) {
         new THREE.PointLight(0x3577B2, 0.0, 6000),
         new THREE.PointLight(0x3577B2, 0.0, 6000),
         new THREE.PointLight(0x3577B2, 0.0, 6000)]);
-    const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));
+    const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));//BACKGROUND PLANE
     const materialBackground = useRef(new THREE.MeshPhongMaterial({color: 0x9EC2E3, dithering: true}));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
-    const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));
+    const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
     const counter = useRef(0);
+    const scene = useRef(new THREE.Scene()); //SCENE
+    const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.6));//SCENE LIGHT
+    const renderer = useRef(new THREE.WebGLRenderer());//RENDERER
+    // MOVING EFFEKT
+    let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
+    let materialEffect = new THREE.MeshPhongMaterial({color: 0x25D4D4, dithering: true});
+    const effectSphere = useRef(new THREE.Mesh(geometryEffect, materialEffect)); //EFFECT SPHERE DOT
+
+    // MOVING SYNTH
+    let geometrySynth = new THREE.SphereGeometry(1, 32, 32);
+    let materialSynth = new THREE.MeshPhongMaterial({color: 0xD4D425, dithering: true});
+    const synthSphere = useRef(new THREE.Mesh(geometrySynth, materialSynth));//SYNTH SPHERE DOT
+
+    // MOVING MUSIK
+    let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
+    let materialMusik = new THREE.MeshPhongMaterial({color: 0xD425D4, dithering: true});
+    const musikSphere = useRef( new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
+
+    const spotLight = useRef(new THREE.SpotLight(0x8E2057, 0.5));//ATMOSPHERE SPOT LIGHT
 
 
     const canvasClick = useCallback((value, playback = false) => {
@@ -132,81 +151,63 @@ function Canvas(props) {
 
     //CREATING SCENE
     useEffect(() => {
-        // get current instances
 
-        //ADD SCENE
-        var scene = new THREE.Scene();
-
-        //ADD CAMERA
+        //SET CAMERA
         camera.current.position.z = 20;
 
-        //LIGHT
-        let ambient = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambient);
+        //SCENE LIGHT
+        scene.current.add(ambient.current);
 
-        //ADD RENDERER
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(width, height);
-        renderer.shadowMap.enabled = true;
-        mount.current.appendChild(renderer.domElement);
+        //SET RENDERER
+        renderer.current.setSize(width, height);
+        renderer.current.shadowMap.enabled = true;
+        mount.current.appendChild(renderer.current.domElement);
 
-        // MOVING EFFEKT
-        let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
-        let materialEffect = new THREE.MeshPhongMaterial({color: 0x25D4D4, dithering: true});
-        let effectSphere = new THREE.Mesh(geometryEffect, materialEffect);
-        effectSphere.position.set(0, 0, 0);
-        scene.add(effectSphere);
+        //SET EFFECT SPHERE START POSITION
+        effectSphere.current.position.set(0, 0, 0);
+        scene.current.add(effectSphere.current);
 
-        // MOVING SYNTH
-        let geometrySynth = new THREE.SphereGeometry(1, 32, 32);
-        let materialSynth = new THREE.MeshPhongMaterial({color: 0xD4D425, dithering: true});
-        let synthSphere = new THREE.Mesh(geometrySynth, materialSynth);
-        synthSphere.position.set(-10, 0, 0);
-        scene.add(synthSphere);
+        //SET SYNTH SPHERE START POSITION
+        synthSphere.current.position.set(-10, 0, 0);
+        scene.current.add(synthSphere.current);
 
-        // MOVING MUSIK
-        let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
-        let materialMusik = new THREE.MeshPhongMaterial({color: 0xD425D4, dithering: true});
-        let musikSphere = new THREE.Mesh(geometryMusik, materialMusik);
-        musikSphere.position.set(10, 0, 0);
-        scene.add(musikSphere);
-
+        //SET MUSIK SPHERE START POSITION
+        musikSphere.current.position.set(10, 0, 0);
+        scene.current.add(musikSphere.current);
 
         //MOVING LIGHT BLOB ON CLICK
-        let groupBlobs = new THREE.Group();
         lightForRegularClick.current.position.set(0, 0, 0);
         lightForRegularClick.current.castShadow = true;
-        groupBlobs.add(lightForRegularClick.current);
-        scene.add(groupBlobs);
+        scene.current.add(lightForRegularClick.current);
 
         //ADD LOPING LIGHTS
         for (let i = 0; i < looperLights.current.length ; i++) {
-            scene.add(looperLights.current[i]);
+            scene.current.add(looperLights.current[i]);
         }
 
         //BACKGROUND
         background.current.position.set(0, -5, -1);
         background.current.receiveShadow = true;
-        scene.add(background.current);
+        scene.current.add(background.current);
 
-        //SPOT LIGHT
-        let spotLight = new THREE.SpotLight(0x8E2057, 0.5);
-        spotLight.position.set(20, 0, 50);
-        spotLight.angle = Math.PI / 4;
-        spotLight.penumbra = 0.05;
-        spotLight.decay = 2;
-        spotLight.distance = 200;
+        //ATMOSPHERE SPOT LIGHT
+        spotLight.current.position.set(20, 0, 50);
+        spotLight.current.angle = Math.PI / 4;
+        spotLight.current.penumbra = 0.05;
+        spotLight.current.decay = 2;
+        spotLight.current.distance = 200;
 
-        spotLight.castShadow = true;
-        spotLight.shadow.mapSize.width = 1024;
-        spotLight.shadow.mapSize.height = 1024;
-        spotLight.shadow.camera.near = 10;
-        spotLight.shadow.camera.far = 200;
-        scene.add(spotLight);
+        spotLight.current.castShadow = true;
+        spotLight.current.shadow.mapSize.width = 1024;
+        spotLight.current.shadow.mapSize.height = 1024;
+        spotLight.current.shadow.camera.near = 10;
+        spotLight.current.shadow.camera.far = 200;
+        scene.current.add(spotLight.current);
 
+        //=======================================
 
         //DRAGGING DOTS
-        let controls = new DragControls([effectSphere, synthSphere, musikSphere], camera.current, renderer.domElement);
+        let controls = new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement);
         // let dragging = false;
         controls.addEventListener('dragstart', function (event) {
             dragging.current = true;
@@ -219,11 +220,11 @@ function Canvas(props) {
         controls.addEventListener('drag', function (event) {
             let pos = event.object.position.clone();
             pos.project(camera.current);
-            if (event.object === effectSphere) {
+            if (event.object === effectSphere.current) {
                 effectSphereDrag(pos);
-            } else if (event.object === synthSphere) {
+            } else if (event.object === synthSphere.current) {
                 synthSphereDrag(pos);
-            } else if (event.object === musikSphere) {
+            } else if (event.object === musikSphere.current) {
                 musikSphereDrag(pos);
             }
 
@@ -259,7 +260,7 @@ function Canvas(props) {
 
         }**/
 
-
+        //======================================
         //changing the lightForRegularClick intensisty every x milliseconds
         function refreshLightIntensity() {
             let x = 3;  // 30 milliseconds
@@ -285,18 +286,18 @@ function Canvas(props) {
         }
         looperLightIntensity();
 
-
+        //================================================
         var animate = function () {
             requestAnimationFrame(animate);
-            effectSphere.rotation.x += 0.01;
-            effectSphere.rotation.y += 0.01;
+            effectSphere.current.rotation.x += 0.01;
+            effectSphere.current.rotation.y += 0.01;
 
             /** might be too often
              if (lightForRegularClick.intensity > 0.003) {
                 lightForRegularClick.intensity -= 0.003;
             }
              **/
-            renderer.render(scene, camera.current);
+            renderer.current.render(scene.current, camera.current);
         };
         animate();
 
