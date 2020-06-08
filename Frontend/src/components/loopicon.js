@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useGlobalState } from "../GlobalState"
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as MuteIcon } from '../img/mute.svg';
 import { ReactComponent as VolumeIcon } from '../img/volume.svg';
+import UseEventListener from "./../UseEventListener"
 
 
 function Loopicon({ id }) {
@@ -15,6 +16,23 @@ function Loopicon({ id }) {
   //local state to toogle icons
   const [play, setPlay] = useState(true);
   const [mute, setMute] = useState(false);
+
+
+  const handleKeyDown = useCallback(
+    (event) => {
+      // start/stop muting with Number Keys
+      let keyNumber = event.keyCode - 48
+      if (id < 10 && id === keyNumber) { 
+        if (runningLoopers.get(keyNumber)) {
+          runningLoopers.get(keyNumber).toggleMute();
+          setMute(!mute);
+        }
+      }
+    },
+    [mute]
+  );
+
+  UseEventListener("keydown", handleKeyDown);
 
   //pause progress ring animation
   const animationPause = () => {

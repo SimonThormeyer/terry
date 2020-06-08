@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
@@ -10,6 +10,7 @@ import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { useGlobalState } from "../GlobalState"
 import { Looper } from '../components/toneJS/Looper'
+import UseEventListener from "./../UseEventListener"
 
 
 function Menu(props) {
@@ -25,6 +26,22 @@ function Menu(props) {
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
     const [record, setRecord] = useState(true)
+
+    const handleSpaceKeyDown = () => {loopFunction(loop);
+        setLoop(!loop);}
+
+    const handleKeyDown = useCallback(
+        (event) => {
+        // start/stop Looping with Space
+        if (event.keyCode === 32) {
+            handleSpaceKeyDown();
+        }
+        },
+        [loop]
+    );
+        
+    UseEventListener("keydown", handleKeyDown);
+
 
 
     const loopFunction = (startLoop) => {
@@ -77,8 +94,7 @@ function Menu(props) {
         window.alert("Your download was successful!");
     }
 
-
-
+    
 
     return (
         <>
