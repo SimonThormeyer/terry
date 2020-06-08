@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
@@ -10,6 +10,7 @@ import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { useGlobalState } from "../GlobalState"
 import { Looper } from '../components/toneJS/Looper'
+import useEventListener from "./../UseEventListener"
 
 
 function Menu(props) {
@@ -27,17 +28,18 @@ function Menu(props) {
     const [record, setRecord] = useState(true)
 
 
-    const loopFunction = (startLoop) => {
-        if (startLoop) {
-            setListeningLooper(new Looper(performance.now(), musicCtrl));
-        } else {
-            listeningLooper.stopRecording(performance.now());
-            setNextLooperID(nextLooperID + 1);
-            runningLoopers.set(nextLooperID, listeningLooper);
-            setRunningLoopers(new Map(runningLoopers));
-            setListeningLooper(undefined)
-        }
-    }
+    const loopFunction = useCallback(
+        (startLoop) => {
+            if (startLoop) {
+                setListeningLooper(new Looper(performance.now(), musicCtrl));
+            } else {
+                listeningLooper.stopRecording(performance.now());
+                setNextLooperID(nextLooperID + 1);
+                runningLoopers.set(nextLooperID, listeningLooper);
+                setRunningLoopers(new Map(runningLoopers));
+                setListeningLooper(undefined)
+            }
+        }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
 
     const playFunction = () => {
         musicCtrl.startStopSoundbed()
@@ -56,7 +58,7 @@ function Menu(props) {
         console.log("menu js downlaodOverlayOn Function");
         var divOverlay = document.getElementById("overlay");
 
-       
+
         divOverlay.style.display = "block";
         var underlay = document.getElementById("underlay");
         underlay.style.display = "block";
@@ -77,6 +79,26 @@ function Menu(props) {
         window.alert("Your download was successful!");
     }
 
+    // KEY BINDINGS
+
+    const handleSpaceKeyDown = useCallback(
+        () => {
+            loopFunction(loop);
+            setLoop(!loop);
+        }, [loop, loopFunction, setLoop]);
+
+    const handleKeyDown = useCallback(
+        (event) => {
+            event.preventDefault();
+            // start/stop Looping with Space
+            if (event.keyCode === 32) {
+                handleSpaceKeyDown();
+            }
+        },
+        [handleSpaceKeyDown]
+    );
+
+    useEventListener("keydown", handleKeyDown);
 
 
 
@@ -126,7 +148,7 @@ function Menu(props) {
             </div>
         </>
     );
-    }
+}
 
 
 export default Menu;
