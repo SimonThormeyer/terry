@@ -171,9 +171,6 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
-    useEventListener('mousedown', onMouseClick);
-    useEventListener('touchstart', onTouch);
-
 
     const effectSphereDrag = useCallback((value) => {
         musicCtrl.setParameterEffect(value.x, value.y)
@@ -328,7 +325,7 @@ function Canvas(props) {
     //=================
     return (
         <div style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
-            ref={mount}
+            ref={mount} onClick={onMouseClick} onTouchStart={onTouch}
         />
     )
 }
