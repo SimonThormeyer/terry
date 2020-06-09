@@ -27,19 +27,19 @@ function Canvas(props) {
     const raycaster = useRef(new THREE.Raycaster());
     const lightForRegularClick = useRef(new THREE.PointLight(0xFFFFFF, 0.0, 6000));
     const looperLights = useRef([
-        new THREE.PointLight(0x3577B2, 0.0, 6000),
-        new THREE.PointLight(0x3577B2, 0.0, 6000),
-        new THREE.PointLight(0x3577B2, 0.0, 6000),
-        new THREE.PointLight(0x3577B2, 0.0, 6000)
+        new THREE.PointLight(0x38761D, 0.0, 6000),
+        new THREE.PointLight(0x38761D, 0.0, 6000),
+        new THREE.PointLight(0x38761D, 0.0, 6000),
+        new THREE.PointLight(0x38761D, 0.0, 6000)
     ]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));//BACKGROUND PLANE
    // const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
-    const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xffffff, dithering: true }));
+    const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
     const counter = useRef(0);
     const scene = useRef(new THREE.Scene()); //SCENE
-    const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.4));//SCENE LIGHT
+    const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.6));//SCENE LIGHT
     const spotLightMusic = useRef(createSpotlight(0xD970A7));//ATMOSPHERE SPOT LIGHT
     const spotLightEffect = useRef(createSpotlight(0xF9CB9C));//ATMOSPHERE SPOT LIGHT
     const sportLightSynth = useRef(createSpotlight(0x9FC5E8));//ATMOSPHERE SPOT LIGHT
@@ -135,7 +135,7 @@ function Canvas(props) {
             //Changing lightForRegularClick position and brightness
             lightForRegularClick.current.position.x = intersections[0].point.x;
             lightForRegularClick.current.position.y = intersections[0].point.y;
-            lightForRegularClick.current.intensity = 0.5;
+            lightForRegularClick.current.intensity = 0.3;
         }
 
         musicCtrl.triggerSynth(value[0], value[1]);
@@ -290,8 +290,8 @@ function Canvas(props) {
         function refreshLightIntensity() {
             let x = 3;  // 30 milliseconds
 
-            if (lightForRegularClick.current.intensity > 0.03) {
-                lightForRegularClick.current.intensity -= 0.03;
+            if (lightForRegularClick.current.intensity > 0.01) {
+                lightForRegularClick.current.intensity -= 0.01;
             }
 
             setTimeout(refreshLightIntensity, x * 10);

@@ -16,10 +16,9 @@ function App() {
   }
 
 
-
+// <button onClick={CallCanvasState}>click </button>
   return (
     <div className="App">
-      <button onClick={CallCanvasState}>click </button>
       <Loopcontrols />
       <Canvas />
       <Menu />
