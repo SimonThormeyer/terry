@@ -5,11 +5,10 @@ import Loopcontrols from "./loopcontrols";
 
 
 function App() {
-  
 
   return (
     <div className="App">
-      <Loopcontrols/>
+      <Loopcontrols />
       <Canvas />
       <Menu />
     </div>
