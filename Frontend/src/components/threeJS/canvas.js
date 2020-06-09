@@ -121,23 +121,16 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
-    const oldOnMouseClick = useRef(onMouseClick);
-    const oldOnTouch = useRef(onTouch);
+    useEventListener('mousedown', onMouseClick);
+    useEventListener('touchstart', onTouch);
 
-    useEffect(() => { // useEventListener
-        mount.current.removeEventListener('mousedown', oldOnMouseClick.current)
-        mount.current.removeEventListener('touchstart', oldOnTouch.current)
-        mount.current.addEventListener('mousedown', onMouseClick, false);
-        mount.current.addEventListener('touchstart', onTouch, false);
-        oldOnMouseClick.current = onMouseClick;
-    }, [onMouseClick, onTouch]);
 
     const effectSphereDrag = useCallback((value) => {
-        musicCtrl.setParameterEffect(value.x, value.y)
+        musicCtrl.setParameterEffect((value.x*2)-1, (value.y*2)-1)
     }, [musicCtrl]);
 
     const synthSphereDrag = useCallback((value) => {
-        musicCtrl.setParameterSynth(value.x, value.y)
+        musicCtrl.setParameterSynth((value.x*2)-1, (value.y*2)-1)
     }, [musicCtrl]);
 
     const musikSphereDrag = useCallback((value) => {
@@ -148,20 +141,11 @@ function Canvas(props) {
         dragging.current = true;
         event.object.material.emissive.set(0xaaaaaa);
 
-    },[dragging.current]);
+    },[]);
 
-    useEventListener('dragstart',dragStart, controls.current)
-    // useEventListener
-    controls.current.addEventListener('dragstart', function (event) {
-        dragging.current = true;
-        event.object.material.emissive.set(0xaaaaaa);
+    useEventListener('dragstart',dragStart, controls.current);
 
-    });
-
-
-    // useEventListener
-    //Called every drag
-    controls.current.addEventListener('drag', function (event) {
+    const drag = useCallback((event)=>{
         let pos = event.object.position.clone();
         pos.project(camera.current);
         if (event.object === effectSphere.current) {
@@ -171,15 +155,15 @@ function Canvas(props) {
         } else if (event.object === musikSphere.current) {
             musikSphereDrag(pos);
         }
+    },[effectSphereDrag,musikSphereDrag,synthSphereDrag]);
 
-    });
+    useEventListener('drag',drag, controls.current);
 
-    // useEventListener
-    //only on drag end
-    controls.current.addEventListener('dragend', function (event) {
-        dragging.current = false;
-        event.object.material.emissive.set(0x000000);
-    });
+    const dragEnd = useCallback((event)=>{
+            dragging.current = false;
+            event.object.material.emissive.set(0x000000);
+    },[]);
+    useEventListener('dragend',dragEnd, controls.current);
 
     //CREATING SCENE
     useEffect(() => {
@@ -198,14 +182,26 @@ function Canvas(props) {
         //SET EFFECT SPHERE START POSITION
         effectSphere.current.position.set(0, 0, 0);
         scene.current.add(effectSphere.current);
+        let posEffect = effectSphere.current.position.clone();
+        camera.current.updateMatrixWorld();
+        posEffect.project(camera.current);
+        effectSphereDrag(posEffect);
 
         //SET SYNTH SPHERE START POSITION
         synthSphere.current.position.set(-10, 0, 0);
         scene.current.add(synthSphere.current);
+        let posSynth = effectSphere.current.position.clone();
+        camera.current.updateMatrixWorld();
+        posSynth.project(camera.current);
+      synthSphereDrag(posSynth);
 
         //SET MUSIK SPHERE START POSITION
         musikSphere.current.position.set(10, 0, 0);
         scene.current.add(musikSphere.current);
+        let posMusik = effectSphere.current.position.clone();
+        camera.current.updateMatrixWorld();
+        posMusik.project(camera.current);
+        musikSphereDrag(posMusik);
 
         //MOVING LIGHT BLOB ON CLICK
         lightForRegularClick.current.position.set(0, 0, 0);
@@ -237,12 +233,6 @@ function Canvas(props) {
         scene.current.add(spotLight.current);
 
         //=======================================
-
-        //DRAGGING DOTS ===> better out of this build-scene-useEffect
-
-
-
-        //======================================
 
         //changing the lightForRegularClick intensisty every x milliseconds
         function refreshLightIntensity() {
