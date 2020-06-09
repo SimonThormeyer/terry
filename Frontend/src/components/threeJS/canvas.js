@@ -4,7 +4,8 @@ import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
 // import useLocalStorage from "../../UseLocalStorage.js"
-
+import * as TWEEN from 'tween';
+import {white} from "color-name";
 function Canvas(props) {
 
     // global state 
@@ -32,33 +33,46 @@ function Canvas(props) {
         new THREE.PointLight(0x3577B2, 0.0, 6000)
     ]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));//BACKGROUND PLANE
-    const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0x9EC2E3, dithering: true }));
+   // const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
+    const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xffffff, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
     const counter = useRef(0);
     const scene = useRef(new THREE.Scene()); //SCENE
-    const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.6));//SCENE LIGHT
-    const spotLight = useRef(new THREE.SpotLight(0x8E2057, 0.5));//ATMOSPHERE SPOT LIGHT
-    const renderer = useRef(new THREE.WebGLRenderer());//RENDERER
+    const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.4));//SCENE LIGHT
+    const spotLightMusic = useRef(createSpotlight(0xD970A7));//ATMOSPHERE SPOT LIGHT
+    const spotLightEffect = useRef(createSpotlight(0xF9CB9C));//ATMOSPHERE SPOT LIGHT
+    const sportLightSynth = useRef(createSpotlight(0x9FC5E8));//ATMOSPHERE SPOT LIGHT
+    const renderer = useRef(new THREE.WebGLRenderer({alpha: true}));//RENDERER
 
     // MOVING EFFEKT
     let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
-    let materialEffect = new THREE.MeshPhongMaterial({ color: 0x25D4D4, dithering: true });
+    let materialEffect = new THREE.MeshPhongMaterial({ color: 0xF9CB9C, dithering: true });
     const effectSphere = useRef(new THREE.Mesh(geometryEffect, materialEffect)); //EFFECT SPHERE DOT
 
     // MOVING SYNTH
     let geometrySynth = new THREE.SphereGeometry(1, 32, 32);
-    let materialSynth = new THREE.MeshPhongMaterial({ color: 0xD4D425, dithering: true });
+    let materialSynth = new THREE.MeshPhongMaterial({ color: 0x9FC5E8, dithering: true });
     const synthSphere = useRef(new THREE.Mesh(geometrySynth, materialSynth));//SYNTH SPHERE DOT
 
     // MOVING MUSIK
     let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
-    let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD425D4, dithering: true });
+    let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD970A7, dithering: true });
     const musikSphere = useRef(new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
 
 
     const controls = useRef(new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement)); //DRAGGING CONTROLS
 
+    function createSpotlight( color ) {
+        let newObj = new THREE.SpotLight( color, 0.4 );
+        newObj.castShadow = true;
+        newObj.angle = 0.3;
+        newObj.penumbra = 0.2;
+        newObj.decay = 2;
+        newObj.distance = 50;
+
+        return newObj;
+    }
     useEffect(()=>{
         let getCanvasState = function() {
             let posEffect = effectSphere.current.position.clone();
@@ -121,7 +135,7 @@ function Canvas(props) {
             //Changing lightForRegularClick position and brightness
             lightForRegularClick.current.position.x = intersections[0].point.x;
             lightForRegularClick.current.position.y = intersections[0].point.y;
-            lightForRegularClick.current.intensity = 0.7;
+            lightForRegularClick.current.intensity = 0.5;
         }
 
         musicCtrl.triggerSynth(value[0], value[1]);
@@ -256,19 +270,19 @@ function Canvas(props) {
         background.current.receiveShadow = true;
         scene.current.add(background.current);
 
-        //ATMOSPHERE SPOT LIGHT
-        spotLight.current.position.set(20, 0, 50);
-        spotLight.current.angle = Math.PI / 4;
-        spotLight.current.penumbra = 0.05;
-        spotLight.current.decay = 2;
-        spotLight.current.distance = 200;
 
-        spotLight.current.castShadow = true;
-        spotLight.current.shadow.mapSize.width = 1024;
-        spotLight.current.shadow.mapSize.height = 1024;
-        spotLight.current.shadow.camera.near = 10;
-        spotLight.current.shadow.camera.far = 200;
-        scene.current.add(spotLight.current);
+        //ATMOSPHERE SPOT LIGHT
+        spotLightEffect.current.position.set( 0, 0, 20 );
+        sportLightSynth.current.position.set( 0, 0, 20 );
+        spotLightMusic.current.position.set(0,0,20);
+        sportLightSynth.current.target = synthSphere.current;
+        spotLightEffect.current.target = effectSphere.current;
+        spotLightMusic.current.target = musikSphere.current;
+        scene.current.add(sportLightSynth.current);
+       scene.current.add(spotLightMusic.current);
+        scene.current.add(spotLightEffect.current);
+
+      //  spotLight3.position.set( - 15, 40, 45 );
 
         //=======================================
 
@@ -303,6 +317,8 @@ function Canvas(props) {
             effectSphere.current.rotation.x += 0.01;
             effectSphere.current.rotation.y += 0.01;
             renderer.current.render(scene.current, camera.current);
+
+
         };
 
         animate();
