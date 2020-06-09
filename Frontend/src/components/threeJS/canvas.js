@@ -154,6 +154,7 @@ function Canvas(props) {
     const onMouseClick = useCallback((event) => {
         event.preventDefault();
         if (!dragging.current) {
+            console.log(dragging.current + " click");
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
             canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
 
@@ -186,11 +187,13 @@ function Canvas(props) {
 
     const dragStart = useCallback((event) => {
         dragging.current = true;
+        console.log(dragging.current);
         event.object.material.emissive.set(0xaaaaaa);
 
     },[]);
 
     useEventListener('dragstart',dragStart, controls.current);
+
 
     const drag = useCallback((event)=>{
         let pos = event.object.position.clone();
@@ -325,7 +328,7 @@ function Canvas(props) {
     //=================
     return (
         <div style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
-            ref={mount} onClick={onMouseClick} onTouchStart={onTouch}
+            ref={mount} onMouseDown={onMouseClick} onTouchStart={onTouch}
         />
     )
 }
