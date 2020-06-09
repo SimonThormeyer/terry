@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
+import useEventListener from "../../UseEventListener";
 
 function Canvas(props) {
 
@@ -35,6 +36,7 @@ function Canvas(props) {
     const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.6));//SCENE LIGHT
     const spotLight = useRef(new THREE.SpotLight(0x8E2057, 0.5));//ATMOSPHERE SPOT LIGHT
     const renderer = useRef(new THREE.WebGLRenderer());//RENDERER
+
     // MOVING EFFEKT
     let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
     let materialEffect = new THREE.MeshPhongMaterial({ color: 0x25D4D4, dithering: true });
@@ -50,7 +52,7 @@ function Canvas(props) {
     let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD425D4, dithering: true });
     const musikSphere = useRef(new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
 
-
+    const controls = useRef(new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement)); //DRAGGING CONTROLS
 
     const canvasClick = useCallback((value, playback = false) => {
 
@@ -142,6 +144,42 @@ function Canvas(props) {
         musicCtrl.setParameterMusic(value.x, value.y)
     }, [musicCtrl]);
 
+    const dragStart = useCallback((event) => {
+        dragging.current = true;
+        event.object.material.emissive.set(0xaaaaaa);
+
+    },[dragging.current]);
+
+    useEventListener('dragstart',dragStart, controls.current)
+    // useEventListener
+    controls.current.addEventListener('dragstart', function (event) {
+        dragging.current = true;
+        event.object.material.emissive.set(0xaaaaaa);
+
+    });
+
+
+    // useEventListener
+    //Called every drag
+    controls.current.addEventListener('drag', function (event) {
+        let pos = event.object.position.clone();
+        pos.project(camera.current);
+        if (event.object === effectSphere.current) {
+            effectSphereDrag(pos);
+        } else if (event.object === synthSphere.current) {
+            synthSphereDrag(pos);
+        } else if (event.object === musikSphere.current) {
+            musikSphereDrag(pos);
+        }
+
+    });
+
+    // useEventListener
+    //only on drag end
+    controls.current.addEventListener('dragend', function (event) {
+        dragging.current = false;
+        event.object.material.emissive.set(0x000000);
+    });
 
     //CREATING SCENE
     useEffect(() => {
@@ -201,38 +239,8 @@ function Canvas(props) {
         //=======================================
 
         //DRAGGING DOTS ===> better out of this build-scene-useEffect
-        let controls = new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement);
-        // ^ move up to refs
-
-        // useEventListener
-        controls.addEventListener('dragstart', function (event) {
-            dragging.current = true;
-            event.object.material.emissive.set(0xaaaaaa);
-
-        });
 
 
-        // useEventListener
-        //Called every drag
-        controls.addEventListener('drag', function (event) {
-            let pos = event.object.position.clone();
-            pos.project(camera.current);
-            if (event.object === effectSphere.current) {
-                effectSphereDrag(pos);
-            } else if (event.object === synthSphere.current) {
-                synthSphereDrag(pos);
-            } else if (event.object === musikSphere.current) {
-                musikSphereDrag(pos);
-            }
-
-        });
-
-        // useEventListener
-        //only on drag end
-        controls.addEventListener('dragend', function (event) {
-            dragging.current = false;
-            event.object.material.emissive.set(0x000000);
-        });
 
         //======================================
 
