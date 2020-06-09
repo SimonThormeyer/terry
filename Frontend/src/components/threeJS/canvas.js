@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
-// import useLocalStorage from "../../UseLocalStorage.js"
 function Canvas(props) {
 
     //HOW TO GET CANVAS INFO
