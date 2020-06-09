@@ -3,13 +3,14 @@ import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
-import useLocalStorage from "../../UseLocalStorage.js"
+// import useLocalStorage from "../../UseLocalStorage.js"
 
 function Canvas(props) {
 
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
+    const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
 
 
 
@@ -55,25 +56,21 @@ function Canvas(props) {
     let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD425D4, dithering: true });
     const musikSphere = useRef(new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
 
-    ///local storage
-    const getCanvasState = useLocalStorage('getCanvasState', ()=>{});
-
 
     const controls = useRef(new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement)); //DRAGGING CONTROLS
 
-let i =0;
     useEffect(()=>{
-        getCanvasState.current =(function() {
-            console.log("canvas state return" + i);
-            i++;
+        let getCanvasState = function() {
+            console.log("canvas state return");
             return {
                 'effectSphere': {
                     'x': effectSphere.current.position.x,
                     'y': effectSphere.current.position.y
                 }
             }
-        })
-    },[getCanvasState]);
+        }
+        setGlobalFunctions(Object.assign(globalFunctions, {'getCanvasState': getCanvasState}))
+    },[globalFunctions, setGlobalFunctions]);
 
 
     const canvasClick = useCallback((value, playback = false) => {

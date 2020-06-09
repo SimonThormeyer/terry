@@ -19,6 +19,7 @@ const initialState = {
     // containing all loopers that currently playback recorded actions (or are paused)
     runningLoopers: new Map(),
     musicCtrl: new MusicCtrl(),
+    globalFunctions: {},
 };
 
 export const { useGlobalState } = createGlobalState(initialState);
