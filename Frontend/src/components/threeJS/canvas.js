@@ -4,8 +4,6 @@ import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
 // import useLocalStorage from "../../UseLocalStorage.js"
-import * as TWEEN from 'tween';
-import {white} from "color-name";
 function Canvas(props) {
 
     // global state 
@@ -66,7 +64,7 @@ function Canvas(props) {
     function createSpotlight( color ) {
         let newObj = new THREE.SpotLight( color, 0.4 );
         newObj.castShadow = true;
-        newObj.angle = 0.3;
+        newObj.angle = 0.4;
         newObj.penumbra = 0.2;
         newObj.decay = 2;
         newObj.distance = 50;
