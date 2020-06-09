@@ -61,11 +61,30 @@ function Canvas(props) {
 
     useEffect(()=>{
         let getCanvasState = function() {
-            console.log("canvas state return");
+            let posEffect = effectSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posEffect.project(camera.current);
+
+            let posSynth = synthSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posSynth.project(camera.current);
+
+            let posMusic = musikSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posMusic.project(camera.current);
+          //  console.log("canvas state return");
             return {
                 'effectSphere': {
-                    'x': effectSphere.current.position.x,
-                    'y': effectSphere.current.position.y
+                    'x': posEffect.x,
+                    'y': posEffect.y
+                },
+                'synthSphere': {
+                    'x': posSynth.x,
+                    'y': posSynth.y
+                },
+                'musicSphere': {
+                    'x': posMusic.x,
+                    'y': posMusic.y
                 }
             }
         }
@@ -145,11 +164,11 @@ function Canvas(props) {
 
 
     const effectSphereDrag = useCallback((value) => {
-        musicCtrl.setParameterEffect((value.x*2)-1, (value.y*2)-1)
+        musicCtrl.setParameterEffect(value.x, value.y)
     }, [musicCtrl]);
 
     const synthSphereDrag = useCallback((value) => {
-        musicCtrl.setParameterSynth((value.x*2)-1, (value.y*2)-1)
+        musicCtrl.setParameterSynth((value.x), (value.y))
     }, [musicCtrl]);
 
     const musikSphereDrag = useCallback((value) => {
@@ -188,7 +207,7 @@ function Canvas(props) {
     useEffect(() => {
 
         //SET CAMERA
-        camera.current.position.z = 20;
+        camera.current.position.z = 30;
 
         //SCENE LIGHT
         scene.current.add(ambient.current);
@@ -209,7 +228,7 @@ function Canvas(props) {
         //SET SYNTH SPHERE START POSITION
         synthSphere.current.position.set(-10, 0, 0);
         scene.current.add(synthSphere.current);
-        let posSynth = effectSphere.current.position.clone();
+        let posSynth = synthSphere.current.position.clone();
         camera.current.updateMatrixWorld();
         posSynth.project(camera.current);
       synthSphereDrag(posSynth);
@@ -217,7 +236,7 @@ function Canvas(props) {
         //SET MUSIK SPHERE START POSITION
         musikSphere.current.position.set(10, 0, 0);
         scene.current.add(musikSphere.current);
-        let posMusik = effectSphere.current.position.clone();
+        let posMusik = musikSphere.current.position.clone();
         camera.current.updateMatrixWorld();
         posMusik.project(camera.current);
         musikSphereDrag(posMusik);
