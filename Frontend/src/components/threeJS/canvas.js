@@ -6,14 +6,24 @@ import useEventListener from "../../UseEventListener";
 // import useLocalStorage from "../../UseLocalStorage.js"
 function Canvas(props) {
 
+    //HOW TO GET CANVAS INFO
+    /**
+     * const [globalFunctions] = useGlobalState('globalFunctions');
+     * a way to get the data of the canvas
+     *  const CallCanvasState = () => {
+        if (globalFunctions.getCanvasState instanceof Function) {
+          console.log(
+            globalFunctions.getCanvasState());
+        }
+    }
+     */
+
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
 
-
-
-    // component state 
+    // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
 
@@ -34,7 +44,7 @@ function Canvas(props) {
    // const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
-    const camera = useRef(new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
+    const camera = useRef(new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
     const counter = useRef(0);
     const scene = useRef(new THREE.Scene()); //SCENE
     const ambient = useRef(new THREE.AmbientLight(0xffffff, 0.6));//SCENE LIGHT
@@ -154,7 +164,6 @@ function Canvas(props) {
     const onMouseClick = useCallback((event) => {
         event.preventDefault();
         if (!dragging.current) {
-            console.log(dragging.current + " click");
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
             canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
 
@@ -187,7 +196,6 @@ function Canvas(props) {
 
     const dragStart = useCallback((event) => {
         dragging.current = true;
-        console.log(dragging.current);
         event.object.material.emissive.set(0xaaaaaa);
 
     },[]);
