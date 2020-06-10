@@ -126,7 +126,6 @@ export class SynthAndEffects {
     }
 
     /*** RECORDER FUNCTIONS ***/
-
     startStopRecording() {
         if (!this.recorderStarted) {
             this.recorder.start()
