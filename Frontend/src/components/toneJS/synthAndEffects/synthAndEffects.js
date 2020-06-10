@@ -1,23 +1,26 @@
 import Tone from "tone";
-import {Recorder} from "../recorder/recorder";
 
 export class SynthAndEffects {
+    audio;
+    chunks = []
 
     constructor() {
-
         // Settings
         this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
         this.waveforms = ["sine", "saw", "pulse"]
         this.noteLength = this.noteLengthOptions[2]
 
+        //RECORDER
+        this.recorderStarted = false
+        this.context = Tone.context
+        this.destination = this.context.createMediaStreamDestination()
+        this.recorder = new MediaRecorder(this.destination.stream)
+        this.fileSaver = require('file-saver');
+
         // INSTRUMENT_CHAIN
         //Effects
-
         this.limiter = new Tone.Limiter(-1).toMaster()
-        this.recorder = new Recorder()
-        this.limiter.connect(this.recorder)
-        this.volume = new Tone.Volume(-12).connect(this.limiter);
-        this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.volume)
+        this.limiter.connect(this.destination)
         this.volume = new Tone.Volume(-5).connect(this.limiter);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.reverb)
@@ -44,32 +47,60 @@ export class SynthAndEffects {
         // INITIALISING
         this.reverb.generate() //reverb needs to be initialised
         this.reverb.wet.value = 0.1
+
+        //RECORDER
+        this.recorderStarted = false
+        this.context = Tone.context
+        this.destination = this.context.createMediaStreamDestination()
+        this.recorder = new MediaRecorder(this.destination.stream)
+        this.fileSaver = require('file-saver');
+
     }
 
-    //SYNTH FUNCTIONS
+    /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
     setFilter(value) {
         let calculatedFrequency = (value + 1) / 2 * 5000
-        // console.log("BEFORE: " + this.filter.frequency.value)
         this.filter.frequency.value = calculatedFrequency
-        // console.log("AFTER: " + this.filter.frequency.value)
     }
 
     setNoteLength(value) {
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-        // console.log("Notelength: " + position)
+
+    }
+
+    setSynthADSR(value) {
+        this.polySynth.set({
+            "envelope": {
+                "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
+                "attack": (this._normalizeRange(value) * 0.2)
+            }
+        });
+    }
+
+    setOscillatorType(value) {
+        let numberOfWaveformOptions = this.waveforms.length - 1
+        let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
+        let waveform = this.waveforms[position]
+        this.polySynth.set(
+            {
+                oscillator: {
+                    type: waveform
+
+                }
+            })
     }
 
 
-    // EFFECT FUNCTIONS
+    /*** EFFECT FUNCTIONS ***/
     //Panning
     setPanningEffect(valueX, valueY) {
-        this.panLfo.set("max", this._normalizeRange(valueX)*this._normalizeRange(valueX))
+        this.panLfo.set("max", this._normalizeRange(valueX) * this._normalizeRange(valueX))
         this.panLfo.frequency.value = this._normalizeRange(valueY) * 8
 
     }
@@ -92,6 +123,26 @@ export class SynthAndEffects {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
         this.reverbCounter++
+    }
+
+    /*** RECORDER FUNCTIONS ***/
+
+    startStopRecording() {
+        if (!this.recorderStarted) {
+            this.recorder.start()
+            this.recorderStarted = true
+        } else {
+            this.recorder.stop()
+        }
+
+        this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
+        this.recorder.onstop = evt => {
+            console.log(evt)
+            let blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'});
+            console.log(blob)
+            this.fileSaver.saveAs(blob)
+
+        };
     }
 
 

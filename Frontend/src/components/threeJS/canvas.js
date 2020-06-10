@@ -67,6 +67,10 @@ function Canvas(props) {
     let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD970A7, dithering: true });
     const musikSphere = useRef(new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
 
+    // AUDIOCONTEXT
+    var audioContextStarted = false
+
+
 
     const controls = useRef(new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement)); //DRAGGING CONTROLS
 
@@ -114,6 +118,10 @@ function Canvas(props) {
 
 
     const canvasClick = useCallback((value, playback = false) => {
+        if (!audioContextStarted){
+            audioContextStarted = true
+            musicCtrl.startAudioContext()
+        }
 
         // give canvasClick to Looper => possibly better in a useEffect
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {

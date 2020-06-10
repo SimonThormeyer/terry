@@ -2,20 +2,12 @@ import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 import {Soundbed} from "./soundbed/soundbed";
 import {Recorder} from "./recorder/recorder";
+import * as Tone from "tone";
 
-
-/*
-    IMPORT:
-    import {MusicCtrl} from './musicCtrl';
-
-    INSTANTIATE:
-    let musicCtrl = new musicCtrl();
-
-    CALL FUNCTION:
-    */
 
 export class MusicCtrl {
     soundBed;
+    adcStarted = false
 
     constructor() {
         this.isomorphicLayout = new IsomorphicLayout()
@@ -24,20 +16,27 @@ export class MusicCtrl {
         this.recorder = new Recorder()
     }
 
+    //UTILITY
+    startAudioContext(){
+        this.recorder = new SynthAndEffects()
+        this.adcStarted = true
+    }
+
+    //SYNTH
     triggerSynth(valueX, valueY) {
         this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
         this.synthAndEffects.triggerSynth(this.note);
     }
 
     startStopSoundbed(){
-        this.recorder.startRecording()
-        this.soundBed.playPauseSoundbed()
+        this.synthAndEffects.startStopRecording()
+        //this.soundBed.playPauseSoundbed()
     }
 
     setParameterSynth(valueX, valueY) {
         this.synthAndEffects.setFilter(valueX)
         this.synthAndEffects.setNoteLength(valueY)
-        // this.synthAndEffects.setOscillatorType(valueX)
+        //this.synthAndEffects.setOscillatorType(valueX)
         this.synthAndEffects.setSynthADSR(valueY)
     }
 
@@ -51,17 +50,15 @@ export class MusicCtrl {
     setParameterMusic(valueX, valueY) {
         this.isomorphicLayout.changeScale(valueX);
         this.isomorphicLayout.changeOctave(valueY);
-        this.recorder.stopRecording()
-        //this.isomorphicLayout.set('detune',valueX)
     }
 
     startRecording(){
-        this.recorder.startRecording()
+        if (this.adcStarted) {
+            this.synthAndEffects.startRecording()
+        }
     }
 
-    stopRecording(){
-        this.recorder.stopRecording()
-    }
+
 
 
 
