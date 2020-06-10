@@ -1,6 +1,7 @@
 import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 import {Soundbed} from "./soundbed/soundbed";
+import {RandomNotes} from "./randomNotes/randomNotes";
 
 
 /*
@@ -50,7 +51,7 @@ export class MusicCtrl {
     }
 
     startStopRandomNotes() {
-        
+        this.randomNotes.startStopRandomNotes(value);
     }
 
 
