@@ -122,7 +122,6 @@ function Canvas(props) {
             audioContextStarted = true
             musicCtrl.startAudioContext()
         }
-
         // give canvasClick to Looper => possibly better in a useEffect
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
             listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);

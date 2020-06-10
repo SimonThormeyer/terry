@@ -10,9 +10,13 @@ export class SynthAndEffects {
         this.waveforms = ["sine", "saw", "pulse"]
         this.noteLength = this.noteLengthOptions[2]
 
+        //GENERAL TONEJS SETTINGS
+        this.context = Tone.context
+        this.context.latencyHint = 0.35
+
         //RECORDER
         this.recorderStarted = false
-        this.context = Tone.context
+
         this.destination = this.context.createMediaStreamDestination()
         this.recorder = new MediaRecorder(this.destination.stream)
         this.fileSaver = require('file-saver');
@@ -45,16 +49,8 @@ export class SynthAndEffects {
         this.reverbCounter = 0
 
         // INITIALISING
-        this.reverb.generate() //reverb needs to be initialised
+        this.reverb.generate() // reverb needs to be initialised
         this.reverb.wet.value = 0.1
-
-        //RECORDER
-        this.recorderStarted = false
-        this.context = Tone.context
-        this.destination = this.context.createMediaStreamDestination()
-        this.recorder = new MediaRecorder(this.destination.stream)
-        this.fileSaver = require('file-saver');
-
     }
 
     /*** SYNTH FUNCTIONS ***/

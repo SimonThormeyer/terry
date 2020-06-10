@@ -1,8 +1,6 @@
 import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 import {Soundbed} from "./soundbed/soundbed";
-import {Recorder} from "./recorder/recorder";
-import * as Tone from "tone";
 
 
 export class MusicCtrl {
@@ -13,12 +11,11 @@ export class MusicCtrl {
         this.isomorphicLayout = new IsomorphicLayout()
         this.synthAndEffects = new SynthAndEffects()
         this.soundBed = new Soundbed()
-        this.recorder = new Recorder()
     }
 
     //UTILITY
     startAudioContext(){
-        this.recorder = new SynthAndEffects()
+        this.synthAndEffects = new SynthAndEffects()
         this.adcStarted = true
     }
 
