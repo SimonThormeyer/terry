@@ -12,7 +12,7 @@ export class SynthAndEffects {
 
         //GENERAL TONEJS SETTINGS
         this.context = Tone.context
-        this.context.latencyHint = 0.35
+        this.context.latencyHint = "balanced"
         this.context.lookAhead = 0.1
 
         //RECORDER
@@ -27,8 +27,8 @@ export class SynthAndEffects {
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.limiter.connect(this.destination)
         this.volume = new Tone.Volume(-5).connect(this.limiter);
-        this.reverb = new Tone.Reverb(2).connect(this.volume)
-        this.pan = new Tone.Panner(1).connect(this.reverb)
+        //this.reverb = new Tone.Reverb(2).connect(this.volume)
+        this.pan = new Tone.Panner(1).connect(this.volume)
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
 
 
@@ -50,8 +50,8 @@ export class SynthAndEffects {
         this.reverbCounter = 0
 
         // INITIALISING
-        this.reverb.generate() // reverb needs to be initialised
-        this.reverb.wet.value = 0.1
+        //this.reverb.generate() // reverb needs to be initialised
+        //this.reverb.wet.value = 0.1
     }
 
     /*** SYNTH FUNCTIONS ***/
@@ -115,12 +115,15 @@ export class SynthAndEffects {
     }
 
     //Reverb
+    /*
     setReverbWet(value) {
         if (this.reverbCounter % 50) {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
         this.reverbCounter++
     }
+
+     */
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {

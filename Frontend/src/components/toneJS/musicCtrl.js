@@ -40,7 +40,7 @@ export class MusicCtrl {
     setParameterEffect(valueX, valueY) {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
-        this.synthAndEffects.setReverbWet(valueX)
+        //this.synthAndEffects.setReverbWet(valueX)
         this.synthAndEffects.setPanningEffect(valueX,valueY)
     }
 
