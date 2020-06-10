@@ -57,6 +57,7 @@ function Menu(props) {
     }
 
     const randomFunction = () => {
+        musicCtrl.startStopRandomNotes();
         console.log("menu js random Function");
     }
 

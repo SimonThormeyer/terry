@@ -49,4 +49,9 @@ export class MusicCtrl {
         this.isomorphicLayout.changeOctave(valueY);
     }
 
+    startStopRandomNotes() {
+        
+    }
+
+
 }
