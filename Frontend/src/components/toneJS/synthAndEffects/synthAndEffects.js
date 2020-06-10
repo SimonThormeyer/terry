@@ -59,9 +59,11 @@ export class SynthAndEffects {
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
-    setFilter(value) {
-        let calculatedFrequency = (value + 1) / 2 * 5000
+    setFilter(valueX) {
+        let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
         this.filter.frequency.value = calculatedFrequency
+        // compensate volume when the filter opens up
+        this.volume.volume.value = ((-1) * (this._normalizeRange(valueX)) * 8) - 8
     }
 
     setNoteLength(value) {
@@ -122,7 +124,6 @@ export class SynthAndEffects {
         }
         this.reverbCounter++
     }
-
 
 
     /*** RECORDER FUNCTIONS ***/
