@@ -13,6 +13,7 @@ export class SynthAndEffects {
         //GENERAL TONEJS SETTINGS
         this.context = Tone.context
         this.context.latencyHint = 0.35
+        this.context.lookAhead = 0.1
 
         //RECORDER
         this.recorderStarted = false
