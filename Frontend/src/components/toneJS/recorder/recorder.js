@@ -1,6 +1,5 @@
 import * as Tone from "tone"
 
-
 export class Recorder {
 
     constructor() {

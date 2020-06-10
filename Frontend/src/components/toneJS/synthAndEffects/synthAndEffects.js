@@ -3,6 +3,9 @@ import {Recorder} from "../recorder/recorder";
 
 export class SynthAndEffects {
 
+    //TODO https://tonejs.github.io/docs/13.8.25/Context.html#latencyhint
+
+
     constructor() {
 
         // Settings
