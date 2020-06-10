@@ -25,8 +25,9 @@ export class SynthAndEffects {
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
+        this.compressor = new Tone.Compressor(-20,12).connect(this.limiter)
         this.limiter.connect(this.destination)
-        this.volume = new Tone.Volume(-5).connect(this.limiter);
+        this.volume = new Tone.Volume(-5).connect(this.compressor);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.volume)
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
