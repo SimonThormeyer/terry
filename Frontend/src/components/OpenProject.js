@@ -23,6 +23,7 @@ function OpenProject() {
             })
             .catch(err => {
                 err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
+                alert(err.response.data);
             })
 
     }, [])

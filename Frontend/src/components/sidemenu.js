@@ -30,7 +30,6 @@ function SideMenu() {
         if (username === "" || projectname === "") {
         } else {
             SaveProject(runningLoopers, username, projectname);
-            alert("Project successfully saved!");
             saveForm.reset();
         }
     }

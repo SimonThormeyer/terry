@@ -25,12 +25,15 @@ function SaveProject(loopers, username, projectname) {
             // Anfang POST
             .post(`${backendUrl}/projects/user/${userID}/project/${projectName}`, getGlobalState())
             .then(res => {
-                console.log(`successful: ${res.statusText}`)
+                console.log(`successful: ${res.statusText}`);
+                alert("Saved successfully");
             }) 
             // Ende Post
 
             .catch(err => {
                 err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
+                alert("Oooops, project name already in use");
+
             })
 
     
