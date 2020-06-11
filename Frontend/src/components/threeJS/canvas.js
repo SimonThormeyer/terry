@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
-import {MusicCtrl} from "../toneJS/musicCtrl";
 function Canvas(props) {
 
     //HOW TO GET CANVAS INFO
@@ -19,11 +18,9 @@ function Canvas(props) {
      */
 
     // global state 
-    const [musicCtrl,setMusicCtrl] = useGlobalState('musicCtrl');
+    const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
-
-
     // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
@@ -68,10 +65,6 @@ function Canvas(props) {
     let geometryMusik = new THREE.SphereGeometry(1, 32, 32);
     let materialMusik = new THREE.MeshPhongMaterial({ color: 0xD970A7, dithering: true });
     const musikSphere = useRef(new THREE.Mesh(geometryMusik, materialMusik));//MUSIK SPHERE DOT
-
-    // AUDIOCONTEXT
-    var audioContextStarted = false
-
 
 
     const controls = useRef(new DragControls([effectSphere.current, synthSphere.current, musikSphere.current], camera.current, renderer.current.domElement)); //DRAGGING CONTROLS
@@ -120,9 +113,7 @@ function Canvas(props) {
 
 
     const canvasClick = useCallback((value, playback = false) => {
-        if (!musicCtrl){
-            setMusicCtrl(new MusicCtrl())
-        }
+
         // give canvasClick to Looper => possibly better in a useEffect
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
             listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);

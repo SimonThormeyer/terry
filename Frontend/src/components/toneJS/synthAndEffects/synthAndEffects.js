@@ -3,6 +3,8 @@ import Tone from "tone";
 export class SynthAndEffects {
     audio;
     chunks = []
+    blob = undefined
+
 
     constructor() {
         // Settings
@@ -18,14 +20,17 @@ export class SynthAndEffects {
         //RECORDER
         this.recorderStarted = false
         this.destination = this.context.createMediaStreamDestination()
+        MediaRecorder.mimeType = "audio/mp3"
         this.recorder = new MediaRecorder(this.destination.stream)
+
         this.fileSaver = require('file-saver');
+        this.blob = undefined
 
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
         this.limiter.connect(this.destination)
-        this.compressor = new Tone.Compressor(-20,12).connect(this.limiter)
+        this.compressor = new Tone.Compressor(-20, 12).connect(this.limiter)
         this.volume = new Tone.Volume(-5).connect(this.compressor);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.volume)
@@ -54,7 +59,7 @@ export class SynthAndEffects {
     }
 
     /*** UTILITY FUNCTIONS ***/
-    startContext(){
+    startContext() {
         //this.context.close()
         console.log(this.context.isContext)
         //this.context.dispose()
@@ -135,21 +140,40 @@ export class SynthAndEffects {
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {
+        console.log(MediaRecorder.mimeType)
+        console.log(MediaRecorder.isTypeSupported("audio/mp3;codecs=opus"))
+
         if (!this.recorderStarted) {
             this.recorder.start()
             this.recorderStarted = true
         } else {
             this.recorder.stop()
+            this.recorderStarted = false
         }
 
         this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
         this.recorder.onstop = evt => {
             console.log(evt)
-            let blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'});
-            console.log(blob)
-            this.fileSaver.saveAs(blob)
+            //this.blob = new Blob(this.chunks, {type: 'audio/wav; codecs=0'});
+            this.blob = new Blob(this.chunks, {type: "audio/mp3; codecs=opus"})
+
+            //let blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'});
+            console.log(this.blob)
+
+            if (window.confirm("Download Recording?")) {
+                this.fileSaver.saveAs(this.blob)
+            }
 
         };
+    }
+
+    saveRecording() {
+        if (this.blob) {
+            if (window.confirm("Download Recording?")) {
+                this.fileSaver.saveAs(this.blob)
+            }
+
+        }
     }
 
     //INTERNAL FUNCTIONS
