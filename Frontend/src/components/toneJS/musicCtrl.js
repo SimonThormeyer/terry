@@ -15,7 +15,7 @@ export class MusicCtrl {
 
     //UTILITY
     startAudioContext(){
-        this.synthAndEffects = new SynthAndEffects()
+        this.synthAndEffects.startContext()
         this.adcStarted = true
     }
 

@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import DragControls from "three-dragcontrols";
 import useEventListener from "../../UseEventListener";
+import {MusicCtrl} from "../toneJS/musicCtrl";
 function Canvas(props) {
 
     //HOW TO GET CANVAS INFO
@@ -18,9 +19,10 @@ function Canvas(props) {
      */
 
     // global state 
-    const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [musicCtrl,setMusicCtrl] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
+
 
     // component state
     const [width,] = useState(window.innerWidth);
@@ -118,9 +120,8 @@ function Canvas(props) {
 
 
     const canvasClick = useCallback((value, playback = false) => {
-        if (!audioContextStarted){
-            audioContextStarted = true
-            musicCtrl.startAudioContext()
+        if (!musicCtrl){
+            setMusicCtrl(new MusicCtrl())
         }
         // give canvasClick to Looper => possibly better in a useEffect
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {

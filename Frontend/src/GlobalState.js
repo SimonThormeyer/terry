@@ -18,7 +18,7 @@ const initialState = {
     nextLooperID: 1, // can't just use 'runningLoopers.size' because of duplicate IDs when not deleting highest number loop first
     // containing all loopers that currently playback recorded actions (or are paused)
     runningLoopers: new Map(),
-    musicCtrl: new MusicCtrl(),
+    musicCtrl: undefined,
     globalFunctions: {},
 };
 

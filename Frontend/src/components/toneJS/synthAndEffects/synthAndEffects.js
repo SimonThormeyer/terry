@@ -3,7 +3,6 @@ import Tone from "tone";
 export class SynthAndEffects {
     audio;
     chunks = []
-    context;
 
     constructor() {
         // Settings
@@ -25,13 +24,12 @@ export class SynthAndEffects {
         // INSTRUMENT_CHAIN
         //Effects
         this.limiter = new Tone.Limiter(-1).toMaster()
-        this.compressor = new Tone.Compressor(-20,12).connect(this.limiter)
         this.limiter.connect(this.destination)
+        this.compressor = new Tone.Compressor(-20,12).connect(this.limiter)
         this.volume = new Tone.Volume(-5).connect(this.compressor);
         this.reverb = new Tone.Reverb(2).connect(this.volume)
         this.pan = new Tone.Panner(1).connect(this.volume)
         this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
-
 
         //Synth
         this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
@@ -53,6 +51,15 @@ export class SynthAndEffects {
         // INITIALISING
         this.reverb.generate() // reverb needs to be initialised
         this.reverb.wet.value = 0.1
+    }
+
+    /*** UTILITY FUNCTIONS ***/
+    startContext(){
+        //this.context.close()
+        console.log(this.context.isContext)
+        //this.context.dispose()
+        this.context = Tone.context
+        console.log(this.context.isContext)
     }
 
     /*** SYNTH FUNCTIONS ***/
@@ -118,7 +125,6 @@ export class SynthAndEffects {
     }
 
     //Reverb
-
     setReverbWet(value) {
         if (this.reverbCounter % 50) {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
@@ -145,7 +151,6 @@ export class SynthAndEffects {
 
         };
     }
-
 
     //INTERNAL FUNCTIONS
     _normalizeRange(value) {
