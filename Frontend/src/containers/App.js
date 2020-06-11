@@ -7,7 +7,6 @@ import SideMenu from '../components/sidemenu';
 
 function App() {
 
-
   return (
     <div className="App">
       <SideMenu />
