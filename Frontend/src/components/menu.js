@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
@@ -19,7 +19,7 @@ function Menu(props) {
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
-    const [overlayIsOpen, ] = useGlobalState('overlayIsOpen');
+    const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
 
     // state of Component (used for appearance of buttons)
     const [nextLooperID, setNextLooperID] = useState(1);
@@ -42,7 +42,12 @@ function Menu(props) {
                 setListeningLooper(undefined)
             }
         }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
+    
 
+    // set the global state 'overlayIsOpen' to true if an overlay is open
+    useEffect(() => {
+        setOverlayIsOpen(recordOverlay);
+    }, [recordOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
         musicCtrl.startStopSoundbed()

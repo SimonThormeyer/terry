@@ -22,7 +22,7 @@ function SideMenu() {
     const [saveOverlay, setSaveOverlay] = useState(false);
     const [openOverlay, setOpenOverlay] = useState(false);
 
-    // set the global state to true if an overlay is open
+    // set the global state 'overlayIsOpen' to true if an overlay is open
     useEffect(() => {
         setOverlayIsOpen(saveOverlay || openOverlay);
     }, [saveOverlay, openOverlay, setOverlayIsOpen])
