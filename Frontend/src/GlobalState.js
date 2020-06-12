@@ -21,6 +21,7 @@ const initialState = {
     globalFunctions: {},
     nextLooperId: 1,
     activeHelpDialogue : "",
+    randomNotes: new RandomNotes(),
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

@@ -1,16 +1,17 @@
-import Tone from "tone";
-
 export class RandomNotes {
 
     constructor(){
-        this.polySynth = Tone.PolySynth(8, Tone.FMSynth, {
-            oscillator: {
-                type: "sine",
-            }
-        });
-
-        this.timeOut = 0;
+        this.timeout = undefined;
+        this._simulateCanvasClick = undefined;
+        this.running = false;
     }
 
+    toggleRandomNote () {
+        if(!running) {
+            this.timeout = setTimeout(loopRandomNote(),)
+        } else {
+            clearTimeout(this.timeout);
+        }
+    };
     
 }

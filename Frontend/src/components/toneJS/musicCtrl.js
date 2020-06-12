@@ -1,7 +1,6 @@
 import {IsomorphicLayout} from "./scales/isomorphicLayout";
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 import {Soundbed} from "./soundbed/soundbed";
-import {RandomNotes} from "./randomNotes/randomNotes";
 
 
 /*
@@ -48,10 +47,6 @@ export class MusicCtrl {
     setParameterMusic(valueX, valueY) {
         this.isomorphicLayout.changeScale(valueX);
         this.isomorphicLayout.changeOctave(valueY);
-    }
-
-    startStopRandomNotes() {
-        this.randomNotes.startStopRandomNotes(value);
     }
 
 
