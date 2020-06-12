@@ -47,7 +47,7 @@ function OpenProject() {
     const openProjectFunction = (project_id) => {
         let project = data[project_id].project;
 
-        console.log("open project Function")
+        console.log(`open project Function, project: ${project}`)
 
     }
 

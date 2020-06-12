@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ReactComponent as SideMenuIcon } from '../img/sidemenu.svg';
 import { ReactComponent as SaveIcon } from '../img/save.svg';
 import { ReactComponent as Helpicon } from '../img/help.svg';
@@ -15,11 +15,17 @@ function SideMenu() {
 
     //global 
     const [runningLoopers,] = useGlobalState('runningLoopers');
+    const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
 
     //local
     const [sideMenu, setSideMenu] = useState(false);
     const [saveOverlay, setSaveOverlay] = useState(false);
     const [openOverlay, setOpenOverlay] = useState(false);
+
+    // set the global state 'overlayIsOpen' to true if an overlay is open
+    useEffect(() => {
+        setOverlayIsOpen(saveOverlay || openOverlay);
+    }, [saveOverlay, openOverlay, setOverlayIsOpen])
 
 
 //function to call the SaveProject component and pass runningloopers, username and projectname
@@ -76,7 +82,7 @@ function SideMenu() {
             
 
             <div id="sidemenu">
-                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu) }} />
+                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu); }} />
             </div>
             {sideMenu ?
                 <>
