@@ -22,8 +22,12 @@ function OpenProject() {
                 setRows(res);
             })
             .catch(err => {
-                err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
-                err.response ? alert(err.response.data) : "";
+                if (err.response) {
+                    console.log(`error: ${err.response.data}`);
+                    alert(err.response.data);
+                } else {
+                    console.log(err.message);
+                }
             })
 
     }, [])
