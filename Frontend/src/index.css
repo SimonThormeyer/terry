@@ -488,3 +488,34 @@ body {
   padding: 0 0.2vw;
   color: #a5a4a4;
 }
+
+/*********** Navigation Multitracking **************/
+
+#multitrackingNav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin-top: 2vw;
+  height: 0;
+}
+
+#arrowForward {
+  width: 2.2vw;
+  height: 2.2vw;
+  cursor: pointer;
+}
+
+#arrowBack {
+  width: 2.2vw;
+  height: 2.2vw;
+  cursor: pointer;
+}
+
+#synthesizerName {
+  font-size: 1.5vw;
+  display: inline-block;
+  vertical-align: middle;
+  margin: -1.6vw 0.8vw 0 0.3vw;
+  user-select: none;
+}

@@ -3,6 +3,8 @@ import Menu from '../components/menu'
 import React from 'react';
 import Loopcontrols from "./loopcontrols";
 import SideMenu from '../components/sidemenu';
+import MultitrackNav from '../components/multitracknav';
+
 
 
 function App() {
@@ -10,6 +12,7 @@ function App() {
   return (
     <div className="App">
       <SideMenu />
+      <MultitrackNav />
       <Loopcontrols />
       <Canvas />
       <Menu />
