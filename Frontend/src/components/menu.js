@@ -17,15 +17,16 @@ function Menu(props) {
 
     // Global state - see GlobalState.js for explanation, needed for functional logic of menu buttons 
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
-    const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperID');
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
 
     // state of Component (used for appearance of buttons)
+    const [nextLooperID, setNextLooperID] = useState(1);
     const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
     const [record, setRecord] = useState(true)
+    const [recordOverlay, setRecordOverlay] = useState(false)
 
 
     const loopFunction = useCallback(
@@ -41,6 +42,7 @@ function Menu(props) {
             }
         }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
 
+    
     const playFunction = () => {
         musicCtrl.startStopSoundbed()
         console.log("menu js play Function");
@@ -52,26 +54,6 @@ function Menu(props) {
 
     const recordFunction = () => {
         console.log("menu js record Function");
-    }
-
-    const downloadOverlayOnFunction = () => {
-        console.log("menu js downlaodOverlayOn Function");
-        var divOverlay = document.getElementById("overlay");
-
-
-        divOverlay.style.display = "block";
-        var underlay = document.getElementById("underlay");
-        underlay.style.display = "block";
-
-    }
-
-    const downloadOverlayOffFunction = () => {
-        console.log("menu js downlaodOOverlayOff Function");
-        var divOverlay = document.getElementById("overlay");
-        divOverlay.style.display = "none";
-
-        var divUnderlay = document.getElementById("underlay");
-        divUnderlay.style.display = "none";
     }
 
     const downloadFunction = () => {
@@ -126,26 +108,28 @@ function Menu(props) {
                 <li id="recordbutton" onClick={() => { setRecord(!record); recordFunction() }}>
                     {record ?
                         <RecordIcon /> :
-                        <StopIcon onClick={() => { downloadOverlayOnFunction() }} />}
+                        <StopIcon onClick={() => { setRecordOverlay(true) }} />}
                 </li>
             </ul>
-            <div id="underlay"></div>
-            <div id="overlay">
-                <ul>
-                    <li>
-                        <DeleteIcon id="closeOverlay" onClick={() => { downloadOverlayOffFunction() }} />
-                    </li>
-                    <li>
+            {recordOverlay ?
+                <>
+                    <div id="underlay"></div>
+                    <div id="overlay">
+
+                        <DeleteIcon id="closeOverlay" onClick={() => { setRecordOverlay(false) }} />
+
                         <LogoIcon id="logoIcon" />
-                    </li>
-                    <li>
+
                         <p>Download your Track?</p>
-                    </li>
-                    <li>
+
                         <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction() }} />
-                    </li>
-                </ul>
-            </div>
+
+                    </div>
+                </>
+                :
+                <> </>
+            }
+
         </>
     );
 }
