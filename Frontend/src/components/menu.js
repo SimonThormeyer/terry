@@ -42,7 +42,7 @@ function Menu(props) {
             }
         }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
 
-    
+
     const playFunction = () => {
         musicCtrl.startStopSoundbed()
         console.log("menu js play Function");
@@ -71,9 +71,10 @@ function Menu(props) {
 
     const handleKeyDown = useCallback(
         (event) => {
-            event.preventDefault();
+            event.stopPropagation(); // no other element should receive this event
             // start/stop Looping with Space
             if (event.keyCode === 32) {
+                event.preventDefault(); // don't scroll to bottom of page
                 handleSpaceKeyDown();
             }
         },
