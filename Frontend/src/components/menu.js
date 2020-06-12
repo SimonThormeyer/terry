@@ -19,6 +19,7 @@ function Menu(props) {
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [overlayIsOpen, ] = useGlobalState('overlayIsOpen');
 
     // state of Component (used for appearance of buttons)
     const [nextLooperID, setNextLooperID] = useState(1);
@@ -71,18 +72,20 @@ function Menu(props) {
 
     const handleKeyDown = useCallback(
         (event) => {
-            event.stopPropagation(); // no other element should receive this event
+            if(overlayIsOpen) return;
             // start/stop Looping with Space
             if (event.keyCode === 32) {
                 event.preventDefault(); // don't scroll to bottom of page
                 handleSpaceKeyDown();
             }
         },
-        [handleSpaceKeyDown]
+        [handleSpaceKeyDown, overlayIsOpen]
     );
 
-    useEventListener("keydown", handleKeyDown);
 
+
+    useEventListener("keydown", handleKeyDown);
+    
 
 
     return (
