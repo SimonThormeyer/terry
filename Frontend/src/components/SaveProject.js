@@ -32,8 +32,7 @@ function SaveProject(loopers, username, projectname) {
 
             .catch(err => {
                 err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
-                alert("Oooops, project name already in use");
-
+                err.response ? alert("Oooops, project name already in use") : "";
             })
 
     
