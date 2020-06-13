@@ -11,11 +11,14 @@ import { useGlobalState } from "../GlobalState";
 
 
 
+
 function SideMenu() {
 
     //global 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
+    const [helpDialogue, setHelpDialogue] = useGlobalState('helpDialogue');
+
 
     //local
     const [sideMenu, setSideMenu] = useState(false);
@@ -72,7 +75,7 @@ function SideMenu() {
 
 
     const helpProjectFunction = () => {
-        console.log("sidemenu help function");
+        setHelpDialogue(true)
     }
 
 
