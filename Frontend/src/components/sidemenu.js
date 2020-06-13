@@ -17,7 +17,7 @@ function SideMenu() {
     //global 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
-    const [helpDialogue, setHelpDialogue] = useGlobalState('helpDialogue');
+    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
 
     //local
@@ -75,18 +75,13 @@ function SideMenu() {
 
 
     const helpProjectFunction = () => {
-        setHelpDialogue(true)
+        setActiveHelpDialogue("canvas");
     }
 
 
 
     return (
         <>
-            
-
-            <div id="sidemenu">
-                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu); }} />
-            </div>
             {sideMenu ?
                 <>
                 <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
@@ -140,6 +135,9 @@ function SideMenu() {
                     <></>
             }
 
+            <div id="sidemenu">
+                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu); if (activeHelpDialogue === "saveOpen") { setActiveHelpDialogue("") } }} />
+            </div>
         </>
     );
 }

@@ -11,12 +11,12 @@ function App() {
 
   return (
     <div className="App">
-      <HelpDialogue/>
       <SideMenu />
       <Loopcontrols />
       <Canvas />
       <Menu />
       <StartOverlay />
+      <HelpDialogue />
     </div>
   );
 }

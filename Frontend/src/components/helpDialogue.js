@@ -5,101 +5,87 @@ import { useGlobalState } from "../GlobalState";
 
 function HelpDialogue(clickEvent) {
 
-    const [helpDialogue, setHelpDialogue] = useGlobalState('helpDialogue');
-    const [activeHelpDialogue, setActiveHelpDialogue] = useState("canvas");
+    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
 
 
-    let canvasClick = document.getElementById("");
-    let loopIcon = document.getElementById("loopbutton");
-    let backgroundMusicIcon = document.getElementById("playbutton");
-    let recordIcon = document.getElementById("recordbutton");
-    let randomMusicIcon = document.getElementById("randombutton");
-    let saveIcon = document.getElementById("save");
-    let openIcon = document.getElementById("open");
-
+    
 
 
     return (
-        <> {
-            helpDialogue ?
+        <> 
 
 
-                <div id="helpDialogue">
-
-
-                    {activeHelpDialogue == "canvas" ?
+                    {activeHelpDialogue === "canvas" ?
                         <div id="clickCanvasDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false)}}/>
-                            <p>Click on the canvas to create music. Try it!</p>
-                            <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("effects") }}>Skip</div>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("")}}/>
+                            <p>Click on the canvas to create music.<br />Try it!</p>
+                    <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("effects")}}>Skip</div>
                         </div> :
                         ""
                     }
 
-                    {activeHelpDialogue == "effects" ?
+                    {activeHelpDialogue === "effects" ?
                         <div id="useEffects" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
-                            <p>Move the sphere to change the sound. Try it!</p>
-                            <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("loop") }}>Skip</div>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
+                            <p>Move the spheres to change the sound, effects and keys and click again.</p>
+                    <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("loop")}}>Skip</div>
                         </div> :
                         ""
                     }
 
 
-                    {activeHelpDialogue == "loop" ?
+                    {activeHelpDialogue === "loop" ?
                         <div id="loopDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
-                            <p>Here you can loop your music. Try it!</p>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
+                            <p>Here you can loop your music. You can also use the space key. Try it!</p>
                             <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("loopIcons") }}>Skip</div>
                         </div> :
                         ""}
                     
 
-                    {activeHelpDialogue == "loopIcons" ?
+                    {activeHelpDialogue === "loopIcons" ?
                         <div id="loopIconsDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
-                            <p>Here you can loop your music. Try it!</p>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
+                            <p>(Un)Mute, delete or pause the loops. Keys 1 to 5 also mute the loops.</p>
                             <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("soundBed") }}>Skip</div>
                         </div> :
                         ""}
 
-                    {activeHelpDialogue == "soundBed" ?
+                    {activeHelpDialogue === "soundBed" ?
                         <div id="soundbedDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
-                            <p>Click here to turn on the background music. Try it!</p>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
+                            <p>Click here to turn on and off the background music. Try it!</p>
                             <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("random") }}>Skip</div>
                         </div> :
                         ""}
 
-                    {activeHelpDialogue == "random" ?
+                    {activeHelpDialogue === "random" ?
                         <div id="randomDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
-                            <p>Click on the canvas to create music. Try it!</p>
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
+                            <p>Click on the random button to play random notes.</p>
                             <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("record") }}>Skip</div>
                         </div> :
                         ""
                     }
 
 
-                    {activeHelpDialogue == "record" ?
+                    {activeHelpDialogue === "record" ?
                         <div id="RecordDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
                             <p>Record your music to download your track. Try it!</p>
                             <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("saveOpen") }}>Skip</div>
                         </div> :
                         ""}
 
 
-                    {activeHelpDialogue == "saveOpen" ?
+                    {activeHelpDialogue === "saveOpen" ?
                         <div id="SaveOpenDialogue" className="dialogueStyle">
-                            <DeleteIcon className="closeDialogue" onClick={() => { setHelpDialogue(false) }} />
+                            <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
                             <p>In this sidemenu you can save and open projects. Now you are ready to start!</p>
-                            <div className="styleSkipButton" onClick={() => { setHelpDialogue(false) }}>Close</div>
+                            <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("") }}>Close</div>
                         </div> :
                         ""}
-                </div> :
-                ""
-        }
+               
         </>
     );
 }

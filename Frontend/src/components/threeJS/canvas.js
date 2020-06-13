@@ -21,6 +21,7 @@ function Canvas(props) {
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
+    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
     // component state
     const [width,] = useState(window.innerWidth);
@@ -336,8 +337,19 @@ function Canvas(props) {
 
 
     //=================
+
+    let clicks = 0;
+    
     return (
-        <div style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
+        <div id="canvas"
+            onClick={() => {
+                if (activeHelpDialogue === "canvas") { setActiveHelpDialogue("effects") };
+                /* Fake listen on effect button movement for help dialogue */
+                if (activeHelpDialogue === "effects") { clicks = clicks + 1 };
+                if (activeHelpDialogue === "effects" && clicks === 2) { setActiveHelpDialogue("loop") };
+            }}
+            
+            style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
             ref={mount} onMouseDown={onMouseClick} onTouchStart={onTouch}
         />
     )

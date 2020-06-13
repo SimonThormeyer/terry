@@ -13,6 +13,11 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/************ CANVAS ****************/
+#canvas {
+  line-height: 0;
+}
+
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
 
 #menu {
@@ -576,9 +581,10 @@ body {
   background-color: #2fecfd;
   text-align: center;
   border-radius: 1vw;
-  margin-left: 3.5vw;
-  margin-top: 2vw;
+  bottom: 1.8vw;
+  left: 4.5vw;
   font-size: 1.2vw;
+  position: absolute;
 }
 
 .closeDialogue {
@@ -589,7 +595,7 @@ body {
   cursor: pointer;
 }
 
-#helpDialogue p {
+.dialogueStyle p {
   text-align: center;
   margin: 2.5vw 0.7vw 0.6vw 0.7vw;
   font-size: 1vw;
@@ -603,36 +609,38 @@ body {
 }
 
 #useEffects {
-  top: 2vw;
-  left: 35vw;
+  top: 5vw;
+  left: 15vw;
 }
 
 #soundbedDialogue {
-  bottom: 10vw;
+  bottom: 4vw;
   left: 26vw;
 }
 
 #randomDialogue {
-  bottom: 10vw;
-  left: 30vw;
+  bottom: 6vw;
+  left: 37vw;
 }
 
 #loopDialogue {
-  bottom: 10vw;
-  left: 42vw;
+  bottom: 5vw;
+  left: 46vw;
 }
 
 #loopIconsDialogue {
-  top: 8vw;
-  left: 6vw;
+  top: 4vw;
+  left: 3vw;
 }
 
 #RecordDialogue {
-  bottom: 10vw;
+  bottom: 5vw;
   left: 58vw;
 }
 
 #SaveOpenDialogue {
-  top: 9vw;
+  top: 2vw;
   left: 82vw;
 }
+
+
