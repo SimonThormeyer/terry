@@ -3,6 +3,7 @@ import Menu from '../components/menu'
 import React from 'react';
 import Loopcontrols from "./loopcontrols";
 import SideMenu from '../components/sidemenu';
+import StartOverlay from '../components/startoverlay';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
       <Loopcontrols />
       <Canvas />
       <Menu />
+      <StartOverlay />
     </div>
   );
 }
