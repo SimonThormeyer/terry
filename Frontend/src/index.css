@@ -65,8 +65,8 @@ body {
 .progress-ring__circle {
   stroke: black;
   stroke-width: 0.25vw;
-  stroke-dasharray: 11vw;
-  stroke-dashoffset: 0vw;
+  stroke-dasharray: 277%;
+  stroke-dashoffset: 0;
   fill: rgba(255, 255, 255, 0.6);
   r: 1.76vw;
   cx: 50%;
@@ -76,11 +76,11 @@ body {
 /***ANIMATION LOOPICONS***/
 
 @keyframes countdown {
-  from {
-    stroke-dashoffset: -11vw;
+  0% {
+    stroke-dashoffset: 277%;
   }
-  to {
-    stroke-dashoffset: 0vw;
+  100% {
+    stroke-dashoffset: 554%;
   }
 }
 
@@ -90,6 +90,7 @@ body {
   position: absolute;
   max-width: 92.5%;
   height: 0;
+  z-index: 999;
 }
 
 .loop {
@@ -109,35 +110,30 @@ body {
 
 /*******three icons to interact with the loop******/
 
-.loop ul {
-  height: 100%;
-  position: fixed;
-  z-index: 999999999999;
-  margin-left: -0.25vw;
-  ;
-}
 
 .loop ul li {
   cursor: pointer;
   float: left;
   height: 2vw;
   width: 2vw;
+  position: absolute;
+  z-index: 999999999999;
 }
 
 .loopPausePlay {
-  margin-top: -0.5vw;
-  margin-right: 0.2vw;
+  margin-top: -0.3vw;
   display: none;
 }
 
 .loopDelete {
-  margin-top: -0.5vw;
-  margin-left: 0.2vw;
+  margin-top: -0.3vw;
+  margin-left: 4vw;
   display: none;
 }
 
 .loopMute {
-  margin-top: -1.2vw;
+  margin-top: -1.4vw;
+  margin-left: 2vw;
   display: none;
 }
 
@@ -145,6 +141,7 @@ body {
 
 .loop:hover>ul li {
   display: block;
+  z-index: 999999999999;
 }
 
 /*******DOWNLAOD OVERLAY*********/
