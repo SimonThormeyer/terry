@@ -182,14 +182,17 @@ function Canvas(props) {
 
 
     const effectSphereDrag = useCallback((value) => {
+        if(!musicCtrl) return;
         musicCtrl.setParameterEffect(value.x, value.y)
     }, [musicCtrl]);
 
     const synthSphereDrag = useCallback((value) => {
+        if(!musicCtrl) return;
         musicCtrl.setParameterSynth((value.x), (value.y))
     }, [musicCtrl]);
 
     const musikSphereDrag = useCallback((value) => {
+        if(!musicCtrl) return;
         musicCtrl.setParameterMusic(value.x, value.y)
     }, [musicCtrl]);
 
