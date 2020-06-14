@@ -11,11 +11,14 @@ import { useGlobalState } from "../GlobalState";
 
 
 
+
 function SideMenu() {
 
     //global 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
+    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
+
 
     //local
     const [sideMenu, setSideMenu] = useState(false);
@@ -72,18 +75,13 @@ function SideMenu() {
 
 
     const helpProjectFunction = () => {
-        console.log("sidemenu help function");
+        setActiveHelpDialogue("canvas");
     }
 
 
 
     return (
         <>
-            
-
-            <div id="sidemenu">
-                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu); }} />
-            </div>
             {sideMenu ?
                 <>
                 <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
@@ -137,6 +135,9 @@ function SideMenu() {
                     <></>
             }
 
+            <div id="sidemenu">
+                <SideMenuIcon id="sideMenuIcon" onClick={() => { setSideMenu(!sideMenu); if (activeHelpDialogue === "saveOpen") { setActiveHelpDialogue("") } }} />
+            </div>
         </>
     );
 }

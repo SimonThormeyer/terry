@@ -13,6 +13,7 @@ function Loopicon({ id }) {
 //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
   const [overlayIsOpen, ] = useGlobalState('overlayIsOpen');
+  const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
   //local state to toogle icons
   const [play, setPlay] = useState(true);
@@ -36,6 +37,7 @@ function Loopicon({ id }) {
    () => {
     var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
     loopId.style.opacity = 0.6;
+    
   }, [id])
 
   //if the loop is not muted the icon is not transparent
@@ -94,15 +96,16 @@ function Loopicon({ id }) {
         if (runningLoopers.get(keyNumber)) {
           runningLoopers.get(keyNumber).toggleMute();
           setMute(!mute);
-          if(!mute) {
+          if (!mute) {
             muteLook();
           } else {
+            if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") };
             unmuteLook();
           }
         }
       }
     },
-    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen]
+    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
   );
 
   useEventListener("keydown", handleKeyDown);
@@ -112,7 +115,7 @@ function Loopicon({ id }) {
     <span className="loop" id={`loop_${id}`}>
       <ul>
         <li className="loopPausePlay" key={`loopPause_${id}`} onClick={() => {
-          setPlay(!play)
+          setPlay(!play); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") }
         }} >
           {play ?
             <PauseIcon key={`loopPauseButton_${id}`} onClick={() => {
@@ -123,7 +126,7 @@ function Loopicon({ id }) {
             }} />}
         </li>
 
-        <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute) }}>
+        <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") } }}>
           {mute ?
             <MuteIcon key={`loopMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute();
@@ -137,6 +140,7 @@ function Loopicon({ id }) {
         </li>
         {/*set Timeout 600ms because of waiting the fade out animation is done and delete after*/}
         <li className="loopDelete" key={`loopDelete_${id}`} onClick={() => {
+          if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") };
           slide();
           setTimeout(() => {
             slideFinished();

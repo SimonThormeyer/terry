@@ -14,7 +14,6 @@ import {Soundbed} from "./soundbed/soundbed";
     */
 
 export class MusicCtrl {
-    soundBed;
 
     constructor() {
         this.isomorphicLayout = new IsomorphicLayout()
