@@ -87,7 +87,7 @@ function Menu(props) {
                 handleSpaceKeyDown();
             }
         },
-        [handleSpaceKeyDown, overlayIsOpen]
+        [handleSpaceKeyDown, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
     );
 
 

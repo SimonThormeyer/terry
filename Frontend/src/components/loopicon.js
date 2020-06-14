@@ -105,7 +105,7 @@ function Loopicon({ id }) {
         }
       }
     },
-    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen]
+    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
   );
 
   useEventListener("keydown", handleKeyDown);
