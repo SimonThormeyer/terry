@@ -1,5 +1,4 @@
 import { createGlobalState } from 'react-hooks-global-state';
-import { MusicCtrl } from './components/toneJS/musicCtrl';
 
 /*
  USED LIKE THIS IN ANY FUNCTIONAL COMPONENT:
@@ -17,7 +16,8 @@ const initialState = {
     listeningLooper: undefined,
     // containing all loopers that currently playback recorded actions (or are paused)
     runningLoopers: new Map(),
-    musicCtrl: new MusicCtrl(),
+    musicCtrl: undefined,
+    overlayIsOpen: false,
     globalFunctions: {},
 };
 

@@ -22,8 +22,12 @@ function OpenProject() {
                 setRows(res);
             })
             .catch(err => {
-                err.response ? console.log(`error: ${err.response.data}`) : console.log(err.message);
-                alert(err.response.data);
+                if (err.response) {
+                    console.log(`error: ${err.response.data}`);
+                    alert(err.response.data);
+                } else {
+                    console.log(err.message);
+                }
             })
 
     }, [])
@@ -47,7 +51,7 @@ function OpenProject() {
     const openProjectFunction = (project_id) => {
         let project = data[project_id].project;
 
-        console.log("open project Function")
+        console.log(`open project Function, project: ${project}`)
 
     }
 

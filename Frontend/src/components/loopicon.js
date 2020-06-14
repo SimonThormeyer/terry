@@ -12,6 +12,7 @@ function Loopicon({ id }) {
 
 //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
+  const [overlayIsOpen, ] = useGlobalState('overlayIsOpen');
 
   //local state to toogle icons
   const [play, setPlay] = useState(true);
@@ -86,6 +87,7 @@ function Loopicon({ id }) {
   //----------- KEY-BINDINGS ------------
   const handleKeyDown = useCallback(
     (event) => {
+      if(overlayIsOpen) return;
       // start/stop muting with Number Keys
       let keyNumber = event.keyCode - 48
       if (id < 10 && id === keyNumber) { 
@@ -100,7 +102,7 @@ function Loopicon({ id }) {
         }
       }
     },
-    [mute, id, runningLoopers, muteLook, unmuteLook]
+    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen]
   );
 
   useEventListener("keydown", handleKeyDown);

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
@@ -19,10 +19,11 @@ function Menu(props) {
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
 
     // state of Component (used for appearance of buttons)
     const [nextLooperID, setNextLooperID] = useState(1);
-    const [play, setPlay] = useState(true)
+    const [play, setPlay] = useState(false)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
     const [record, setRecord] = useState(true)
@@ -41,8 +42,13 @@ function Menu(props) {
                 setListeningLooper(undefined)
             }
         }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
-
     
+
+    // set the global state 'overlayIsOpen' to true if an overlay is open
+    useEffect(() => {
+        setOverlayIsOpen(recordOverlay);
+    }, [recordOverlay, setOverlayIsOpen])
+
     const playFunction = () => {
         musicCtrl.startStopSoundbed()
         console.log("menu js play Function");
@@ -71,17 +77,20 @@ function Menu(props) {
 
     const handleKeyDown = useCallback(
         (event) => {
-            event.preventDefault();
+            if(overlayIsOpen) return;
             // start/stop Looping with Space
             if (event.keyCode === 32) {
+                event.preventDefault(); // don't scroll to bottom of page
                 handleSpaceKeyDown();
             }
         },
-        [handleSpaceKeyDown]
+        [handleSpaceKeyDown, overlayIsOpen]
     );
 
-    useEventListener("keydown", handleKeyDown);
 
+
+    useEventListener("keydown", handleKeyDown);
+    
 
 
     return (
