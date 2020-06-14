@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState";
+import { MusicCtrl } from "../components/toneJS/musicCtrl"
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
-
-
-
 
 function StartOverlay() {
 
     const [startOverlay, setStartOverlay] = useState(true);
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
-    const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [, setMusicCtrl] = useGlobalState('musicCtrl');
 
 
     useEffect(() => {
@@ -18,21 +16,22 @@ function StartOverlay() {
 
     const playFunction = () => {
         musicCtrl.startStopSoundbed()
+        setMusicCtrl(new MusicCtrl());
     }
 
-    var isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
     return (
 
         <>
             {
-                startOverlay ?
+                startOverlay &&
                     <>
                     <div id="startUnderlay"></div>
                     <div id="startOverlay">
                         <LogoIcon id="startLogo" />
-                        <p>Music Playground Terry is a web app to simply create beautiful soundscapes. {
-                            isChromeBrowser ? "" : "For the best music experience we recommend the use of Google Chrome."
+                        <p>Terry is a playground to create and share beautiful soundscapes without effort. {
+                            isChromeBrowser || "For the best music experience we recommend the use of Google Chrome."
                         }
                         </p>
 
@@ -41,8 +40,8 @@ function StartOverlay() {
                             <button id="startButton" onClick={() => { setStartOverlay(false); playFunction() }}>Let's play music!</button>
                         </div>
 
-                    </> :
-                ""
+                    </> 
+                
             }
         </>
         
