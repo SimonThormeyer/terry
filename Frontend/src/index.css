@@ -13,6 +13,11 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/************ CANVAS ****************/
+#canvas {
+  line-height: 0;
+}
+
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
 
 #menu {
@@ -542,3 +547,100 @@ body {
   cursor: pointer;
   margin: 2vw 0 7vh 0;
 }
+/*******HELP DIALOGUE********/
+
+/***********HELP DIALOGUE*************/
+
+/**Allgemein***/
+
+.dialogueStyle {
+  position: absolute;
+  background-color: white;
+  width: 12vw;
+  height: 12vw;
+  border-radius: 15vw;
+  box-shadow: 2px 2px 20px grey;
+  padding: 1vw;
+  z-index: 9999999999999999;
+  animation: helpAnimation 1s ease-out;
+}
+
+@keyframes helpAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.styleSkipButton {
+  width: 3vw;
+  padding: 0.2vw 1vw;
+  cursor: pointer;
+  background-color: #2fecfd;
+  text-align: center;
+  border-radius: 1vw;
+  bottom: 1.8vw;
+  left: 4.5vw;
+  font-size: 1.2vw;
+  position: absolute;
+}
+
+.closeDialogue {
+  width: 2vw;
+  height: 2vw;
+  position: absolute;
+  right: 0.8vw;
+  cursor: pointer;
+}
+
+.dialogueStyle p {
+  text-align: center;
+  margin: 2.5vw 0.7vw 0.6vw 0.7vw;
+  font-size: 1vw;
+}
+
+/* Help Dialogue Positions */
+
+#clickCanvasDialogue {
+  top: 6vw;
+  left: 30vw;
+}
+
+#useEffects {
+  top: 5vw;
+  left: 15vw;
+}
+
+#soundbedDialogue {
+  bottom: 4vw;
+  left: 26vw;
+}
+
+#randomDialogue {
+  bottom: 6vw;
+  left: 37vw;
+}
+
+#loopDialogue {
+  bottom: 5vw;
+  left: 46vw;
+}
+
+#loopIconsDialogue {
+  top: 4vw;
+  left: 3vw;
+}
+
+#RecordDialogue {
+  bottom: 5vw;
+  left: 58vw;
+}
+
+#SaveOpenDialogue {
+  top: 2vw;
+  left: 82vw;
+}
+
+
