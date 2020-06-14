@@ -15,7 +15,6 @@ function StartOverlay() {
     }, [startOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        musicCtrl.startStopSoundbed()
         setMusicCtrl(new MusicCtrl());
     }
 
