@@ -57,12 +57,17 @@ function OpenProject() {
 
     //open project and reconstruct loopers to play music
     const openProjectFunction = (project_id) => {
+        let project = data[project_id].project;
         for (let id of Array.from(runningLoopers.keys())) {
             runningLoopers.get(id).stop()
             runningLoopers.delete(id);
         }
         setRunningLoopers(new Map());
-        let project = data[project_id].project;
+
+        // rehydrate canvases
+        if (project.canvases && project.canvases.length > 0) {
+            globalFunctions.loadCanvasState(project.canvases[0]);
+        }
 
         // rehydrate loopers
         if (project.loopers && project.loopers.length > 0) {
@@ -84,9 +89,8 @@ function OpenProject() {
             }
             setNextLooperID(project.loopers.length);
         }
-        
 
-        // rehydrate canvases
+
 
     }
 
