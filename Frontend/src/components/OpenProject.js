@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Looper } from './toneJS/Looper'
 import axios from 'axios';
+import { useGlobalState } from "../GlobalState"
 
 
 
@@ -7,6 +9,9 @@ function OpenProject() {
 
 
     const [rows, setRows] = useState([]);
+    const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
+    const [globalFunctions,] = useGlobalState('globalFunctions');
+    const [, setNextLooperID] = useGlobalState('nextLooperId');
 
 
 
@@ -41,7 +46,10 @@ function OpenProject() {
             let username = data[index].user_ID;
             let projectname = data[index].project_name;
             let listElement = username + " - " + projectname;
-            items.push(<li key={index} onClick={() => { openProjectFunction(index)}} >{listElement}</li>)
+            items.push(<li key={index} onClick={() => {
+                openProjectFunction(index);
+
+            }} >{listElement}</li>)
         }
 
     }
@@ -49,9 +57,36 @@ function OpenProject() {
 
     //open project and reconstruct loopers to play music
     const openProjectFunction = (project_id) => {
+        for (let id of Array.from(runningLoopers.keys())) {
+            runningLoopers.get(id).stop()
+            runningLoopers.delete(id);
+        }
+        setRunningLoopers(new Map());
         let project = data[project_id].project;
 
-        console.log(`open project Function, project: ${project}`)
+        // rehydrate loopers
+        if (project.loopers && project.loopers.length > 0) {
+            for (let i = 0; i < project.loopers.length; i++) {
+                console.log(`rehydrating looper no. ${i + 1}`);
+                let loadedLooper = project.loopers[i];
+                let looper = new Looper();
+                looper.events = Array.from(loadedLooper.events);
+                looper.startTime = loadedLooper.currentTime; // is this correct?
+                looper.duration = loadedLooper.duration;
+                looper.muted = loadedLooper.muted;
+                looper.pauseTime = loadedLooper.pauseTime;
+                looper.playStartTime = loadedLooper.playStartTime;
+                looper.canvasID = loadedLooper.canvasID;
+                globalFunctions.giveCanvasClickToLooper(looper);
+                runningLoopers.set(i, looper);
+                setRunningLoopers(new Map(runningLoopers))
+                if (!loadedLooper.stopped) looper.play();
+            }
+            setNextLooperID(project.loopers.length);
+        }
+        
+
+        // rehydrate canvases
 
     }
 

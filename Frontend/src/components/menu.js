@@ -21,10 +21,10 @@ function Menu(props) {
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
+    const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
 
 
     // state of Component (used for appearance of buttons)
-    const [nextLooperID, setNextLooperID] = useState(1);
     const [play, setPlay] = useState(false)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)

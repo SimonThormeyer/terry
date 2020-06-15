@@ -81,37 +81,6 @@ function Canvas(props) {
 
         return newObj;
     }
-    useEffect(()=>{
-        let getCanvasState = function() {
-            let posEffect = effectSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posEffect.project(camera.current);
-
-            let posSynth = synthSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posSynth.project(camera.current);
-
-            let posMusic = musikSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posMusic.project(camera.current);
-          //  console.log("canvas state return");
-            return {
-                'effectSphere': {
-                    'x': posEffect.x,
-                    'y': posEffect.y
-                },
-                'synthSphere': {
-                    'x': posSynth.x,
-                    'y': posSynth.y
-                },
-                'musicSphere': {
-                    'x': posMusic.x,
-                    'y': posMusic.y
-                }
-            }
-        }
-        setGlobalFunctions(Object.assign(globalFunctions, {'getCanvasState': getCanvasState}))
-    },[globalFunctions, setGlobalFunctions]);
 
 
     const canvasClick = useCallback((value, playback = false) => {
@@ -169,6 +138,48 @@ function Canvas(props) {
 
         }
     }, [canvasClick]);
+
+    // set global functions
+    useEffect(()=>{
+        let getCanvasState = function() {
+            let posEffect = effectSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posEffect.project(camera.current);
+
+            let posSynth = synthSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posSynth.project(camera.current);
+
+            let posMusic = musikSphere.current.position.clone();
+            camera.current.updateMatrixWorld();
+            posMusic.project(camera.current);
+          //  console.log("canvas state return");
+            return {
+                'effectSphere': {
+                    'x': posEffect.x,
+                    'y': posEffect.y
+                },
+                'synthSphere': {
+                    'x': posSynth.x,
+                    'y': posSynth.y
+                },
+                'musicSphere': {
+                    'x': posMusic.x,
+                    'y': posMusic.y
+                }
+            }
+        }
+
+        let giveCanvasClickToLooper = function(looper) {
+            looper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        }
+
+        setGlobalFunctions(Object.assign(globalFunctions, {
+            'getCanvasState': getCanvasState,
+            'giveCanvasClickToLooper': giveCanvasClickToLooper
+            
+        }))
+    },[globalFunctions, setGlobalFunctions, canvasClick]);
 
     //Touch on display (mobile/tablet)
     const onTouch = useCallback((event) => {
