@@ -7,3 +7,5 @@ datetime
 pytz
 pymongo
 flask-mongoengine
+marshmallow
+flask-marshmallow

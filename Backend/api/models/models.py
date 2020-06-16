@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
+from marshmallow import Schema, fields, post_load
 import pytz
 import json
+
 from api.service.mongoService import check_ProjectName
 from api.routes.responses import Standard400ErrorResponse
 
@@ -32,3 +34,24 @@ class Project():
             'project': self.project
         }
         return content
+#
+# class BookSchema(ma.Schema):
+#     class Meta:
+#         fields = ('id', 'title', 'author', 'links')
+#
+#     author = ma.Nested(AuthorSchema)
+#
+#     links = ma.Hyperlinks({
+#         'self': ma.URLFor('book_detail', id='<id>'),
+#         'collection': ma.URLFor('book_list')
+#     })
+#
+# class ProjectSchema(Schema):
+#
+#     _id = fields.Str()
+#
+#     name = fields.Str()
+#     location = fields.Str()
+#     @post_load
+#     def make_store(self, data, **kwargs):
+#         return Project(**data)

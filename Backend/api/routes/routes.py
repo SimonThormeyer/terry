@@ -10,6 +10,15 @@ def test():
     res = {'Res': 'Test was successful!'}
     return Standard200Response(res)
 
+@projects.route('/testdb', methods=['GET'])
+def testdb():
+    projdata = {"loop":"first","starttime":30,"events":[ "time1", "time2", "time3" ]}
+    project = Project("tuser", "testproject", projdata).to_json()
+    if isinstance(project, tuple):
+        return project
+    else:
+        res = Controller.post_ProjectWithProjectNameFromUser(project)
+        return res
 
 @projects.route('/user/<user_ID>', methods=['GET'])
 def get_withUser(user_ID):
