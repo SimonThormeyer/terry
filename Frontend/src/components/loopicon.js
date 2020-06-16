@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState"
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
@@ -10,9 +10,9 @@ import useEventListener from "./../UseEventListener"
 
 function Loopicon({ id }) {
 
-//globale State
+  //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
-  const [overlayIsOpen, ] = useGlobalState('overlayIsOpen');
+  const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
   const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
   //local state to toogle icons
@@ -20,11 +20,13 @@ function Loopicon({ id }) {
   const [mute, setMute] = useState(false);
 
 
+
   //pause progress ring animation
-  const animationPause = () => {
-    var progressRingCircleAnimationPause = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring__circle")[0];
-    progressRingCircleAnimationPause.style.webkitAnimationPlayState = "paused";
-  }
+  const animationPause = useCallback(
+    () => {
+      var progressRingCircleAnimationPause = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring__circle")[0];
+      progressRingCircleAnimationPause.style.webkitAnimationPlayState = "paused";
+    }, [id])
 
   //after pause run progress ring animation again
   const animationRun = () => {
@@ -34,18 +36,19 @@ function Loopicon({ id }) {
 
   //if the loop is muted the icon is transparent
   const muteLook = useCallback(
-   () => {
-    var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-    loopId.style.opacity = 0.6;
-    
-  }, [id])
+    () => {
+      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
+      loopId.style.opacity = 0.6;
+
+    }, [id])
 
   //if the loop is not muted the icon is not transparent
   const unmuteLook = useCallback(
-  () => {
-    var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-    loopId.style.opacity = 1;
-  }, [id])
+    () => {
+      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
+      loopId.style.opacity = 1;
+    }, [id])
+
 
   //slides the loopicons if the user deletes one 
   const slide = () => {
@@ -84,15 +87,25 @@ function Loopicon({ id }) {
     };
   };
 
+  // after first render, set up according to state of looper
+  useEffect(() => {
+    let looperIsStopped = runningLoopers.get(id).stopped;
+    let looperIsMuted = runningLoopers.get(id).muted
+    setPlay(!looperIsStopped)
+    if (looperIsStopped) animationPause();
+    setMute(looperIsMuted)
+    if (looperIsMuted) muteLook();
+  }, [id, runningLoopers, animationPause, muteLook])
+
 
 
   //----------- KEY-BINDINGS ------------
   const handleKeyDown = useCallback(
     (event) => {
-      if(overlayIsOpen) return;
+      if (overlayIsOpen) return;
       // start/stop muting with Number Keys
       let keyNumber = event.keyCode - 48
-      if (id < 10 && id === keyNumber) { 
+      if (id < 10 && id === keyNumber) {
         if (runningLoopers.get(keyNumber)) {
           runningLoopers.get(keyNumber).toggleMute();
           setMute(!mute);
