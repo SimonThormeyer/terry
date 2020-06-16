@@ -353,13 +353,22 @@ function Canvas(props) {
         animate();
 
 
-    }, [mount, height, width, effectSphereDrag, musikSphereDrag, synthSphereDrag]);
+}, [mount, height, width, effectSphereDrag, musikSphereDrag, synthSphereDrag]);
 
+    window.addEventListener( 'resize', onWindowResize, false );
+
+    function onWindowResize(){
+
+        camera.current.aspect = window.innerWidth / window.innerHeight;
+        camera.current.updateProjectionMatrix();
+
+        renderer.current.setSize( window.innerWidth, window.innerHeight );
+
+    }
 
     //=================
 
     let clicks = 0;
-
     return (
         <div id="canvas"
             onClick={() => {
