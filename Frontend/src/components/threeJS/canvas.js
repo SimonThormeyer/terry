@@ -157,6 +157,7 @@ function Canvas(props) {
         if (!musicCtrl) return;
         camera.current.updateMatrixWorld();
         let pos = effectSphere.current.position.clone();
+        console.log( " drag position " +pos.x);
         pos.project(camera.current);
         musicCtrl.setParameterEffect(pos.x, pos.y)
     }, [musicCtrl]);
@@ -208,28 +209,22 @@ function Canvas(props) {
     useEffect(() => {
         let getCanvasState = function () {
             let posEffect = effectSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posEffect.project(camera.current);
 
             let posSynth = synthSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posSynth.project(camera.current);
 
             let posMusic = musikSphere.current.position.clone();
-            camera.current.updateMatrixWorld();
-            posMusic.project(camera.current);
             return {
                 'effectSphere': {
-                    'x': posEffect.x,
-                    'y': posEffect.y
+                    'x': posEffect.x/window.innerWidth,
+                    'y': posEffect.y/window.innerHeight
                 },
                 'synthSphere': {
-                    'x': posSynth.x,
-                    'y': posSynth.y
+                    'x': posSynth.x/window.innerWidth,
+                    'y': posSynth.y/window.innerHeight
                 },
                 'musicSphere': {
-                    'x': posMusic.x,
-                    'y': posMusic.y
+                    'x': posMusic.x/window.innerWidth,
+                    'y': posMusic.y/window.innerHeight
                 }
             }
         }
@@ -240,12 +235,9 @@ function Canvas(props) {
 
         let loadCanvasState = function (canvas) {
             if (!canvas) return;
-            // FIX ME!
-            // the sphere positions projected onto relative screen coordinates need to be calculated back to world coordinates
-            effectSphere.current.position.set(canvas.effectSphere.x, canvas.effectSphere.y, 0);
-            console.log(`canvas effect sphere: ${canvas.effectSphere.x}`);
-            synthSphere.current.position.set(canvas.synthSphere.x, canvas.synthSphere.y, 0);
-            musikSphere.current.position.set(canvas.musicSphere.x, canvas.musicSphere.y, 0);
+            effectSphere.current.position.set(canvas.effectSphere.x * window.innerWidth, canvas.effectSphere.y * window.innerHeight, 0);
+            synthSphere.current.position.set(canvas.synthSphere.x * window.innerWidth, canvas.synthSphere.y * window.innerHeight, 0);
+            musikSphere.current.position.set(canvas.musicSphere.x * window.innerWidth, canvas.musicSphere.y * window.innerHeight, 0);
             effectSphereDrag();
             synthSphereDrag();
             musikSphereDrag();
