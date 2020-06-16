@@ -4,7 +4,7 @@ import { ReactComponent as SaveIcon } from '../img/save.svg';
 import { ReactComponent as Helpicon } from '../img/help.svg';
 import { ReactComponent as OpenIcon } from '../img/open.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
-import SaveProject from './SaveProject';
+import SaveProjectForm from './SaveProjectForm';
 import OpenProject from '../components/OpenProject';
 import { useGlobalState } from "../GlobalState";
 
@@ -15,7 +15,6 @@ import { useGlobalState } from "../GlobalState";
 function SideMenu() {
 
     //global 
-    const [runningLoopers,] = useGlobalState('runningLoopers');
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
@@ -30,18 +29,6 @@ function SideMenu() {
         setOverlayIsOpen(saveOverlay || openOverlay);
     }, [saveOverlay, openOverlay, setOverlayIsOpen])
 
-
-//function to call the SaveProject component and pass runningloopers, username and projectname
-    const saveProjectFunction = () => {
-        var username = document.getElementById("username").value;
-        var projectname = document.getElementById("projectname").value;
-        var saveForm = document.getElementById("saveForm");
-        if (username === "" || projectname === "") {
-        } else {
-            SaveProject(runningLoopers, username, projectname);
-            saveForm.reset();
-        }
-    }
 
 
     //we search in the array (array includes the data from database) while typing and show the matching result
@@ -82,57 +69,49 @@ function SideMenu() {
 
     return (
         <>
-            {sideMenu ?
+            {sideMenu &&
                 <>
-                <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
-                <div id="sideMenuIcons">
-                    <OpenIcon id="openIcon" onClick={() => { setSideMenu(false); setOpenOverlay(true) }} />
-                    <SaveIcon id="saveIcon" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
-                    <Helpicon id="helpIcon" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
-                </div></>
-                :
-                <></>
+                    <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
+                    <div id="sideMenuIcons">
+                        <OpenIcon id="openIcon" onClick={() => { setSideMenu(false); setOpenOverlay(true) }} />
+                        <SaveIcon id="saveIcon" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
+                        <Helpicon id="helpIcon" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
+                    </div>
+                </>
             }
 
             {
-                saveOverlay ?
-                    <>
-                        <div className="saveOpenUnderlay"></div>
-                        <div id="saveOverlay">
+                saveOverlay &&
+                <>
+                    <div className="saveOpenUnderlay"></div>
+                    <div id="saveOverlay">
 
-                            <DeleteIcon id="closeSaveOverlay" onClick={() => { setSaveOverlay(false) }} />
-                            <p id="headerSave">Save your Track?</p>
-                            <form id="saveForm">
-                                <label id="labelUsername">Username</label>
-                                <input name="username" id="username" maxLength="5" required></input>
-                                <label id="labelProjectname">Project name</label>
-                                <input name="projectname" id="projectname" maxLength="255" required></input>
-                            </form>
-                            <button id="saveButton" onClick={() => { saveProjectFunction() }}>Save</button>
-                        </div> </> :
-                    <></>
+                        <DeleteIcon id="closeSaveOverlay" onClick={() => { setSaveOverlay(false) }} />
+                        <p id="headerSave">Save your Track?</p>
+                        <SaveProjectForm />
+
+                    </div>
+                </>
 
             }
 
             {
-                openOverlay ?
-                    <>
-                        <div className="saveOpenUnderlay"></div>
-                        <div id="openOverlay">
-                            <DeleteIcon id="closeOpenOverlay" onClick={() => { setOpenOverlay(false) }} />
+                openOverlay &&
+                <>
+                    <div className="saveOpenUnderlay"></div>
+                    <div id="openOverlay">
+                        <DeleteIcon id="closeOpenOverlay" onClick={() => { setOpenOverlay(false) }} />
 
-                            <p id="headerOpen">Open a Track?</p>
-                            <form>
-                                <label id="findProject">Find a project</label>
-                                <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
-                            </form>
-                            <ul id="databaseTable">
-                                <OpenProject />
-                            </ul>
-
-                        </div>
-                    </> :
-                    <></>
+                        <p id="headerOpen">Open a Track?</p>
+                        <form>
+                            <label id="findProject">Find a project</label>
+                            <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
+                        </form>
+                        <ul id="databaseTable">
+                            <OpenProject />
+                        </ul>
+                    </div>
+                </>
             }
 
             <div id="sidemenu">
