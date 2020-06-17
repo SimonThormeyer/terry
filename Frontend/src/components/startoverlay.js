@@ -15,7 +15,7 @@ function StartOverlay() {
     }, [startOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        setMusicCtrl(new MusicCtrl());
+        setMusicCtrl([new MusicCtrl(), new MusicCtrl(), new MusicCtrl()]);
     }
 
     let isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
