@@ -4,7 +4,7 @@ Clone via `git clone`
 Start via `docker-compose up --build` 
 
 ## Have a try
-[Live Demo of Terry](http://80.190.117.183:3000)
+[https://terry.beuth-media.de](https://terry.beuth-media.de)
 
 ## Description
 

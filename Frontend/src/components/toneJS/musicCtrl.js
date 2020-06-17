@@ -14,7 +14,6 @@ import {Soundbed} from "./soundbed/soundbed";
     */
 
 export class MusicCtrl {
-    soundBed;
 
     constructor() {
         this.isomorphicLayout = new IsomorphicLayout()
@@ -34,7 +33,7 @@ export class MusicCtrl {
     setParameterSynth(valueX, valueY) {
         this.synthAndEffects.setFilter(valueX, valueY)
         this.synthAndEffects.setNoteLength(valueY)
-        this.synthAndEffects.setOscillatorType(valueX)
+        // this.synthAndEffects.setOscillatorType(valueX)
         this.synthAndEffects.setSynthADSR(valueY)
     }
 
@@ -46,10 +45,8 @@ export class MusicCtrl {
     }
 
     setParameterMusic(valueX, valueY) {
-        //this.isomorphicLayout.set('detune',valueX)
+        this.isomorphicLayout.changeScale(valueX);
+        this.isomorphicLayout.changeOctave(valueY);
     }
-
-
-
 
 }

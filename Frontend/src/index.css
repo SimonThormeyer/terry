@@ -13,6 +13,11 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
+/************ CANVAS ****************/
+#canvas {
+  line-height: 0;
+}
+
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
 
 #menu {
@@ -36,18 +41,21 @@ body {
   width: 3vw;
   height: 3vw;
   margin-right: 3vw;
+  cursor: pointer;
 }
 
 #recordbutton {
   width: 3vw;
   height: 3vw;
   margin-left: 3vw;
+  cursor: pointer;
 }
 
 #loopbutton {
   width: 5vw;
   height: 5vw;
   margin: 0 2vw;
+  cursor: pointer;
 }
 
 /*+++++++++++LOOPICONS++++++++++++++++++++*/
@@ -62,8 +70,8 @@ body {
 .progress-ring__circle {
   stroke: black;
   stroke-width: 0.25vw;
-  stroke-dasharray: 11vw;
-  stroke-dashoffset: 0vw;
+  stroke-dasharray: 277%;
+  stroke-dashoffset: 0;
   fill: rgba(255, 255, 255, 0.6);
   r: 1.76vw;
   cx: 50%;
@@ -73,18 +81,21 @@ body {
 /***ANIMATION LOOPICONS***/
 
 @keyframes countdown {
-  from {
-    stroke-dashoffset: -11vw;
+  0% {
+    stroke-dashoffset: 277%;
   }
-  to {
-    stroke-dashoffset: 0vw;
+  100% {
+    stroke-dashoffset: 554%;
   }
 }
 
 /****STYLING LOOPICONS****/
 
 .loopcontrols {
-  position: fixed;
+  position: absolute;
+  max-width: 92.5%;
+  height: 0;
+  z-index: 999;
 }
 
 .loop {
@@ -104,35 +115,30 @@ body {
 
 /*******three icons to interact with the loop******/
 
-.loop ul {
-  height: 100%;
-  position: fixed;
-  z-index: 999999999999;
-  margin-left: -0.25vw;
-  ;
-}
 
 .loop ul li {
   cursor: pointer;
   float: left;
   height: 2vw;
   width: 2vw;
+  position: absolute;
+  z-index: 999999999999;
 }
 
 .loopPausePlay {
-  margin-top: -0.5vw;
-  margin-right: 0.2vw;
+  margin-top: -0.3vw;
   display: none;
 }
 
 .loopDelete {
-  margin-top: -0.5vw;
-  margin-left: 0.2vw;
+  margin-top: -0.3vw;
+  margin-left: 4vw;
   display: none;
 }
 
 .loopMute {
-  margin-top: -1.2vw;
+  margin-top: -1.4vw;
+  margin-left: 2vw;
   display: none;
 }
 
@@ -140,6 +146,7 @@ body {
 
 .loop:hover>ul li {
   display: block;
+  z-index: 999999999999;
 }
 
 /*******DOWNLAOD OVERLAY*********/
@@ -147,7 +154,6 @@ body {
 #overlay {
   position: absolute;
   /* Sit on top of the page content */
-  display: none;
   opacity: 0;
   /* Hidden by default */
   animation: overlayAnimation 2s ease 0.25s forwards;
@@ -160,7 +166,8 @@ body {
   margin-top: 5vw;
   margin-left: 37.5%;
   top: 0;
-  z-index: 9999999;
+  left: 0;
+  z-index: 999999999999999999999;
   align-items: center;
   /* Specify a stack order in case you're using a different order for other elements */
   border-radius: 15vw;
@@ -172,7 +179,7 @@ body {
   }
 }
 
-#overlay ul li p {
+#overlay p {
   font-size: 1.75vw;
   margin-top: 2vw;
   vertical-align: middle;
@@ -180,7 +187,7 @@ body {
   color: #4d4b4b;
 }
 
-#overlay ul {
+#overlay {
   text-align: center;
 }
 
@@ -191,13 +198,12 @@ body {
   right: 0;
   background-color: rgb(0, 0, 0);
   position: fixed;
-  display: none;
   width: 100%;
   height: 100%;
   z-index: 2;
-  display: none;
   opacity: 0.4;
   animation: underlayAnimation 0.8s ease;
+  z-index: 99999999999999999999;
 }
 
 @keyframes underlayAnimation {
@@ -226,4 +232,444 @@ body {
   width: 8vw;
   height: 8vw;
   text-align: center;
+}
+
+/**********SIDEMENU***************/
+
+#sidemenu {
+  position: absolute;
+  right: 1vw;
+  top: 1vw;
+  z-index: 999999999999999;
+}
+
+#closeSideMenuDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 999999999999;
+}
+
+#sideMenuIcon {
+  width: 2vw;
+  height: 2vw;
+  cursor: pointer;
+  padding: 1vw;
+}
+
+#sideMenuIcons {
+  position: absolute;
+  right: 1.5vw;
+  top: 5.5vw;
+  z-index: 999999999999999;
+}
+
+#openIcon {
+  animation: openIconAnimation 0.3s ease;
+}
+
+@keyframes openIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: -2vw;
+  }
+}
+
+#saveIcon {
+  animation: saveIconAnimation 0.3s ease;
+  margin-top: 4vw;
+}
+
+@keyframes saveIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 0vw;
+  }
+}
+
+#helpIcon {
+  animation: helpIconAnimation 0.3s ease;
+  margin-top: 8vw;
+}
+
+@keyframes helpIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 2vw;
+  }
+}
+
+#sideMenuIcons svg {
+  position: absolute;
+  top: 0vw;
+  right: 0vw;
+  width: 3vw;
+  height: 3vw;
+  display: block;
+  cursor: pointer;
+}
+
+#saveOverlay {
+  position: absolute;
+  /* Sit on top of the page content */
+  opacity: 0;
+  /* Hidden by default */
+  animation: overlayAnimation 2s ease 0.25s forwards;
+  width: 25vw;
+  /* Full width (cover the whole page) */
+  height: 25vw;
+  /* Full height (cover the whole page) */
+  background-color: rgba(255, 255, 255);
+  /* Black background with opacity */
+  margin-top: 5vw;
+  margin-left: 37.5%;
+  top: 0;
+  align-items: center;
+  /* Specify a stack order in case you're using a different order for other elements */
+  border-radius: 15vw;
+  z-index: 999999999999999999999;
+}
+
+.saveOpenUnderlay {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgb(0, 0, 0);
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: 0.4;
+  animation: underlayAnimation 0.8s ease;
+  z-index: 99999999999999999999;
+}
+
+#saveButton {
+  background-color: #2fecfd;
+  border-radius: 2vw;
+  border: none;
+  font-size: 1.25vw;
+  padding: 0.75vw 2vw;
+  cursor: pointer;
+  margin-top: 2vw;
+}
+
+#headerSave {
+  font-size: 1.75vw;
+  margin-bottom: 2.75vw;
+}
+
+#saveOverlay {
+  text-align: center;
+}
+
+#username, #projectname {
+  display: block;
+  margin-left: calc(2.5vw - 1px);
+  width: 18vw;
+  height: 2.2vw;
+  border: solid 1px #a5a4a4;
+  border-radius: 2.2vw;
+  margin-top: 1.8vw;
+  padding: 0.5vw 1vw;
+  font-size: 1vw;
+}
+
+#labelProjectname, #labelUsername {
+  position: absolute;
+  margin-left: -7vw;
+  margin-top: -0.75vw;
+  font-size: 1vw;
+  background-color: white;
+  padding: 0 0.2vw;
+  color: #a5a4a4;
+}
+
+#labelProjectname {
+  margin-top: 1.02vw;
+}
+
+#closeSaveOverlay {
+  width: 2vw;
+  height: 2vw;
+  cursor: pointer;
+  margin-left: 17.5vw;
+  margin-top: 2vw;
+}
+
+/***********OPEN PROJECT OVERLAY****************/
+
+#openOverlay {
+  position: absolute;
+  opacity: 0;
+  animation: overlayAnimation 2s ease 0.25s forwards;
+  width: 40vw;
+  height: 28vw;
+  background-color: rgba(255, 255, 255);
+  margin-top: 2vw;
+  margin-left: 30%;
+  top: 0;
+  align-items: center;
+  border-radius: 2vw;
+  z-index: 999999999999999999999;
+}
+
+#closeOpenOverlay {
+  width: 2vw;
+  height: 2vw;
+  cursor: pointer;
+  margin-left: 38.6vw;
+  margin-top: -0.6vw;
+}
+
+#headerOpen {
+  font-size: 1.75vw;
+  text-align: center;
+}
+
+#usernameProject {
+  margin-top: 2vw;
+  margin-left: calc(2vw - 1px);
+  width: 34vw;
+  height: 2.2vw;
+  border: solid 1px #a5a4a4;
+  border-radius: 2.2vw;
+  padding: 0.5vw 1vw;
+  font-size: 1vw;
+}
+
+#databaseTable {
+  width: 37vw;
+  margin-top: 1.5vw;
+  margin-left: 1.5vw;
+  font-size: 1.15vw;
+  height: 16vw;
+  overflow-y: scroll;
+}
+
+#databaseTable::before {
+  content: "";
+  position: absolute;
+  right: 1.5vw;
+  width: 3vw;
+  height: 16vw;
+  background: linear-gradient(to left, white, rgba(0, 0, 0, 0));
+}
+
+#databaseTable::after {
+  content: "";
+  position: absolute;
+  top: 10.5vw;
+  left: 1.5vw;
+  width: 3vw;
+  height: 16.5vw;
+  background: linear-gradient(to right, white, rgba(0, 0, 0, 0));
+}
+
+#databaseTable li {
+  padding: 0.6vw 0 0.6vw 2vw;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+  display: block;
+}
+
+#databaseTable li:hover {
+  background-color: #f1f1f1;
+}
+
+#findProject {
+  position: absolute;
+  margin-left: 4vw;
+  margin-top: 1.32vw;
+  font-size: 1vw;
+  background-color: white;
+  padding: 0 0.2vw;
+  color: #a5a4a4;
+}
+
+/*********** Navigation Multitracking **************/
+
+#multitrackingNav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  margin-top: 2vw;
+  height: 0;
+}
+
+#arrowForward {
+  width: 2.2vw;
+  height: 2.2vw;
+  cursor: pointer;
+}
+
+#arrowBack {
+  width: 2.2vw;
+  height: 2.2vw;
+  cursor: pointer;
+}
+
+#synthesizerName {
+  font-size: 1.5vw;
+  display: inline-block;
+  vertical-align: middle;
+  margin: -1.6vw 0.8vw 0 0.3vw;
+  user-select: none;
+}
+
+/************* Start Overlay ***************/
+
+#startUnderlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 33vw;
+  background-color: black;
+  opacity: 0.85;
+  top: 0;
+  left: 0;
+  z-index: 9999999999999999;
+}
+
+#startOverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9999999999999999999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.25vw;
+}
+
+#startLogo {
+  min-width: 10vw;
+  min-height: 10vw;
+  width: 10vw;
+  height: 10vw;
+  margin: 10vh 0;
+}
+
+#startOverlay p {
+  margin-bottom: 1vw;
+  width: 50vw;
+  text-align: center;
+  line-height: 2.5vw;
+  color: white;
+}
+
+#credits {
+  font-size: 1vw
+}
+
+#startButton {
+  background-color: #2fecfd;
+  border-radius: 2vw;
+  border: none;
+  font-size: 1.25vw;
+  padding: 0.75vw 2vw;
+  cursor: pointer;
+  margin: 2vw 0 7vh 0;
+}
+/*******HELP DIALOGUE********/
+
+/***********HELP DIALOGUE*************/
+
+/**Allgemein***/
+
+.dialogueStyle {
+  position: absolute;
+  background-color: white;
+  width: 12vw;
+  height: 12vw;
+  border-radius: 15vw;
+  box-shadow: 2px 2px 20px grey;
+  padding: 1vw;
+  z-index: 9999999999999999;
+  animation: helpAnimation 1s ease-out;
+}
+
+@keyframes helpAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.styleSkipButton {
+  width: 3vw;
+  padding: 0.2vw 1vw;
+  cursor: pointer;
+  background-color: #2fecfd;
+  text-align: center;
+  border-radius: 1vw;
+  bottom: 1.8vw;
+  left: 4.5vw;
+  font-size: 1.2vw;
+  position: absolute;
+}
+
+.closeDialogue {
+  width: 2vw;
+  height: 2vw;
+  position: absolute;
+  right: 0.8vw;
+  cursor: pointer;
+}
+
+.dialogueStyle p {
+  text-align: center;
+  margin: 2.5vw 0.7vw 0.6vw 0.7vw;
+  font-size: 1vw;
+}
+
+/* Help Dialogue Positions */
+
+#clickCanvasDialogue {
+  top: 6vw;
+  left: 30vw;
+}
+
+#useEffects {
+  top: 5vw;
+  left: 15vw;
+}
+
+#soundbedDialogue {
+  bottom: 4vw;
+  left: 26vw;
+}
+
+#randomDialogue {
+  bottom: 6vw;
+  left: 37vw;
+}
+
+#loopDialogue {
+  bottom: 5vw;
+  left: 46vw;
+}
+
+#loopIconsDialogue {
+  top: 4vw;
+  left: 3vw;
+}
+
+#RecordDialogue {
+  bottom: 5vw;
+  left: 58vw;
+}
+
+#SaveOpenDialogue {
+  top: 2vw;
+  left: 82vw;
 }
