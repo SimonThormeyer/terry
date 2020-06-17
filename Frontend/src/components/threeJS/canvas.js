@@ -28,6 +28,7 @@ function Canvas(props) {
     // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
+    const [canvasState, setCanvasState] = useState(canvases[id]);
 
     const mount = useRef(null);
 
@@ -154,6 +155,29 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
+    const refreshSpherePositions = () => {
+        let aspectRatio = window.innerWidth / window.innerHeight;
+            let posEffect = effectSphere.current.position.clone();
+
+            let posSynth = synthSphere.current.position.clone();
+
+            let posMusic = musikSphere.current.position.clone();
+            setCanvasState({
+                'effectSphere': {
+                    'x': posEffect.x/aspectRatio,
+                    'y': posEffect.y * aspectRatio
+                },
+                'synthSphere': {
+                    'x': posSynth.x/aspectRatio,
+                    'y': posSynth.y * aspectRatio
+                },
+                'musicSphere': {
+                    'x': posMusic.x/aspectRatio,
+                    'y': posMusic.y * aspectRatio
+                }
+            })
+    }
+
 
     const effectSphereDrag = useCallback(() => {
         if (!musicCtrl[id]) return;
@@ -203,26 +227,29 @@ function Canvas(props) {
     const dragEnd = useCallback((event) => {
         dragging.current = false;
         event.object.material.emissive.set(0x000000);
+        refreshSpherePositions();
+
     }, []);
     useEventListener('dragend', dragEnd, controls.current);
 
 
-    const loadSpherePositions = useCallback(() => {
-            if (!canvases[id]) {
-                console.error(`sphere positions could not be loaded for canvas ${id}`)
+    const loadSpherePositions = useCallback((canvasData) => {
+            if (!canvasData) {
+                console.error(`sphere positions error`)
             }
             let aspectRatio = window.innerWidth / window.innerHeight;
             console.log(`aspect ratio: ${aspectRatio}`)
-            console.log(canvases[id])
-            effectSphere.current.position.set(canvases[id].effectSphere.x * aspectRatio, canvases[id].effectSphere.y / aspectRatio, 0);
-            synthSphere.current.position.set(canvases[id].synthSphere.x * aspectRatio, canvases[id].synthSphere.y / aspectRatio, 0);
-            musikSphere.current.position.set(canvases[id].musicSphere.x * aspectRatio, canvases[id].musicSphere.y / aspectRatio, 0);
+            effectSphere.current.position.set(canvasData.effectSphere.x * aspectRatio, canvasData.effectSphere.y / aspectRatio, 0);
+            synthSphere.current.position.set(canvasData.synthSphere.x * aspectRatio, canvasData.synthSphere.y / aspectRatio, 0);
+            musikSphere.current.position.set(canvasData.musicSphere.x * aspectRatio, canvasData.musicSphere.y / aspectRatio, 0);
             console.log(musikSphere.current.position.clone())
             console.log(window.innerWidth)
             // effectSphereDrag();
             // synthSphereDrag();
             // musikSphereDrag();
-    },[canvases, id])//effectSphereDrag, synthSphereDrag, musikSphereDrag])
+    },[])//effectSphereDrag, synthSphereDrag, musikSphereDrag])
+
+    
 
     // set global functions
     useEffect(() => {
@@ -256,12 +283,12 @@ function Canvas(props) {
         }
 
     
-        setGlobalFunctions(Object.assign(globalFunctions, {
+        setGlobalFunctions(Object.assign({
             'updateCanvasState': updateCanvasState,
             'giveCanvasClickToLooper': giveCanvasClickToLooper,
 
         }))
-    }, [id, canvases, setCanvases, globalFunctions, setGlobalFunctions, canvasClick,]);
+    }, [id, canvases, setCanvases, setGlobalFunctions, canvasClick,]);
     // --> End of global functions
 
     //CREATING SCENE
@@ -293,7 +320,7 @@ function Canvas(props) {
         // musikSphere.current.position.set(10, 0, 0);
         scene.current.add(musikSphere.current);
         // musikSphereDrag();
-        loadSpherePositions();
+        loadSpherePositions(canvases[id]);
 
         //MOVING LIGHT BLOB ON CLICK
         lightForRegularClick.current.position.set(0, 0, 0);
@@ -354,8 +381,8 @@ function Canvas(props) {
         //================================================
         var animate = function () { // why is this a function?
             requestAnimationFrame(animate);
-            effectSphere.current.rotation.x += 0.01;
-            effectSphere.current.rotation.y += 0.01;
+            // effectSphere.current.rotation.x += 0.01;
+            // effectSphere.current.rotation.y += 0.01;
             renderer.current.render(scene.current, camera.current);
 
 
@@ -364,7 +391,7 @@ function Canvas(props) {
         animate();
 
 
-    }, [mount, height, width, loadSpherePositions]);
+    }, [mount, height, width, loadSpherePositions, canvases, id]);
 
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -374,6 +401,7 @@ function Canvas(props) {
         camera.current.updateProjectionMatrix();
 
         renderer.current.setSize( window.innerWidth, window.innerHeight );
+        loadSpherePositions(canvasState);
 
     }
 
