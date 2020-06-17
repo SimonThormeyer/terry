@@ -21,7 +21,7 @@ function OpenProject() {
     useEffect(() => {
 
         axios
-            .get(`http://localhost:5000/projects/all`)
+            .get(`https://terry.beuth-media.de/db/projects/all`)
             .then(res => {
                 console.log(res.statusText);
                 setRows(res);
