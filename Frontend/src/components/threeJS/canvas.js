@@ -258,7 +258,7 @@ function Canvas(props) {
     useEffect(() => {
 
         //SET CAMERA
-        camera.current.position.z = 50000/window.innerWidth;
+        camera.current.position.z = 30;
         camera.current.updateMatrixWorld();
 
         //SCENE LIGHT
@@ -357,17 +357,12 @@ function Canvas(props) {
 
     window.addEventListener( 'resize', onWindowResize, false );
 
-    let OldWindowWidth = window.innerWidth;
     function onWindowResize(){
 
-        camera.current.position.z = 50000/window.innerWidth;
         camera.current.aspect = window.innerWidth / window.innerHeight;
         camera.current.updateProjectionMatrix();
 
         renderer.current.setSize( window.innerWidth, window.innerHeight );
-
-        OldWindowWidth = window.innerWidth;
-
 
     }
 
