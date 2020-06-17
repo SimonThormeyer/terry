@@ -20,9 +20,11 @@ function Menu(props) {
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
+    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
+    const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
+
 
     // state of Component (used for appearance of buttons)
-    const [nextLooperID, setNextLooperID] = useState(1);
     const [play, setPlay] = useState(false)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
@@ -80,11 +82,12 @@ function Menu(props) {
             if(overlayIsOpen) return;
             // start/stop Looping with Space
             if (event.keyCode === 32) {
+                if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") };
                 event.preventDefault(); // don't scroll to bottom of page
                 handleSpaceKeyDown();
             }
         },
-        [handleSpaceKeyDown, overlayIsOpen]
+        [handleSpaceKeyDown, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
     );
 
 
@@ -96,12 +99,12 @@ function Menu(props) {
     return (
         <>
             <ul id="menu">
-                <li id="playbutton" onClick={() => { setPlay(!play); playFunction(); }}>
+                <li id="playbutton" onClick={() => { setPlay(!play); playFunction(); if (activeHelpDialogue === "soundBed") { setActiveHelpDialogue("random") }}}>
                     {play ?
                         <PlayIcon /> :
                         <PauseIcon />}
                 </li>
-                <li id="randombutton" onClick={() => { setRandom(!random); randomFunction() }}>
+                <li id="randombutton" onClick={() => { setRandom(!random); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") }}}>
                     {random ?
                         <RandomIcon /> :
                         <PauseIcon />}
@@ -112,7 +115,7 @@ function Menu(props) {
                 }}>
                     {loop ?
                         <LooperIcon /> :
-                        <StopIcon />}
+                        <StopIcon onClick={() => { if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") }}}  />}
                 </li>
                 <li id="recordbutton" onClick={() => { setRecord(!record); recordFunction() }}>
                     {record ?
@@ -125,13 +128,13 @@ function Menu(props) {
                     <div id="underlay"></div>
                     <div id="overlay">
 
-                        <DeleteIcon id="closeOverlay" onClick={() => { setRecordOverlay(false) }} />
+                        <DeleteIcon id="closeOverlay" onClick={() => { setRecordOverlay(false); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") }}} />
 
                         <LogoIcon id="logoIcon" />
 
                         <p>Download your Track?</p>
 
-                        <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction() }} />
+                        <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction(); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
 
                     </div>
                 </>

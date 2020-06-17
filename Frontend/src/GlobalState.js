@@ -19,6 +19,8 @@ const initialState = {
     musicCtrl: undefined,
     overlayIsOpen: false,
     globalFunctions: {},
+    nextLooperId: 1,
+    activeHelpDialogue : "",
 };
 
 export const { useGlobalState } = createGlobalState(initialState)
