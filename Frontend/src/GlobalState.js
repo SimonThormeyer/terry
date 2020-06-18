@@ -13,16 +13,16 @@ import { createGlobalState } from 'react-hooks-global-state';
 
 const initialCanvas = {
     'effectSphere': {
-        'x': .88,
+        'x': 10,
         'y': 0,
     },
     'synthSphere': {
         'x': 0, 
-        'y': -.33
+        'y': 0
     },
     'musicSphere': {
-        'x': 0,  
-        'y': .33
+        'x': -10,
+        'y': 0
     }
 }
 

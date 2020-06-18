@@ -160,7 +160,7 @@ function Canvas(props) {
             let posEffect = effectSphere.current.position.clone();
             console.log('speichern. vor Projektion:')
             console.log(posEffect);
-            posEffect.project(camera.current);
+
             console.log('speichern. nach Projektion:')
             console.log(posEffect);
 
@@ -174,12 +174,12 @@ function Canvas(props) {
                     'z': posEffect.z
                 },
                 'synthSphere': {
-                    'x': posSynth.x/ window.innerWidth,
-                    'y': posSynth.y / window.innerHeight
+                    'x': posSynth.x,
+                    'y': posSynth.y
                 },
                 'musicSphere': {
-                    'x': posMusic.x/ window.innerWidth,
-                    'y': posMusic.y / window.innerHeight
+                    'x': posMusic.x,
+                    'y': posMusic.y
                 }
             })
     }
@@ -243,17 +243,9 @@ function Canvas(props) {
             if (!canvasData) {
                 console.error(`sphere positions error`)
             }
-            console.log('laden. vor Projektion:')
-            console.log(new THREE.Vector3(canvasData.effectSphere.x, canvasData.effectSphere.y, -1 ))
-            let vector = new THREE.Vector3(canvasData.effectSphere.x, canvasData.effectSphere.y, -1 )
-            // vector = THREE.Vector3. vector - camera.current.position.clone();
-            camera.current.updateProjectionMatrix();
-            vector.unproject( camera.current );
-            console.log('laden. nach Projektion:')
-            console.log(vector);
-            effectSphere.current.position.set(vector.x, vector.y, 0);
-            synthSphere.current.position.set(canvasData.synthSphere.x * window.innerWidth, canvasData.synthSphere.y * window.innerHeight, 0);
-            musikSphere.current.position.set(canvasData.musicSphere.x * window.innerWidth, canvasData.musicSphere.y * window.innerHeight, 0);
+            effectSphere.current.position.set(canvasData.effectSphere.x, canvasData.effectSphere.y, 0);
+            synthSphere.current.position.set(canvasData.synthSphere.x , canvasData.synthSphere.y , 0);
+            musikSphere.current.position.set(canvasData.musicSphere.x , canvasData.musicSphere.y, 0);
             // console.log(musikSphere.current.position.clone())
             // console.log(window.innerWidth)
             // effectSphereDrag();
@@ -265,31 +257,32 @@ function Canvas(props) {
 
     // set global functions
     useEffect(() => {
-        // let updateCanvasState = function () {
-        //     let aspectRatio = window.innerWidth / window.innerHeight;
-        //     let posEffect = effectSphere.current.position.clone();
 
-        //     let posSynth = synthSphere.current.position.clone();
+        //can it be deleted ?
+        let updateCanvasState = function () {
 
-        //     let posMusic = musikSphere.current.position.clone();
-        //     let newArray = Array.from(canvases);
-        //     newArray[id] = {
-        //         'effectSphere': {
-        //             'x': posEffect.x/aspectRatio,
-        //             'y': posEffect.y * aspectRatio
-        //         },
-        //         'synthSphere': {
-        //             'x': posSynth.x/aspectRatio,
-        //             'y': posSynth.y * aspectRatio
-        //         },
-        //         'musicSphere': {
-        //             'x': posMusic.x/aspectRatio,
-        //             'y': posMusic.y * aspectRatio
-        //         }
-        //     }
-        //     setCanvases(newArray);
-        // }
+            let posEffect = effectSphere.current.position.clone();
 
+            let posSynth = synthSphere.current.position.clone();
+
+            let posMusic = musikSphere.current.position.clone();
+            setCanvasState({
+                'effectSphere': {
+                    'x': posEffect.x,
+                    'y': posEffect.y,
+                    'z': posEffect.z
+                },
+                'synthSphere': {
+                    'x': posSynth.x,
+                    'y': posSynth.y
+                },
+                'musicSphere': {
+                    'x': posMusic.x,
+                    'y': posMusic.y
+                }
+            })
+
+        }
         let giveCanvasClickToLooper = function (looper) {
             looper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
         }
@@ -307,7 +300,7 @@ function Canvas(props) {
     useEffect(() => {
 
         //SET CAMERA
-        camera.current.position.z = 30;
+        camera.current.position.z = 40;
         camera.current.updateMatrixWorld();
 
         //SCENE LIGHT
@@ -413,7 +406,7 @@ function Canvas(props) {
         camera.current.updateProjectionMatrix();
 
         renderer.current.setSize( window.innerWidth, window.innerHeight );
-        loadSpherePositions(canvasState);
+       // loadSpherePositions(canvasState);
         // console.log(`height: ${window.innerHeight}`)
         
 
