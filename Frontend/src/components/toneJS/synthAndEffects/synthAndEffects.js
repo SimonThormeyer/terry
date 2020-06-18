@@ -68,6 +68,8 @@ export class SynthAndEffects {
             // INITIALISING
             this.reverb.generate() // reverb needs to be initialised
             this.reverb.wet.value = 0.1
+
+            this.initialized = true;
         })
     }
 
@@ -83,10 +85,12 @@ export class SynthAndEffects {
 
     /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
+
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
     setFilter(valueX) {
+        if (!this.initialized) return
         let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
         this.filter.frequency.value = calculatedFrequency
         // compensate volume when the filter opens up
@@ -95,6 +99,7 @@ export class SynthAndEffects {
     }
 
     setNoteLength(value) {
+        if (!this.initialized) return
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
@@ -102,6 +107,7 @@ export class SynthAndEffects {
     }
 
     setSynthADSR(value) {
+        if (!this.initialized) return
         this.polySynth.set({
             "envelope": {
                 "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
@@ -111,6 +117,7 @@ export class SynthAndEffects {
     }
 
     setOscillatorType(value) {
+        if (!this.initialized) return
         let numberOfWaveformOptions = this.waveforms.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
         let waveform = this.waveforms[position]
@@ -127,6 +134,7 @@ export class SynthAndEffects {
     /*** EFFECT FUNCTIONS ***/
     //Panning
     setPanningEffect(valueX, valueY) {
+        if (!this.initialized) return
         this.panLfo.set("max", this._normalizeRange(valueX) * this._normalizeRange(valueX))
         this.panLfo.frequency.value = this._normalizeRange(valueY) * 8
 
@@ -134,6 +142,7 @@ export class SynthAndEffects {
 
     //Delay
     setDelayFeedback(value) {
+        if (!this.initialized) return
         if (this.delayCounter % 35) {
             this.delay.feedback.value = (this._normalizeRange(value)) * 0.9
         }
@@ -141,11 +150,13 @@ export class SynthAndEffects {
     }
 
     setDelayWet(value) {
+        if (!this.initialized) return
         this.delay.wet.value = this._normalizeRange(value)
     }
 
     //Reverb
     setReverbWet(value) {
+        if (!this.initialized) return
         if (this.reverbCounter % 50) {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
