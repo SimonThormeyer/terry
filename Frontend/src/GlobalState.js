@@ -14,16 +14,16 @@ import { RandomNotes } from './components/toneJS/randomNotes/randomNotes';
 
 const initialCanvas = {
     'effectSphere': {
-        'x': 0,
-        'y': 0
+        'x': .88,
+        'y': 0,
     },
     'synthSphere': {
-        'x': -7,
-        'y': 0
+        'x': 0, 
+        'y': -.33
     },
     'musicSphere': {
-        'x': 7,
-        'y': 0
+        'x': 0,  
+        'y': .33
     }
 }
 
