@@ -17,13 +17,13 @@ export class MusicCtrl {
     }
 
     startStopSoundbed(){
-        this.soundBed.playPauseSoundbed()
+        this.synthAndEffects.startStopRecording()
     }
 
     setParameterSynth(valueX, valueY) {
         this.synthAndEffects.setFilter(valueX, valueY)
         this.synthAndEffects.setNoteLength(valueY)
-        // this.synthAndEffects.setOscillatorType(valueX)
+        this.synthAndEffects.setOscillatorType(valueX)
         this.synthAndEffects.setSynthADSR(valueY)
     }
 
@@ -40,7 +40,11 @@ export class MusicCtrl {
     }
 
     startStopRecorder(){
-        this.recorder.startStopRecording()
+        this.synthAndEffects.startStopRecording()
+    }
+
+    saveRecording(){
+        this.synthAndEffects.saveRecording()
     }
 
 }

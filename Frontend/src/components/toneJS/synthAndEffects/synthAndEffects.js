@@ -4,6 +4,7 @@ export class SynthAndEffects {
     audio;
     chunks = []
     blob = undefined
+    saveRecording;
 
     constructor() {
         this.initialized = false;
@@ -12,7 +13,7 @@ export class SynthAndEffects {
 
             // Settings
             this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
-            this.waveforms = ["sine", "saw", "pulse"]
+            this.waveforms = ["sine", "sawtooth6", "square"]
             this.noteLength = this.noteLengthOptions[2]
 
             //GENERAL TONEJS SETTINGS
@@ -20,8 +21,6 @@ export class SynthAndEffects {
             this.context.latencyHint = "balanced"
             this.context.lookAhead = 0.1
 
-
-            /*
             //RECORDER
             this.recorderStarted = false
             this.destination = this.context.createMediaStreamDestination()
@@ -29,12 +28,12 @@ export class SynthAndEffects {
             this.recorder = new MediaRecorder(this.destination.stream)
             this.fileSaver = require('file-saver');
             this.blob = undefined
-             */
+
 
             // INSTRUMENT_CHAIN
             //Effects
             this.limiter = new Tone.Limiter(-1).toMaster()
-            //this.limiter.connect(this.destination)
+            this.limiter.connect(this.destination)
             this.compressor = new Tone.Compressor(-20, 12).connect(this.limiter)
             this.volume = new Tone.Volume(-5).connect(this.compressor);
             this.reverb = new Tone.Reverb(2).connect(this.volume)
@@ -55,15 +54,16 @@ export class SynthAndEffects {
             this.panLfo.start()
 
             // Volume Adjustments
-            this.volumeFilterAdj = 5
-            this.volume.volume.value = -10 + this.volumeFilterAdj
+            this.volumeFilterAdj = -8
+            this.volumeValue = 0-10 + this.volumeFilterAdj // trying to keep the volumen roughly around -10db
+
 
 
 
             //UTILITY
             this.delayCounter = 0
             this.reverbCounter = 0
-            this.volume.volume.value = -30
+            this.volume.volume.value = 0
 
             // INITIALISING
             this.reverb.generate() // reverb needs to be initialised
@@ -80,12 +80,10 @@ export class SynthAndEffects {
         console.log(this.context.isContext)
         //this.context.dispose()
         this.context = Tone.context
-        console.log(this.context.isContext)
     }
 
     /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
-
         this.polySynth.triggerAttackRelease(note, this.noteLength);
     }
 
@@ -95,7 +93,8 @@ export class SynthAndEffects {
         this.filter.frequency.value = calculatedFrequency
         // compensate volume when the filter opens up
         this.volumeFilterAdj = ((-1) * (this._normalizeRange(valueX)) * 8) - 8
-        console.log("FILTER VOLUME ADJ: " + this.volumeFilterAdj)
+        this._setVolumeForAll()
+
     }
 
     setNoteLength(value) {
@@ -164,16 +163,18 @@ export class SynthAndEffects {
     }
 
     //INTERNAL FUNCTIONS
+
     _normalizeRange(value) {
         return ((value + 1) / 2)
     }
 
-
+    _setVolumeForAll(){
+        this.volume.volume.value = this.volumeValue + this.volumeFilterAdj
+        console.log("ALL VOLUMES:  "+this.volume.volume.value)
+    }
 
 
     /*** RECORDER FUNCTIONS ***/
-
-    /*
     startStopRecording() {
         //console.log(MediaRecorder.mimeType)
         //console.log(MediaRecorder.isTypeSupported("audio/mp3;codecs=opus"))
@@ -188,31 +189,19 @@ export class SynthAndEffects {
 
         this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
         this.recorder.onstop = evt => {
-            console.log(evt)
-            //this.blob = new Blob(this.chunks, {type: 'audio/wav; codecs=0'});
-            this.blob = new Blob(this.chunks, {type: "audio/mp3; codecs=opus"})
-
-            //let blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'});
+            this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' });
             console.log(this.blob)
 
-            if (window.confirm("Download Recording?")) {
-                this.fileSaver.saveAs(this.blob)
-            }
+            this.saveRecording = () => {
+                if (this.blob) {
+                    this.fileSaver.saveAs(this.blob)
+                }
 
-        };
-    }
-
-    saveRecording() {
-        if (this.blob) {
-            if (window.confirm("Download Recording?")) {
-                this.fileSaver.saveAs(this.blob)
-            }
-
+            };
         }
+
+
     }
-    */
-
-
 
 
 }
