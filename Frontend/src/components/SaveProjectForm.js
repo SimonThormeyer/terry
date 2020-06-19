@@ -6,6 +6,7 @@ function SaveProjectForm(props) {
 
     const [globalFunctions,] = useGlobalState('globalFunctions');
     const [runningLoopers,] = useGlobalState('runningLoopers');
+    const [backendUrl,] = useGlobalState('backend_url');
 
     const getCanvasState = () => {
         if (globalFunctions.getCanvasState instanceof Function) {
@@ -13,7 +14,7 @@ function SaveProjectForm(props) {
         }
     }
 
-    let backendUrl = `https://terry.beuth-media.de/db`;
+    
 
     let getGlobalState = () => {
         let loopers = [];
