@@ -14,6 +14,7 @@ body {
 }
 
 /************ CANVAS ****************/
+
 #canvas {
   line-height: 0;
 }
@@ -114,7 +115,6 @@ body {
 }
 
 /*******three icons to interact with the loop******/
-
 
 .loop ul li {
   cursor: pointer;
@@ -569,6 +569,9 @@ body {
   font-size: 1vw
 }
 
+#outerButton{
+  text-align: center;
+}
 #startButton {
   background-color: #2fecfd;
   border-radius: 2vw;
@@ -576,8 +579,21 @@ body {
   font-size: 1.25vw;
   padding: 0.75vw 2vw;
   cursor: pointer;
-  margin: 2vw 0 7vh 0;
+  margin: 2vw 1.75vw 7vh 0;
+  display: inline-block;
 }
+
+#startHelpButton {
+  background-color: #2fecfd;
+  border-radius: 2vw;
+  border: none;
+  font-size: 1.25vw;
+  padding: 0.75vw 2vw;
+  cursor: pointer;
+  margin: 2vw 0 7vh 1.75vw;
+  display: inline-block;
+}
+
 /*******HELP DIALOGUE********/
 
 /***********HELP DIALOGUE*************/
