@@ -20,6 +20,7 @@ function StartOverlay() {
     }
 
     const helpFunction = () => {
+        setMusicCtrl(new MusicCtrl());
         setActiveHelpDialogue("canvas");
     }
 
