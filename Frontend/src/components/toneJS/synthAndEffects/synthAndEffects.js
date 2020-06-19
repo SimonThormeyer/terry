@@ -29,7 +29,6 @@ export class SynthAndEffects {
             this.fileSaver = require('file-saver');
             this.blob = undefined
 
-
             // INSTRUMENT_CHAIN
             //Effects
             this.limiter = new Tone.Limiter(-1).toMaster()
@@ -56,6 +55,7 @@ export class SynthAndEffects {
             // Volume Adjustments
             this.volumeFilterAdj = 0
             this.volumeADSRAdj = 0
+            this.volumeReverbAdj = 0
 
             this.volumeValue = 0-10 + this.volumeFilterAdj // trying to keep the volumen roughly around -10db
 
@@ -67,7 +67,6 @@ export class SynthAndEffects {
             // INITIALISING
             this.reverb.generate() // reverb needs to be initialised
             this.reverb.wet.value = 0.1
-
             this.initialized = true;
         })
     }
@@ -100,7 +99,6 @@ export class SynthAndEffects {
         let numberOfLengthOptions = this.noteLengthOptions.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfLengthOptions)
         this.noteLength = this.noteLengthOptions[position]
-
     }
 
     setSynthADSR(value) {
@@ -111,6 +109,7 @@ export class SynthAndEffects {
                 "attack": (this._normalizeRange(value) * 0.2)
             }
         });
+        // compensate volume for longer notes
         this.volumeADSRAdj = ((-1) * (this._normalizeRange(value)) * 6)
         this._setVolumeForAll()
 
@@ -161,6 +160,10 @@ export class SynthAndEffects {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
         this.reverbCounter++
+        // compensate volume when the filter opens up
+
+        this.volumeReverbAdj = ((1) * (this._normalizeRange(value)) * 3)
+        this._setVolumeForAll()
     }
 
     //INTERNAL FUNCTIONS
@@ -170,7 +173,8 @@ export class SynthAndEffects {
     }
 
     _setVolumeForAll(){
-        this.volume.volume.value = this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj
+        this.volume.volume.value =
+            this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
         console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
@@ -187,8 +191,7 @@ export class SynthAndEffects {
 
         this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
         this.recorder.onstop = evt => {
-            this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' });
-            console.log(this.blob)
+            this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' })
 
             this.saveRecording = () => {
                 if (this.blob) {
