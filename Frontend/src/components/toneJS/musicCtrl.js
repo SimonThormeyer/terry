@@ -17,7 +17,7 @@ export class MusicCtrl {
     }
 
     startStopSoundbed(){
-        this.synthAndEffects.startStopRecording()
+        this.soundBed.playPauseSoundbed()
     }
 
     setParameterSynth(valueX, valueY) {

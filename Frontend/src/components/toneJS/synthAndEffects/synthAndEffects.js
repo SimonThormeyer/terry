@@ -35,7 +35,7 @@ export class SynthAndEffects {
             this.limiter = new Tone.Limiter(-1).toMaster()
             this.limiter.connect(this.destination)
             this.compressor = new Tone.Compressor(-20, 12).connect(this.limiter)
-            this.volume = new Tone.Volume(-5).connect(this.compressor);
+            this.volume = new Tone.Volume(0).connect(this.compressor);
             this.reverb = new Tone.Reverb(2).connect(this.volume)
             this.pan = new Tone.Panner(1).connect(this.volume)
             this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
@@ -54,11 +54,10 @@ export class SynthAndEffects {
             this.panLfo.start()
 
             // Volume Adjustments
-            this.volumeFilterAdj = -8
+            this.volumeFilterAdj = 0
+            this.volumeADSRAdj = 0
+
             this.volumeValue = 0-10 + this.volumeFilterAdj // trying to keep the volumen roughly around -10db
-
-
-
 
             //UTILITY
             this.delayCounter = 0
@@ -76,9 +75,7 @@ export class SynthAndEffects {
 
     /*** UTILITY FUNCTIONS ***/
     startContext() {
-        //this.context.close()
         console.log(this.context.isContext)
-        //this.context.dispose()
         this.context = Tone.context
     }
 
@@ -91,8 +88,9 @@ export class SynthAndEffects {
         if (!this.initialized) return
         let calculatedFrequency = (this._normalizeRange(valueX) * 1300) + 200
         this.filter.frequency.value = calculatedFrequency
+
         // compensate volume when the filter opens up
-        this.volumeFilterAdj = ((-1) * (this._normalizeRange(valueX)) * 8) - 8
+        this.volumeFilterAdj = ((-1) * (this._normalizeRange(valueX)) * 8)
         this._setVolumeForAll()
 
     }
@@ -113,6 +111,9 @@ export class SynthAndEffects {
                 "attack": (this._normalizeRange(value) * 0.2)
             }
         });
+        this.volumeADSRAdj = ((-1) * (this._normalizeRange(value)) * 6)
+        this._setVolumeForAll()
+
     }
 
     setOscillatorType(value) {
@@ -169,16 +170,13 @@ export class SynthAndEffects {
     }
 
     _setVolumeForAll(){
-        this.volume.volume.value = this.volumeValue + this.volumeFilterAdj
+        this.volume.volume.value = this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj
         console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {
-        //console.log(MediaRecorder.mimeType)
-        //console.log(MediaRecorder.isTypeSupported("audio/mp3;codecs=opus"))
-
         if (!this.recorderStarted) {
             this.recorder.start()
             this.recorderStarted = true
@@ -199,11 +197,7 @@ export class SynthAndEffects {
 
             };
         }
-
-
     }
-
-
 }
 
 
