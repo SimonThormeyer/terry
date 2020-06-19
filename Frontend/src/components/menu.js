@@ -61,10 +61,12 @@ function Menu(props) {
     }
 
     const recordFunction = () => {
+        musicCtrl.startStopRecorder()
         console.log("menu js record Function");
     }
 
     const downloadFunction = () => {
+        musicCtrl.saveRecording()
         console.log("menu js download function");
         window.alert("Your download was successful!");
     }
