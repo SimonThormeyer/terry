@@ -83,7 +83,7 @@ function Canvas(props) {
     }
 
     const canvasClick = useCallback((value, playback = false) => {
-
+        if (!musicCtrl) return;
         // give canvasClick to Looper => possibly better in a useEffect
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
             listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
@@ -128,12 +128,14 @@ function Canvas(props) {
         }
     }, [musicCtrl, listeningLooper]); // ==> End of canvasClick
 
-    //give Canvas Click to randomNotes-object
+    //give Canvas Click to randomNotes-Object
     useEffect(() => {
-        if (randomNotes && !randomNotes._simulateCanvasClick) {
-            randomNotes._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-        }
-    }, [randomNotes, canvasClick]);
+        if(!musicCtrl) return;
+            if (randomNotes && !randomNotes._simulateCanvasClick) {
+                randomNotes._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+                console.log("useEffect!");
+            };
+    }, [randomNotes, musicCtrl, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
