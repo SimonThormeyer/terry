@@ -12,16 +12,17 @@ function OpenProject() {
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [globalFunctions,] = useGlobalState('globalFunctions');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
-
+    const [backendUrl,] = useGlobalState('backend_url');
 
 
     const items = [];
+    
 
     //get Request to get all Projects of all users
     useEffect(() => {
 
         axios
-            .get(`http://localhost:5000/projects/all`)
+            .get(`${backendUrl}/projects/all`)
             .then(res => {
                 console.log(res.statusText);
                 setRows(res);
