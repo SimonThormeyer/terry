@@ -34,7 +34,7 @@ export class SynthAndEffects {
             this.limiter = new Tone.Limiter(-1).toMaster()
             this.limiter.connect(this.destination)
             this.compressor = new Tone.Compressor(-20, 12).connect(this.limiter)
-            this.volume = new Tone.Volume(0).connect(this.compressor);
+            this.volume = new Tone.Volume(-50).connect(this.compressor);
             this.reverb = new Tone.Reverb(2).connect(this.volume)
             this.pan = new Tone.Panner(1).connect(this.volume)
             this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
@@ -53,16 +53,16 @@ export class SynthAndEffects {
             this.panLfo.start()
 
             // Volume Adjustments
-            this.volumeFilterAdj = 0
-            this.volumeADSRAdj = 0
-            this.volumeReverbAdj = 0
-
-            this.volumeValue = 0-10 + this.volumeFilterAdj // trying to keep the volumen roughly around -10db
+            this.volumeFilterAdj = -8
+            this.volumeADSRAdj = -6
+            this.volumeReverbAdj = 4
+            this.volumeValue = -5
+            this.volume.volume.value = this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
 
             //UTILITY
             this.delayCounter = 0
             this.reverbCounter = 0
-            this.volume.volume.value = 0
+
 
             // INITIALISING
             this.reverb.generate() // reverb needs to be initialised
@@ -110,7 +110,7 @@ export class SynthAndEffects {
             }
         });
         // compensate volume for longer notes
-        this.volumeADSRAdj = ((-1) * (this._normalizeRange(value)) * 6)
+        this.volumeADSRAdj = ((-1) * (this._normalizeRange(value)) * 9)
         this._setVolumeForAll()
 
     }
@@ -160,9 +160,8 @@ export class SynthAndEffects {
             this.reverb.wet.value = (this._normalizeRange(value)) * 0.9
         }
         this.reverbCounter++
-        // compensate volume when the filter opens up
-
-        this.volumeReverbAdj = ((1) * (this._normalizeRange(value)) * 3)
+        // compensate volume when the reverb opens up
+        this.volumeReverbAdj = ((1) * (this._normalizeRange(value)) * 4)
         this._setVolumeForAll()
     }
 
@@ -175,7 +174,7 @@ export class SynthAndEffects {
     _setVolumeForAll(){
         this.volume.volume.value =
             this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
-        console.log("ALL VOLUMES:  "+this.volume.volume.value)
+        //console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
 
