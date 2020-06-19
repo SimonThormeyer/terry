@@ -22,9 +22,9 @@ const initialState = {
     globalFunctions: {},
     nextLooperId: 1,
     activeHelpDialogue : "",
-    randomNotes: new RandomNotes(),
     backend_url: "http://localhost:5000",
     // backend_url:"https://terry.beuth-media.de/db",
+    randomNotes: new RandomNotes(),
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

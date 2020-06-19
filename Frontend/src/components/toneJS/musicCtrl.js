@@ -56,4 +56,5 @@ export class MusicCtrl {
     saveRecording(){
         this.synthAndEffects.saveRecording()
     }
+    
 }
