@@ -49,5 +49,11 @@ export class MusicCtrl {
         this.isomorphicLayout.changeOctave(valueY);
     }
 
+    startStopRecorder(){
+        this.synthAndEffects.startStopRecording()
+    }
 
+    saveRecording(){
+        this.synthAndEffects.saveRecording()
+    }
 }
