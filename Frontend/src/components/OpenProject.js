@@ -36,7 +36,7 @@ function OpenProject() {
                 }
             })
 
-    }, [])
+    }, [backendUrl])
 
 
     var data = rows.data
