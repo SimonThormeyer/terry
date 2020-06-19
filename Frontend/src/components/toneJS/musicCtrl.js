@@ -3,16 +3,6 @@ import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 import {Soundbed} from "./soundbed/soundbed";
 
 
-/*
-    IMPORT:
-    import {MusicCtrl} from './musicCtrl';
-
-    INSTANTIATE:
-    let musicCtrl = new musicCtrl();
-
-    CALL FUNCTION:
-    */
-
 export class MusicCtrl {
 
     constructor() {
@@ -56,5 +46,5 @@ export class MusicCtrl {
     saveRecording(){
         this.synthAndEffects.saveRecording()
     }
-    
+
 }

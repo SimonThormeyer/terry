@@ -24,7 +24,7 @@ function Menu(props) {
     const [randomNotes,] = useGlobalState('randomNotes');
 
     // state of Component (used for appearance of buttons)
-    const [play, setPlay] = useState(false)
+    const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
     const [record, setRecord] = useState(true)
@@ -61,10 +61,12 @@ function Menu(props) {
     }
 
     const recordFunction = () => {
+        musicCtrl.startStopRecorder()
         console.log("menu js record Function");
     }
 
     const downloadFunction = () => {
+        musicCtrl.saveRecording()
         console.log("menu js download function");
         window.alert("Your download was successful!");
     }

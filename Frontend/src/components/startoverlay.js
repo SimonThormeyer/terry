@@ -8,6 +8,7 @@ function StartOverlay() {
     const [startOverlay, setStartOverlay] = useState(true);
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [, setMusicCtrl] = useGlobalState('musicCtrl');
+    const [, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
 
     useEffect(() => {
@@ -16,6 +17,11 @@ function StartOverlay() {
 
     const playFunction = () => {
         setMusicCtrl(new MusicCtrl());
+    }
+
+    const helpFunction = () => {
+        setMusicCtrl(new MusicCtrl());
+        setActiveHelpDialogue("canvas");
     }
 
     let isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
@@ -35,8 +41,10 @@ function StartOverlay() {
                         </p>
 
                         <p id="credits">Created by: Chantal, Freddy, Luca, Malte, Maluna, Niklas, Simon.</p>
-                        
-                            <button id="startButton" onClick={() => { setStartOverlay(false); playFunction() }}>Let's play music!</button>
+                        <div id="outerButton">
+                        <button id="startButton" onClick={() => { setStartOverlay(false); playFunction() }}>Let's play music!</button>
+                            <button id="startHelpButton" onClick={() => { setStartOverlay(false); helpFunction() }}>Start with tutorial!</button>
+                        </div>
                         </div>
 
                     </> 
