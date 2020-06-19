@@ -1,11 +1,12 @@
 import uuid
 from datetime import datetime, timezone
+
 from flask_marshmallow.fields import Hyperlinks, URLFor
-from marshmallow import Schema, fields, post_load, pre_dump, ValidationError
+from marshmallow import post_load, pre_dump, Schema, fields, pre_load, ValidationError
 import pytz
 import json
+
 from api.service import mongoService as Service
-from api.service.mongoService import check_ProjectName
 from api.routes.responses import Standard400ErrorResponse
 from api import ma, log
 from bson.json_util import dumps,loads
@@ -159,24 +160,3 @@ class ProjectModel():
             'project_data': self.project_data
         }
         return content
-#
-# class BookSchema(ma.Schema):
-#     class Meta:
-#         fields = ('id', 'title', 'author', 'links')
-#
-#     author = ma.Nested(AuthorSchema)
-#
-#     links = ma.Hyperlinks({
-#         'self': ma.URLFor('book_detail', id='<id>'),
-#         'collection': ma.URLFor('book_list')
-#     })
-#
-# class ProjectSchema(Schema):
-#
-#     _id = fields.Str()
-#
-#     name = fields.Str()
-#     location = fields.Str()
-#     @post_load
-#     def make_store(self, data, **kwargs):
-#         return Project(**data)
