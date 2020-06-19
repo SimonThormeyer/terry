@@ -25,7 +25,7 @@ function Menu(props) {
 
 
     // state of Component (used for appearance of buttons)
-    const [play, setPlay] = useState(false)
+    const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
     const [record, setRecord] = useState(true)
