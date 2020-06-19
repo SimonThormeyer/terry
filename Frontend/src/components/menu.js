@@ -12,7 +12,6 @@ import { useGlobalState } from "../GlobalState"
 import { Looper } from '../components/toneJS/Looper'
 import useEventListener from "./../UseEventListener"
 
-
 function Menu(props) {
 
     // Global state - see GlobalState.js for explanation, needed for functional logic of menu buttons 
@@ -22,7 +21,7 @@ function Menu(props) {
     const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
     const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
-
+    const [randomNotes,] = useGlobalState('randomNotes');
 
     // state of Component (used for appearance of buttons)
     const [play, setPlay] = useState(false)
@@ -57,7 +56,7 @@ function Menu(props) {
     }
 
     const randomFunction = () => {
-        musicCtrl.startStopRandomNotes();
+        randomNotes.toggleRandomNotes();
         console.log("menu js random Function");
     }
 

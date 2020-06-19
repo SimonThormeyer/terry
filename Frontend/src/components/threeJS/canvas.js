@@ -26,7 +26,7 @@ function Canvas(props) {
     // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
-
+    const [randomNotes,] = useGlobalState('randomNotes');
     const mount = useRef(null);
 
     // THREE-Objects
@@ -82,7 +82,6 @@ function Canvas(props) {
         return newObj;
     }
 
-
     const canvasClick = useCallback((value, playback = false) => {
 
         // give canvasClick to Looper => possibly better in a useEffect
@@ -128,6 +127,13 @@ function Canvas(props) {
             )
         }
     }, [musicCtrl, listeningLooper]); // ==> End of canvasClick
+
+    //give Canvas Click to randomNotes-object
+    useEffect(() => {
+        if (randomNotes && !randomNotes._simulateCanvasClick) {
+            randomNotes._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        }
+    }, [randomNotes, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {

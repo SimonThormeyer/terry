@@ -1,4 +1,5 @@
 import { createGlobalState } from 'react-hooks-global-state';
+import { RandomNotes } from './components/toneJS/randomNotes/randomNotes';
 
 /*
  USED LIKE THIS IN ANY FUNCTIONAL COMPONENT:
