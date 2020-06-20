@@ -21,6 +21,10 @@ const initialState = {
     globalFunctions: {},
     nextLooperId: 1,
     activeHelpDialogue : "",
+
+    backend_url: "http://localhost:5000",
+    // backend_url:"https://terry.beuth-media.de/db",
+
 };
 
 export const { useGlobalState } = createGlobalState(initialState)
