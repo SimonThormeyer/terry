@@ -5,5 +5,7 @@ MongoEngine
 flask-api
 datetime
 pytz
-python-dotenv
+pymongo
+flask-mongoengine
+marshmallow
 flask-marshmallow
