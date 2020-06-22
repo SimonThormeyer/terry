@@ -1,4 +1,5 @@
 import { createGlobalState } from 'react-hooks-global-state';
+import { RandomNotes } from './components/toneJS/randomNotes/randomNotes';
 
 /*
  USED LIKE THIS IN ANY FUNCTIONAL COMPONENT:
@@ -21,10 +22,9 @@ const initialState = {
     globalFunctions: {},
     nextLooperId: 1,
     activeHelpDialogue : "",
-
+    randomNotes: new RandomNotes(),
     backend_url: "http://localhost:5000",
-    // backend_url:"https://terry.beuth-media.de/db",
-
+    // backend_url:"https://terry.beuth-media.de/db",  
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

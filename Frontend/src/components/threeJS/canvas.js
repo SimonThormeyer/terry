@@ -20,13 +20,13 @@ function Canvas(props) {
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
+    const [randomNotes,] = useGlobalState('randomNotes');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
     // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
-
     const mount = useRef(null);
 
     // THREE-Objects
@@ -82,13 +82,7 @@ function Canvas(props) {
         return newObj;
     }
 
-
     const canvasClick = useCallback((value, playback = false) => {
-
-        // give canvasClick to Looper => possibly better in a useEffect
-        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
-            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-        }
         mouse.current.x = (value[0]) * 2 - 1;
         mouse.current.y = -(value[1]) * 2 + 1;
 
@@ -128,6 +122,22 @@ function Canvas(props) {
             )
         }
     }, [musicCtrl, listeningLooper]); // ==> End of canvasClick
+
+    // give canvasClick to Looper
+    useEffect(() => {
+        if(!musicCtrl) return;
+        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
+            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        }
+    }, [listeningLooper, musicCtrl, canvasClick]); 
+
+    //give Canvas Click to randomNotes-Object
+    useEffect(() => {
+        if(!musicCtrl) return;
+        if (randomNotes && !randomNotes._simulateCanvasClick) {
+            randomNotes._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+        };
+    }, [randomNotes, musicCtrl, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
