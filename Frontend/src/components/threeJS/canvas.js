@@ -20,13 +20,13 @@ function Canvas(props) {
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
+    const [randomNotes,] = useGlobalState('randomNotes');
     const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
     // component state
     const [width,] = useState(window.innerWidth);
     const [height,] = useState(window.innerHeight);
-    const [randomNotes,] = useGlobalState('randomNotes');
     const mount = useRef(null);
 
     // THREE-Objects
@@ -123,7 +123,7 @@ function Canvas(props) {
         }
     }, [musicCtrl, listeningLooper]); // ==> End of canvasClick
 
-    // give canvasClick to Looper => possibly better in a useEffect
+    // give canvasClick to Looper
     useEffect(() => {
         if(!musicCtrl) return;
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
