@@ -24,14 +24,14 @@ def query_ProjectWithProjectName(project_name):
     for post in projs.find(query):
         projects.append(post)
     projects.reverse()    
-    return dumps(projects)
+    return projects
 
 
 def query_ProjectWithProjectNameFromUser(user_ID,project_name):
     query = {'user_ID': user_ID,
             'project_name': project_name}
     proj = projs.find_one(query)
-    return dumps(proj)
+    return proj
 
 def query_UserWithUserName(user_ID):
     query = {'user_ID': user_ID}
