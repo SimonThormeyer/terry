@@ -6,9 +6,8 @@ from flask_marshmallow import Marshmallow
 import os
 
 app = Flask(__name__)
-log = app.logger
 CORS(app)
-
+log = app.logger
 
 #mongo_host = os.environ['MONGO_HOST']
 mongo = PyMongo(app, uri='mongodb://mongo:27017/Projects')
