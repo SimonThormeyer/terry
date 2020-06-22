@@ -20,6 +20,7 @@ function Canvas(props) {
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
+    const [runningLoopers, ] = useGlobalState('runningLoopers');
     const [randomNotes,] = useGlobalState('randomNotes');
     const [, setGlobalFunctions] = useGlobalState('canvasFunctions');
     const [canvases, setCanvases] = useGlobalState('canvases');
@@ -29,7 +30,7 @@ function Canvas(props) {
     // component state
     // const [width,] = useState(window.innerWidth);
     // const [height,] = useState(window.innerHeight);
-    const [canvasState, setCanvasState] = useState(canvases[id]);
+    const [, setCanvasState] = useState(canvases[id]);
 
     const mount = useRef(null);
 
@@ -86,9 +87,14 @@ function Canvas(props) {
         return newObj;
     }
 
-    const canvasClick = useCallback((value, playback = false) => {
-        mouse.current.x = (value[0]) * 2 - 1;
-        mouse.current.y = -(value[1]) * 2 + 1;
+    // change background color accoring to canvasID
+    // useEffect(()=> {
+    //     materialBackground.current.color.set(canvases[id].color * 2 )
+    // },[id, canvases])
+
+    const canvasClick = useCallback((coordinates,  canvasId = id, playback = false) => {
+        mouse.current.x = (coordinates[0]) * 2 - 1;
+        mouse.current.y = -(coordinates[1]) * 2 + 1;
 
         raycaster.current.setFromCamera(mouse.current, camera.current);
 
@@ -97,7 +103,10 @@ function Canvas(props) {
         if (playback) {
             looperLights.current[counter.current].position.x = intersections[0].point.x;
             looperLights.current[counter.current].position.y = intersections[0].point.y;
+            // set light color depending on canvasId
+            looperLights.current[counter.current].color.set( canvases[canvasId].color); 
             looperLights.current[counter.current].intensity = 0.5;
+            
             // more elegant: use modulo instead of if / else
             if (counter.current >= looperLights.current.length - 1) {
                 counter.current = 0;
@@ -113,35 +122,41 @@ function Canvas(props) {
             lightForRegularClick.current.intensity = 0.3;
         }
 
-        musicCtrl[id].triggerSynth(value[0], value[1]);
+        musicCtrl[canvasId].triggerSynth(coordinates[0], coordinates[1]);
 
         if (listeningLooper && !playback) {
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
                     type: "canvasClick",
-                    x: value[0],
-                    y: value[1]
+                    x: coordinates[0],
+                    y: coordinates[1]
                 }
             )
         }
-    }, [id, musicCtrl, listeningLooper]); // ==> End of canvasClick
+    }, [id, musicCtrl, listeningLooper, canvases]); // ==> End of canvasClick
 
-    // give canvasClick to Looper
+    // give canvasClick to Looper and set ID to current canvas ID
     useEffect(() => {
-        if (!musicCtrl) return;
+        if (!musicCtrl[id]) return;
         if (listeningLooper && !listeningLooper._simulateCanvasClick) {
-            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+            listeningLooper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
+            listeningLooper.setCanvasId(id);
         }
-    }, [listeningLooper, musicCtrl, canvasClick]);
+        // give canvasClick of this canvas to all loopers
+        for(let looper of Array.from(runningLoopers.values())) {
+            looper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
+        }
+        
+    }, [runningLoopers, listeningLooper, musicCtrl, id, canvasClick]);
 
     //give Canvas Click to randomNotes-Object
     useEffect(() => {
-        if (!musicCtrl) return;
+        if (!musicCtrl[id]) return;
         if (randomNotes && !randomNotes._simulateCanvasClick) {
-            randomNotes._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
+            randomNotes._simulateCanvasClick = (coordinates, playback = true) => canvasClick(coordinates, playback);
         };
-    }, [randomNotes, musicCtrl, canvasClick]);
+    }, [randomNotes, musicCtrl, id, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
@@ -166,7 +181,7 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
-    const refreshSpherePositions = () => {
+    const refreshSpherePositions = useCallback(() => {
         // let aspectRatio = window.innerWidth / window.innerHeight;
             let posEffect = effectSphere.current.position.clone();
             console.log('speichern. vor Projektion:')
@@ -174,15 +189,13 @@ function Canvas(props) {
 
             console.log('speichern. nach Projektion:')
             console.log(posEffect);
-
             let posSynth = synthSphere.current.position.clone();
-
             let posMusic = musikSphere.current.position.clone();
-            setCanvasState({
+
+            let newState = {
                 'effectSphere': {
                     'x': posEffect.x,
                     'y': posEffect.y,
-                    'z': posEffect.z
                 },
                 'synthSphere': {
                     'x': posSynth.x,
@@ -192,8 +205,12 @@ function Canvas(props) {
                     'x': posMusic.x,
                     'y': posMusic.y
                 }
-            })
-    }
+            }
+
+            setCanvasState(newState);
+            canvases[id] = newState;
+            setCanvasState(Array.from(canvases));
+    },[canvases, id])
 
 
     const effectSphereDrag = useCallback(() => {
@@ -217,7 +234,7 @@ function Canvas(props) {
         camera.current.updateMatrixWorld();
         let pos = musikSphere.current.position.clone();
         pos.project(camera.current);
-        // musicCtrl[id].setParameterMusic(pos.x, pos.y)
+        musicCtrl[id].setParameterMusic(pos.x, pos.y)
     }, [id, musicCtrl]);
 
     const dragStart = useCallback((event) => {
@@ -246,7 +263,7 @@ function Canvas(props) {
         event.object.material.emissive.set(0x000000);
         refreshSpherePositions();
 
-    }, []);
+    }, [refreshSpherePositions]);
     useEventListener('dragend', dragEnd, controls.current);
 
 
@@ -268,39 +285,12 @@ function Canvas(props) {
 
     // set global functions
     useEffect(() => {
-
-        //can it be deleted ?
-        let updateCanvasState = function () {
-
-            let posEffect = effectSphere.current.position.clone();
-
-            let posSynth = synthSphere.current.position.clone();
-
-            let posMusic = musikSphere.current.position.clone();
-            setCanvasState({
-                'effectSphere': {
-                    'x': posEffect.x,
-                    'y': posEffect.y,
-                    'z': posEffect.z
-                },
-                'synthSphere': {
-                    'x': posSynth.x,
-                    'y': posSynth.y
-                },
-                'musicSphere': {
-                    'x': posMusic.x,
-                    'y': posMusic.y
-                }
-            })
-
-        }
         let giveCanvasClickToLooper = function (looper) {
             looper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
         }
 
     
         setGlobalFunctions(Object.assign({
-            // 'updateCanvasState': updateCanvasState,
             'giveCanvasClickToLooper': giveCanvasClickToLooper,
 
         }))

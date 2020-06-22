@@ -35,10 +35,10 @@ const initialState = {
     musicCtrl: [],
     overlayIsOpen: false,
     canvases: [
-        Object.assign(initialCanvas), 
-        Object.assign(initialCanvas), 
-        Object.assign(initialCanvas), 
-        Object.assign(initialCanvas)
+        Object.assign({"color": 0x76381D}, initialCanvas), // red 
+        Object.assign({"color": 0x38761D}, initialCanvas), // green
+        Object.assign({"color": 0x387676}, initialCanvas), // blue 
+        // Object.assign(initialCanvas)
     ],
     canvasId: 0,
     canvasFunctions: [],
