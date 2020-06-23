@@ -8,7 +8,7 @@ import { useGlobalState } from "../GlobalState"
 function OpenProject() {
 
 
-    const [rows, setRows] = useState([]);
+    const [apiResponse, setApiResponse] = useState([]);
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     // const [globalFunctions,] = useGlobalState('globalFunctions');
     const [canvases, setCanvases] = useGlobalState('canvases');
@@ -26,7 +26,7 @@ function OpenProject() {
             .get(`${backendUrl}/projects/all`)
             .then(res => {
                 console.log(res.statusText);
-                setRows(res);
+                setApiResponse(res);
             })
             .catch(err => {
                 if (err.response) {
@@ -40,7 +40,7 @@ function OpenProject() {
     }, [backendUrl])
 
 
-    var data = rows.data
+    let data = apiResponse.data ? apiResponse.data.items : undefined;
 
     //loop to get username and projectname from database and save it in a list and create a hmtl li tag
     if (data !== undefined) {
@@ -59,7 +59,7 @@ function OpenProject() {
 
     //open project and reconstruct loopers and canvases
     const openProjectFunction = (project_id) => {
-        let project = data[project_id].project;
+        let project = data[project_id].project_data;
         for (let id of Array.from(runningLoopers.keys())) {
             runningLoopers.get(id).stop()
             runningLoopers.delete(id);
