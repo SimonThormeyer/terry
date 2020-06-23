@@ -42,6 +42,7 @@ const initialState = {
     ],
     canvasId: 0,
     canvasFunctions: [],
+    loading: true, // used to enable or disable certain elements while canvas is loading
     nextLooperId: 1,
     activeHelpDialogue : "",
     randomNotes: new RandomNotes(),

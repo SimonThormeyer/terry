@@ -5,15 +5,22 @@ import { ReactComponent as ArrowBack } from '../img/arrow_back.svg';
 
 
 function MultitrackNav(props) {
+    // global
     const [canvasId, setCanvasId] = useGlobalState('canvasId');
-    const [canvases, ] = useGlobalState('canvases');
-    let synthesizerNames = ['lows','highs', 'mids', 'percussion']
+    const [canvases,] = useGlobalState('canvases');
+    const [loading, ] = useGlobalState('loading');
+
+    let synthesizerNames = ['lows', 'highs', 'mids', 'percussion']
 
     return (
         <div id="multitrackingNav">
-            {canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => setCanvasId(canvasId-1)} />}
+            {!loading && canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => {
+                    setCanvasId(canvasId - 1);
+            }} />}
             <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
-            {canvasId < canvases.length - 1 && <ArrowForward id="arrowForward" onClick={() => setCanvasId(canvasId+1)} />}
+            {!loading && canvasId < canvases.length - 1 && <ArrowForward id="arrowForward"onClick={() => {
+                    setCanvasId(canvasId + 1);
+            }} />}
         </div>
     );
 };
