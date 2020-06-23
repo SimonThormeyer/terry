@@ -148,7 +148,7 @@ function Canvas(props) {
     useEffect(() => {
         if (!musicCtrl[id]) return;
         if (randomNotes && !randomNotes._simulateCanvasClick) {
-            randomNotes._simulateCanvasClick = (coordinates, playback = true) => canvasClick(coordinates, playback);
+            randomNotes._simulateCanvasClick = (coordinates, canvasId = id, playback = true) => canvasClick(coordinates, canvasId, playback);
         };
     }, [randomNotes, musicCtrl, id, canvasClick]);
 

@@ -51,7 +51,7 @@ function Menu(props) {
     }, [recordOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        musicCtrl.startStopSoundbed()
+        musicCtrl[0].startStopSoundbed()
         console.log("menu js play Function");
     }
 
@@ -125,7 +125,7 @@ function Menu(props) {
                         <StopIcon onClick={() => { setRecordOverlay(true) }} />}
                 </li>
             </ul>
-            {recordOverlay ?
+            {recordOverlay &&
                 <>
                     <div id="underlay"></div>
                     <div id="overlay">
@@ -140,8 +140,6 @@ function Menu(props) {
 
                     </div>
                 </>
-                :
-                <> </>
             }
 
         </>
