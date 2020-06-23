@@ -34,7 +34,7 @@ function Menu(props) {
     const loopFunction = useCallback(
         (startLoop) => {
             if (startLoop) {
-                setListeningLooper(new Looper(performance.now(), musicCtrl));
+                setListeningLooper(new Looper());
             } else {
                 listeningLooper.stopRecording(performance.now());
                 setNextLooperID(nextLooperID + 1);
@@ -42,7 +42,7 @@ function Menu(props) {
                 setRunningLoopers(new Map(runningLoopers));
                 setListeningLooper(undefined)
             }
-        }, [musicCtrl, listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
+        }, [listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
     
 
     // set the global state 'overlayIsOpen' to true if an overlay is open
@@ -52,23 +52,18 @@ function Menu(props) {
 
     const playFunction = () => {
         musicCtrl[0].startStopSoundbed()
-        console.log("menu js play Function");
     }
 
     const randomFunction = () => {
         randomNotes.toggleRandomNotes();
-        console.log("menu js random Function");
     }
 
     const recordFunction = () => {
-        musicCtrl.startStopRecorder()
-        console.log("menu js record Function");
+        musicCtrl[0].startStopRecorder()
     }
 
     const downloadFunction = () => {
-        musicCtrl.saveRecording()
-        console.log("menu js download function");
-        window.alert("Your download was successful!");
+        musicCtrl[0].saveRecording()
     }
 
     // KEY BINDINGS
