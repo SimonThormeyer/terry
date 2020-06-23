@@ -16,13 +16,12 @@ function Canvas(props) {
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [randomNotes,] = useGlobalState('randomNotes');
-    const [, setGlobalFunctions] = useGlobalState('canvasFunctions');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [id,] = useGlobalState('canvasId');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
     const [loading, setLoading] = useGlobalState('loading');
+
     // component state
-    const [, setCanvasState] = useState(canvases[id]);
     const [loadingText, setLoadingText] = useState('Loading...');
 
     const mount = useRef(null);
@@ -39,7 +38,6 @@ function Canvas(props) {
         new THREE.PointLight(0x38761D, 0.0, 6000)
     ]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));//BACKGROUND PLANE
-    // const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
@@ -139,7 +137,7 @@ function Canvas(props) {
             listeningLooper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
             listeningLooper.setCanvasId(id);
         }
-        // give canvasClick of this canvas to all loopers
+        // give canvasClick of this canvas to all loopers (needed after loading loopers from DB)
         for (let looper of Array.from(runningLoopers.values())) {
             looper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
         }
@@ -168,7 +166,6 @@ function Canvas(props) {
 
     //Touch on display (mobile/tablet)
     const onTouch = useCallback((event) => {
-        // console.log("touch on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
@@ -178,7 +175,6 @@ function Canvas(props) {
     }, [canvasClick]);
 
     const refreshSpherePositions = useCallback(() => {
-        // let aspectRatio = window.innerWidth / window.innerHeight;
         let posEffect = effectSphere.current.position.clone();
         console.log('speichern. vor Projektion:')
         console.log(posEffect);
@@ -203,10 +199,9 @@ function Canvas(props) {
             }
         }
 
-        setCanvasState(newState);
         canvases[id] = newState;
-        setCanvasState(Array.from(canvases));
-    }, [canvases, id])
+        setCanvases(Array.from(canvases));
+    }, [canvases, id, setCanvases])
 
 
     const effectSphereDrag = useCallback(() => {
@@ -274,22 +269,6 @@ function Canvas(props) {
         // musikSphereDrag();
     }, [canvases, id])//effectSphereDrag, synthSphereDrag, musikSphereDrag])
 
-
-
-    // set global functions
-    useEffect(() => {
-        let giveCanvasClickToLooper = function (looper) {
-            looper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-        }
-
-
-        setGlobalFunctions(Object.assign({
-            'giveCanvasClickToLooper': giveCanvasClickToLooper,
-
-        }))
-    }, [id, canvases, setCanvases, setGlobalFunctions, canvasClick,]);
-    // --> End of global functions
-
     // HANDLE LOSS OF CONTEXT
     useEventListener('webglcontextlost', function (event) {
         event.preventDefault();
@@ -318,33 +297,14 @@ function Canvas(props) {
         renderer.current.setSize(window.innerWidth, window.innerHeight);
         renderer.current.shadowMap.enabled = true;
         mount.current.appendChild(renderer.current.domElement);
-        // renderer.current.getContext().canvas.addEventListener("webglcontextlost", function(event) {
-        //     event.preventDefault();
-        //     // animationID would have been set by your call to requestAnimationFrame
-        //     // cancelAnimationFrame(animationID);
-        //     setLoading(true); 
-        // }, false);
 
-        // renderer.current.getContext().canvas.addEventListener("webglcontextrestored", function(event) {
-        // event.preventDefault();
-        //    setLoading(false); 
-        // }, false);
-
-
-        //SET EFFECT SPHERE START POSITION
-        // effectSphere.current.position.set(0, 0, 0);
+        //EFFECT SPHERE
         scene.current.add(effectSphere.current);
-        // effectSphereDrag();
-
-        //SET SYNTH SPHERE START POSITION
-        // synthSphere.current.position.set(-10, 0, 0);
+        //SYNTH SPHERE
         scene.current.add(synthSphere.current);
-        // synthSphereDrag();
-
-        //SET MUSIK SPHERE START POSITION
-        // musikSphere.current.position.set(10, 0, 0);
+        //MUSIK SPHERE
         scene.current.add(musikSphere.current);
-        // musikSphereDrag();
+        // set all sphere start positions
         loadSpherePositions();
 
         //MOVING LIGHT BLOB ON CLICK
@@ -392,14 +352,14 @@ function Canvas(props) {
         refreshLightIntensity();
 
         function looperLightIntensity() {
-            let x = 3;  // 30 milliseconds
+            let timeout = 30;  // 30 milliseconds
             for (let i = 0; i < looperLights.current.length; i++) {
                 if (looperLights.current[i].intensity > 0.03) {
                     looperLights.current[i].intensity -= 0.03;
                 }
             }
 
-            setTimeout(looperLightIntensity, x * 10);
+            setTimeout(looperLightIntensity, timeout);
         }
         looperLightIntensity();
 
@@ -417,11 +377,10 @@ function Canvas(props) {
         setLoading(false);
 
 
-    }, [loadSpherePositions, canvases, setLoading]);
+    }, [loadSpherePositions, canvases, setLoading]); // ===> End of Creating Scene
 
-    window.addEventListener('resize', onWindowResize, false);
-
-    function onWindowResize() {
+    // event listener for window resize
+    useEventListener('resize', function() { 
 
         camera.current.aspect = window.innerWidth / window.innerHeight;
         camera.current.updateProjectionMatrix();
@@ -430,8 +389,7 @@ function Canvas(props) {
         // loadSpherePositions(canvasState);
         // console.log(`height: ${window.innerHeight}`)
 
-
-    }
+    })
 
     //=================
 
