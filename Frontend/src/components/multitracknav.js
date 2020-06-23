@@ -1,27 +1,23 @@
 import React from 'react';
+import { useGlobalState } from "../GlobalState.js"
 import { ReactComponent as ArrowForward } from '../img/arrow_forward.svg';
 import { ReactComponent as ArrowBack } from '../img/arrow_back.svg';
 
 
 function MultitrackNav(props) {
+    // global
+    const [canvasId, setCanvasId] = useGlobalState('canvasId');
+    const [canvases,] = useGlobalState('canvases');
+    const [loading, ] = useGlobalState('loading');
 
-    // Functions to be filled with functionality to switch canvas for multitracking
-
-    const prevTrack = () => {
-        console.log("switch to previous track");
-    };
-
-    const nextTrack = () => {
-        console.log("switch to next track");
-    };
-
+    let synthesizerNames = ['lows', 'highs', 'mids', 'percussion']
 
     return (
-            <div id="multitrackingNav">
-                <ArrowBack id="arrowBack" onClick={() => { prevTrack() }}/>
-                <span id="synthesizerName">synthesizerName</span>
-                <ArrowForward id="arrowForward" onClick={() => { nextTrack() }}/>
-            </div>
+        <div id="multitrackingNav">
+            {!loading && canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => setCanvasId(canvasId - 1)} />}
+            <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
+            {!loading && canvasId < canvases.length - 1 && <ArrowForward id="arrowForward"onClick={() => setCanvasId(canvasId + 1)} />}
+        </div>
     );
 };
 

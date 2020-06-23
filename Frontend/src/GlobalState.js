@@ -12,14 +12,36 @@ import { RandomNotes } from './components/toneJS/randomNotes/randomNotes';
  Functions that should be available globally can be part of the GlobalState as well.
 */
 
+const initialCanvas = {
+    'effectSphere': {
+        'x': 10,
+        'y': 0,
+    },
+    'synthSphere': {
+        'x': 0, 
+        'y': 0
+    },
+    'musicSphere': {
+        'x': -10,
+        'y': 0
+    }
+}
+
 const initialState = {
     // looper that is currently recording actions
     listeningLooper: undefined,
     // containing all loopers that currently playback recorded actions (or are paused)
     runningLoopers: new Map(),
-    musicCtrl: undefined,
+    musicCtrl: [],
     overlayIsOpen: false,
-    globalFunctions: {},
+    canvases: [
+        Object.assign({"color": 0x76381D}, initialCanvas), // red 
+        Object.assign({"color": 0x38761D}, initialCanvas), // green
+        Object.assign({"color": 0x387676}, initialCanvas), // blue 
+        // Object.assign(initialCanvas)
+    ],
+    canvasId: 0,
+    loading: true, // used to enable or disable certain elements while canvas is loading
     nextLooperId: 1,
     activeHelpDialogue : "",
     randomNotes: new RandomNotes(),

@@ -4,30 +4,16 @@ import { useGlobalState } from "../GlobalState";
 
 function SaveProjectForm(props) {
 
-    const [globalFunctions,] = useGlobalState('globalFunctions');
     const [runningLoopers,] = useGlobalState('runningLoopers');
+    const [canvases, ] = useGlobalState('canvases');
     const [backendUrl,] = useGlobalState('backend_url');
-
-    const getCanvasState = () => {
-        if (globalFunctions.getCanvasState instanceof Function) {
-            return globalFunctions.getCanvasState();
-        }
-    }
-
-    
+  
 
     let getGlobalState = () => {
         let loopers = [];
         for (let looper of Array.from(runningLoopers.values())) {
             loopers.push(looper.getLooper());
         }
-        let canvases = [] 
-        canvases.push(getCanvasState()); // as long as there is only one canvas
-        /* as soon as there is more than 1 canvas:
-        for(let i = 0; i < allCanvases.length; i++){
-            canvases.push(getCanvasState[i]())
-        }
-        */
         return {
             loopers: loopers,
             canvases: canvases
