@@ -2,13 +2,17 @@ FROM node:12
 
 WORKDIR /app
 
-RUN npm install -g nodemon
-
 COPY package.json ./
 
-RUN npm install
-
 RUN rm -rf node_modules
+
+RUN yarn
+
+RUN npm install -g react-scripts
+
+RUN npm install -g nodemon
+
+RUN npm install
 
 RUN npm ci \
  && npm cache clean --force \
@@ -20,4 +24,4 @@ ENV PORT 3000
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["yarn", "run", "start"]

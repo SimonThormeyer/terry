@@ -19,12 +19,10 @@ services:
   app:
     container_name: SoundGroup-Frontend
     image: sg-frontend
-    command: nodemon server.js
+    command: nodemon index.js
     build: ./Frontend/
     ports:
       - "3000:3000"
-    volumes:
-      - ./Frontend:/app
     tty: true
 
   mongo:

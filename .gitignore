@@ -1,4 +1,5 @@
 site-packages/
+yarn.lock
 
 ### Pycharm ###
 */venv/
