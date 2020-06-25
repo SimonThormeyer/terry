@@ -154,7 +154,7 @@ export class Looper {
         let action = (event.type === "canvasClick") ?
             () => { // simulate a click on canvas
                 if (!this.muted) { // do nothing on canvas if looper is muted
-                    this._simulateCanvasClick([event.x, event.y])
+                    this._simulateCanvasClick([event.x, event.y], this.canvasID);
                 }
             } : //event.type == dotShift: simulate a shift of an effectDot 
             () => {

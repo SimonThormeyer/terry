@@ -13,3 +13,15 @@ services:
     volumes:
       # code change detection - no need to rebuild image for container
       - .:/code
+
+# For development build without Frontend, mongo is added here in the docker-compose file
+  mongo:
+      container_name: SoundGroup-MongoDB
+      image: mongo
+      volumes:
+        - mongodata:/usr/share/mongodb/data
+      ports:
+        - "27017:27017"
+
+volumes:
+  mongodata:

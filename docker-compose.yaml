@@ -9,9 +9,10 @@ services:
       - "5000:5000"
     env_file:
       - ./Backend/.env
-    environment: 
-      - WAIT_HOSTS=mongo:27017
-      - MONGO_HOST=mongo  
+    environment:
+      - FLASK_APP=Backend/api/__init__.py
+#      - WAIT_HOSTS=mongo:27017
+#      - MONGO_HOST=mongo
     volumes:
       - .:/code
 

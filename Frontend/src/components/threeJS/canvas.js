@@ -7,25 +7,22 @@ function Canvas(props) {
 
     //HOW TO GET CANVAS INFO
     /**
-     * const [globalFunctions] = useGlobalState('globalFunctions');
-     * a way to get the data of the canvas
-     *  const CallCanvasState = () => {
-        if (globalFunctions.getCanvasState instanceof Function) {
-          console.log(
-            globalFunctions.getCanvasState());
-        }
-    }
+     * const [canvases] = useGlobalState('canvases');
+     * canvases[canvasId]
      */
 
     // global state 
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [listeningLooper,] = useGlobalState('listeningLooper');
-    const [globalFunctions, setGlobalFunctions] = useGlobalState('globalFunctions');
+    const [runningLoopers,] = useGlobalState('runningLoopers');
+    const [randomNotes,] = useGlobalState('randomNotes');
+    const [canvases, setCanvases] = useGlobalState('canvases');
+    const [id,] = useGlobalState('canvasId');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
+    const [loading, setLoading] = useGlobalState('loading');
 
     // component state
-    const [width,] = useState(window.innerWidth);
-    const [height,] = useState(window.innerHeight);
+    const [loadingText, setLoadingText] = useState('Loading...');
 
     const mount = useRef(null);
 
@@ -41,7 +38,6 @@ function Canvas(props) {
         new THREE.PointLight(0x38761D, 0.0, 6000)
     ]);
     const plane = useRef(new THREE.PlaneBufferGeometry(window.innerWidth, window.innerHeight));//BACKGROUND PLANE
-    // const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const materialBackground = useRef(new THREE.MeshPhongMaterial({ color: 0xFFFFFF, dithering: true }));
     const background = useRef(new THREE.Mesh(plane.current, materialBackground.current));
     const camera = useRef(new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000));//CAMERA
@@ -51,7 +47,10 @@ function Canvas(props) {
     const spotLightMusic = useRef(createSpotlight(0xD970A7));//ATMOSPHERE SPOT LIGHT
     const spotLightEffect = useRef(createSpotlight(0xF9CB9C));//ATMOSPHERE SPOT LIGHT
     const sportLightSynth = useRef(createSpotlight(0x9FC5E8));//ATMOSPHERE SPOT LIGHT
-    const renderer = useRef(new THREE.WebGLRenderer({ alpha: true }));//RENDERER
+    const renderer = useRef(new THREE.WebGLRenderer({
+        alpha: false,
+    }));//RENDERER
+    const animationFrame = useRef(null);
 
     // MOVING EFFEKT
     let geometryEffect = new THREE.SphereGeometry(1, 32, 32);
@@ -82,24 +81,26 @@ function Canvas(props) {
         return newObj;
     }
 
+    // change background color accoring to canvasID
+    // useEffect(()=> {
+    //     materialBackground.current.color.set(canvases[id].color)
+    // },[id, canvases])
 
-    const canvasClick = useCallback((value, playback = false) => {
-
-        // give canvasClick to Looper => possibly better in a useEffect
-        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
-            listeningLooper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-        }
-        mouse.current.x = (value[0]) * 2 - 1;
-        mouse.current.y = -(value[1]) * 2 + 1;
+    const canvasClick = useCallback((coordinates, canvasId = id, playback = false) => {
+        mouse.current.x = (coordinates[0]) * 2 - 1;
+        mouse.current.y = -(coordinates[1]) * 2 + 1;
 
         raycaster.current.setFromCamera(mouse.current, camera.current);
 
         let toIntersect = [background.current];
         let intersections = raycaster.current.intersectObjects(toIntersect);
-        if (playback) {
+        if (playback && (canvasId === id)) {
             looperLights.current[counter.current].position.x = intersections[0].point.x;
             looperLights.current[counter.current].position.y = intersections[0].point.y;
+            // set light color depending on canvasId
+            // looperLights.current[counter.current].color.set( canvases[canvasId].color); 
             looperLights.current[counter.current].intensity = 0.5;
+
             // more elegant: use modulo instead of if / else
             if (counter.current >= looperLights.current.length - 1) {
                 counter.current = 0;
@@ -108,26 +109,48 @@ function Canvas(props) {
                 counter.current++;
             }
 
-        } else {
+        } else if (!playback) {
             //Changing lightForRegularClick position and brightness
             lightForRegularClick.current.position.x = intersections[0].point.x;
             lightForRegularClick.current.position.y = intersections[0].point.y;
             lightForRegularClick.current.intensity = 0.3;
         }
 
-        musicCtrl.triggerSynth(value[0], value[1]);
+        musicCtrl[canvasId].triggerSynth(coordinates[0], coordinates[1]);
 
         if (listeningLooper && !playback) {
             listeningLooper.addEvents(
                 {
                     timestamp: performance.now(),
                     type: "canvasClick",
-                    x: value[0],
-                    y: value[1]
+                    x: coordinates[0],
+                    y: coordinates[1]
                 }
             )
         }
-    }, [musicCtrl, listeningLooper]); // ==> End of canvasClick
+    }, [id, musicCtrl, listeningLooper]); // ==> End of canvasClick
+
+    // give canvasClick to Looper and set ID to current canvas ID
+    useEffect(() => {
+        if (!musicCtrl[id]) return;
+        if (listeningLooper && !listeningLooper._simulateCanvasClick) {
+            listeningLooper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
+            listeningLooper.setCanvasId(id);
+        }
+        // give canvasClick of this canvas to all loopers (needed after loading loopers from DB)
+        for (let looper of Array.from(runningLoopers.values())) {
+            looper._simulateCanvasClick = (coordinates, canvasId, playback = true) => canvasClick(coordinates, canvasId, playback);
+        }
+
+    }, [runningLoopers, listeningLooper, musicCtrl, id, canvasClick]);
+
+    //give Canvas Click to randomNotes-Object
+    useEffect(() => {
+        if (!musicCtrl[id]) return;
+        if (randomNotes && !randomNotes._simulateCanvasClick) {
+            randomNotes._simulateCanvasClick = (coordinates, canvasId = id, playback = true) => canvasClick(coordinates, canvasId, playback);
+        };
+    }, [randomNotes, musicCtrl, id, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
@@ -143,7 +166,6 @@ function Canvas(props) {
 
     //Touch on display (mobile/tablet)
     const onTouch = useCallback((event) => {
-        // console.log("touch on canvas");
         event.preventDefault();
         if (!dragging.current) {
             // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
@@ -152,31 +174,59 @@ function Canvas(props) {
         }
     }, [canvasClick]);
 
+    const refreshSpherePositions = useCallback(() => {
+        let posEffect = effectSphere.current.position.clone();
+        console.log('speichern. vor Projektion:')
+        console.log(posEffect);
+
+        console.log('speichern. nach Projektion:')
+        console.log(posEffect);
+        let posSynth = synthSphere.current.position.clone();
+        let posMusic = musikSphere.current.position.clone();
+
+        let newState = {
+            'effectSphere': {
+                'x': posEffect.x,
+                'y': posEffect.y,
+            },
+            'synthSphere': {
+                'x': posSynth.x,
+                'y': posSynth.y
+            },
+            'musicSphere': {
+                'x': posMusic.x,
+                'y': posMusic.y
+            }
+        }
+
+        canvases[id] = newState;
+        setCanvases(Array.from(canvases));
+    }, [canvases, id, setCanvases])
+
 
     const effectSphereDrag = useCallback(() => {
-        if (!musicCtrl) return;
+        if (!musicCtrl[id]) return;
         camera.current.updateMatrixWorld();
         let pos = effectSphere.current.position.clone();
-        console.log( " drag position " +pos.x);
         pos.project(camera.current);
-        musicCtrl.setParameterEffect(pos.x, pos.y)
-    }, [musicCtrl]);
+        musicCtrl[id].setParameterEffect(pos.x, pos.y)
+    }, [id, musicCtrl]);
 
     const synthSphereDrag = useCallback(() => {
-        if (!musicCtrl) return;
+        if (!musicCtrl[id]) return;
         camera.current.updateMatrixWorld();
         let pos = synthSphere.current.position.clone();
         pos.project(camera.current);
-        musicCtrl.setParameterSynth((pos.x), (pos.y))
-    }, [musicCtrl]);
+        musicCtrl[id].setParameterSynth((pos.x), (pos.y))
+    }, [id, musicCtrl]);
 
     const musikSphereDrag = useCallback(() => {
-        if (!musicCtrl) return;
+        if (!musicCtrl[id]) return;
         camera.current.updateMatrixWorld();
         let pos = musikSphere.current.position.clone();
         pos.project(camera.current);
-        musicCtrl.setParameterMusic(pos.x, pos.y)
-    }, [musicCtrl]);
+        musicCtrl[id].setParameterMusic(pos.x, pos.y)
+    }, [id, musicCtrl]);
 
     const dragStart = useCallback((event) => {
         dragging.current = true;
@@ -202,87 +252,60 @@ function Canvas(props) {
     const dragEnd = useCallback((event) => {
         dragging.current = false;
         event.object.material.emissive.set(0x000000);
-    }, []);
+        refreshSpherePositions();
+
+    }, [refreshSpherePositions]);
     useEventListener('dragend', dragEnd, controls.current);
 
-    // set global functions
-    useEffect(() => {
-        let getCanvasState = function () {
-            let posEffect = effectSphere.current.position.clone();
 
-            let posSynth = synthSphere.current.position.clone();
+    const loadSpherePositions = useCallback(() => {
+        effectSphere.current.position.set(canvases[id].effectSphere.x, canvases[id].effectSphere.y, 0);
+        synthSphere.current.position.set(canvases[id].synthSphere.x, canvases[id].synthSphere.y, 0);
+        musikSphere.current.position.set(canvases[id].musicSphere.x, canvases[id].musicSphere.y, 0);
+        // console.log(musikSphere.current.position.clone())
+        // console.log(window.innerWidth)
+        // effectSphereDrag();
+        // synthSphereDrag();
+        // musikSphereDrag();
+    }, [canvases, id])//effectSphereDrag, synthSphereDrag, musikSphereDrag])
 
-            let posMusic = musikSphere.current.position.clone();
-            return {
-                'effectSphere': {
-                    'x': posEffect.x/window.innerWidth,
-                    'y': posEffect.y/window.innerHeight
-                },
-                'synthSphere': {
-                    'x': posSynth.x/window.innerWidth,
-                    'y': posSynth.y/window.innerHeight
-                },
-                'musicSphere': {
-                    'x': posMusic.x/window.innerWidth,
-                    'y': posMusic.y/window.innerHeight
-                }
-            }
-        }
+    // HANDLE LOSS OF CONTEXT
+    useEventListener('webglcontextlost', function (event) {
+        event.preventDefault();
+        setLoadingText('Please wait: WebGL-Context lost. Context is being restored. Change tracks less frequently to prevent this...');
+        setLoading(true);
+        cancelAnimationFrame(animationFrame.current);
+    }, renderer.current.getContext().canvas)
 
-        let giveCanvasClickToLooper = function (looper) {
-            looper._simulateCanvasClick = (value, playback = true) => canvasClick(value, playback);
-        }
+    useEventListener('webglcontextrestored', function (event) {
+        setLoading(false);
+    }, renderer.current.getContext().canvas)
 
-        let loadCanvasState = function (canvas) {
-            if (!canvas) return;
-            effectSphere.current.position.set(canvas.effectSphere.x * window.innerWidth, canvas.effectSphere.y * window.innerHeight, 0);
-            synthSphere.current.position.set(canvas.synthSphere.x * window.innerWidth, canvas.synthSphere.y * window.innerHeight, 0);
-            musikSphere.current.position.set(canvas.musicSphere.x * window.innerWidth, canvas.musicSphere.y * window.innerHeight, 0);
-            effectSphereDrag();
-            synthSphereDrag();
-            musikSphereDrag();
-
-
-        }
-
-        setGlobalFunctions(Object.assign(globalFunctions, {
-            'getCanvasState': getCanvasState,
-            'giveCanvasClickToLooper': giveCanvasClickToLooper,
-            'loadCanvasState': loadCanvasState
-
-        }))
-    }, [globalFunctions, setGlobalFunctions, canvasClick, effectSphereDrag, synthSphereDrag, musikSphereDrag]);
-    // --> End of global functions
 
     //CREATING SCENE
     useEffect(() => {
+        setLoading(true);
 
         //SET CAMERA
-        camera.current.position.z = 30;
+        camera.current.position.z = 40;
         camera.current.updateMatrixWorld();
 
         //SCENE LIGHT
         scene.current.add(ambient.current);
 
         //SET RENDERER
-        renderer.current.setSize(width, height);
+        renderer.current.setSize(window.innerWidth, window.innerHeight);
         renderer.current.shadowMap.enabled = true;
         mount.current.appendChild(renderer.current.domElement);
 
-        //SET EFFECT SPHERE START POSITION
-        effectSphere.current.position.set(0, 0, 0);
+        //EFFECT SPHERE
         scene.current.add(effectSphere.current);
-        effectSphereDrag();
-
-        //SET SYNTH SPHERE START POSITION
-        synthSphere.current.position.set(-10, 0, 0);
+        //SYNTH SPHERE
         scene.current.add(synthSphere.current);
-        synthSphereDrag();
-
-        //SET MUSIK SPHERE START POSITION
-        musikSphere.current.position.set(10, 0, 0);
+        //MUSIK SPHERE
         scene.current.add(musikSphere.current);
-        musikSphereDrag();
+        // set all sphere start positions
+        loadSpherePositions();
 
         //MOVING LIGHT BLOB ON CLICK
         lightForRegularClick.current.position.set(0, 0, 0);
@@ -329,58 +352,62 @@ function Canvas(props) {
         refreshLightIntensity();
 
         function looperLightIntensity() {
-            let x = 3;  // 30 milliseconds
+            let timeout = 30;  // 30 milliseconds
             for (let i = 0; i < looperLights.current.length; i++) {
                 if (looperLights.current[i].intensity > 0.03) {
                     looperLights.current[i].intensity -= 0.03;
                 }
             }
 
-            setTimeout(looperLightIntensity, x * 10);
+            setTimeout(looperLightIntensity, timeout);
         }
         looperLightIntensity();
 
         //================================================
-        var animate = function () { // why is this a function?
-            requestAnimationFrame(animate);
-            effectSphere.current.rotation.x += 0.01;
-            effectSphere.current.rotation.y += 0.01;
+        var animate = function () {
+            animationFrame.current = requestAnimationFrame(animate);
+            // effectSphere.current.rotation.x += 0.01;
+            // effectSphere.current.rotation.y += 0.01;
             renderer.current.render(scene.current, camera.current);
 
 
         };
 
         animate();
+        setLoading(false);
 
 
-}, [mount, height, width, effectSphereDrag, musikSphereDrag, synthSphereDrag]);
+    }, [loadSpherePositions, canvases, setLoading]); // ===> End of Creating Scene
 
-    window.addEventListener( 'resize', onWindowResize, false );
-
-    function onWindowResize(){
+    // event listener for window resize
+    useEventListener('resize', function() { 
 
         camera.current.aspect = window.innerWidth / window.innerHeight;
         camera.current.updateProjectionMatrix();
 
-        renderer.current.setSize( window.innerWidth, window.innerHeight );
+        renderer.current.setSize(window.innerWidth, window.innerHeight);
+        // loadSpherePositions(canvasState);
+        // console.log(`height: ${window.innerHeight}`)
 
-    }
+    })
 
     //=================
 
     let clicks = 0;
     return (
-        <div id="canvas"
-            onClick={() => {
-                if (activeHelpDialogue === "canvas") { setActiveHelpDialogue("effects") };
-                /* Fake listen on effect button movement for help dialogue */
-                if (activeHelpDialogue === "effects") { clicks = clicks + 1 };
-                if (activeHelpDialogue === "effects" && clicks === 2) { setActiveHelpDialogue("loop") };
-            }}
+    <> {loading && <div>{loadingText}</div>}
+            <div id="canvas"
+                onClick={() => {
+                    if (activeHelpDialogue === "canvas") { setActiveHelpDialogue("effects") };
+                    /* Fake listen on effect button movement for help dialogue */
+                    if (activeHelpDialogue === "effects") { clicks = clicks + 1 };
+                    if (activeHelpDialogue === "effects" && clicks === 2) { setActiveHelpDialogue("loop") };
+                }}
 
-            style={{ width: 'window.innerWidth', height: 'window.innerHeight' }}
-            ref={mount} onMouseDown={onMouseClick} onTouchStart={onTouch}
-        />
+                style={loading ? { display: 'none' } : { width: 'window.innerWidth', height: 'window.innerHeight' }}
+                ref={mount} onMouseDown={onMouseClick} onTouchStart={onTouch}
+            />
+        </>
     )
 }
 

@@ -16,7 +16,7 @@ function StartOverlay() {
     }, [startOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        setMusicCtrl(new MusicCtrl());
+        setMusicCtrl([new MusicCtrl(), new MusicCtrl(), new MusicCtrl()]);
     }
 
     const helpFunction = () => {
