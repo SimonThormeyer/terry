@@ -14,6 +14,8 @@ function MultitrackNav(props) {
 
     return (
         <div id="multitrackingNav">
+            {canvasId > 0 && <button onClick={() => setCanvasId(canvasId - 1)}> {"<<"}  </button>}
+            { canvasId < canvases.length - 1 &&<button onClick={() => setCanvasId(canvasId + 1)}> {">>"}  </button>}
             {!loading && canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => setCanvasId(canvasId - 1)} />}
             <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
             {!loading && canvasId < canvases.length - 1 && <ArrowForward id="arrowForward"onClick={() => setCanvasId(canvasId + 1)} />}
