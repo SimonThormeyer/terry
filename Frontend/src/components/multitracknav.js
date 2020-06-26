@@ -10,7 +10,7 @@ function MultitrackNav(props) {
     const [canvases,] = useGlobalState('canvases');
     const [loading, ] = useGlobalState('loading');
 
-    let synthesizerNames = ['lows', 'highs', 'mids', 'percussion']
+    let synthesizerNames = ['Marimba', 'Synth1', 'mids', 'percussion']
 
     return (
         <div id="multitrackingNav">

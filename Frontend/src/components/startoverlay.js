@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState";
 import { MusicCtrl } from "../components/toneJS/musicCtrl"
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
+import {Marimba} from "./toneJS/Marimba";
 
 function StartOverlay() {
 
@@ -16,7 +17,7 @@ function StartOverlay() {
     }, [startOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        setMusicCtrl([new MusicCtrl(), new MusicCtrl(), new MusicCtrl()]);
+        setMusicCtrl([new Marimba(), new MusicCtrl(), new MusicCtrl()]);
     }
 
     const helpFunction = () => {
