@@ -8,15 +8,11 @@ RUN rm -rf node_modules
 
 RUN yarn
 
-RUN npm install -g react-scripts
+RUN yarn global add react-scripts
 
-RUN npm install -g nodemon
+RUN yarn global add nodemon
 
-RUN npm install
-
-RUN npm ci \
- && npm cache clean --force \
- && mv /app/node_modules /node_modules
+RUN yarn install
 
 COPY . .
 
