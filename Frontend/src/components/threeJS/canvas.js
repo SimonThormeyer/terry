@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { Canvas, useThree, useFrame } from 'react-three-fiber'
 import { useGlobalState } from "../../GlobalState.js"
-// import useEventListener from "../../UseEventListener";
 import Dot from './Dot'
 function Scene(props) {
 
@@ -17,17 +16,11 @@ function Scene(props) {
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [randomNotes,] = useGlobalState('randomNotes');
-    // const [canvases, setCanvases] = useGlobalState('canvases');
     const [id,] = useGlobalState('canvasId');
-    // const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
-
-    // component state
-    // const [loadingText, setLoadingText] = useState('Loading...');
-
 
     // THREE-Objects
-    const { camera, raycaster } = useThree();
-    // const dragging = useRef(false);
+    const { camera, raycaster, } = useThree();
+    // const aspect = size.width / viewport.width;
     const mouse = useRef(new THREE.Vector2());
     const lightForRegularClick = useRef();
     const looperLights = [useRef(), useRef(), useRef(), useRef()];
@@ -37,14 +30,10 @@ function Scene(props) {
     const synthSphere = useRef();//SYNTH SPHERE DOT
     const musicSphere = useRef();//MUSIK SPHERE DOT
 
-    // change background color accoring to canvasID
-    // useEffect(()=> {
-    //     materialBackground.current.color.set(canvases[id].color)
-    // },[id, canvases])
-
     const canvasClick = useCallback((coordinates, canvasId = id, playback = false) => {
         mouse.current.x = (coordinates[0]) * 2 - 1;
         mouse.current.y = -(coordinates[1]) * 2 + 1;
+        // x / aspect, -y / aspect
 
         raycaster.setFromCamera(mouse.current, camera);
 
@@ -111,15 +100,14 @@ function Scene(props) {
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
         // if anything more than the background is intersected, don't do anything
-        if(event.intersections.length > 1) return; 
+        if (event.intersections.length > 1) return;
         // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
         canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
         // }
     }, [canvasClick]);
 
-
-
-    //Touch on display (mobile/tablet)
+    // -> use useGesture() for all the click events -> native touch support
+    //Touch on display (mobile/tablet) 
     // const onTouch = useCallback((event) => {
     //     event.preventDefault();
     //     // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
@@ -127,18 +115,6 @@ function Scene(props) {
 
     //     // }
     // }, [canvasClick]);
-
-
-    // HANDLE LOSS OF CONTEXT
-    // useEventListener('webglcontextlost', function (event) {
-    //     event.preventDefault();
-    //     setLoadingText('Please wait: WebGL-Context lost. Context is being restored. Change tracks less frequently to prevent this...');
-    //     setLoading(true);
-    // }, gl.getContext().canvas)
-
-    // useEventListener('webglcontextrestored', function (event) {
-    //     setLoading(false);
-    // }, gl.getContext().canvas)
 
     // make lights disappear over time
     useFrame(() => {
@@ -148,27 +124,8 @@ function Scene(props) {
         }
     });
 
-
-    // let clicks = 0;
     return (
-        <group
-        // onClick={onMouseClick}
-        // onTouchStart={onTouch}
-        // style={loading ? { display: 'none' } : {}}
-        >
-            {/* {loading && <div>{loadingText}</div>} */}
-            {/* <div id="canvas"
-                onClick={() => {
-                    if (activeHelpDialogue === "canvas") { setActiveHelpDialogue("effects") };
-                    // Fake listen on effect button movement for help dialogue 
-                    if (activeHelpDialogue === "effects") { clicks = clicks + 1 };
-                    if (activeHelpDialogue === "effects" && clicks === 2) { setActiveHelpDialogue("loop") };
-                }}
-
-                style={loading ? { display: 'none' } : { width: 'window.innerWidth', height: 'window.innerHeight' }}
-                ref={mount} onMouseDown={onMouseClick} onTouchStart={onTouch}
-            />  */}
-
+        <>
             <ambientLight color='white' intensity={0.6} />
             <mesh
                 ref={background}
@@ -180,21 +137,9 @@ function Scene(props) {
                 <meshPhongMaterial attach="material" color='white' />
             </mesh>
 
-            <Dot // Effect Dot
-                ref={effectSphere}
-                name="effectSphere"
-                color={0xF9CB9C}
-            />
-            <Dot // Synth Dot
-                ref={synthSphere}
-                name="synthSphere"
-                color={0x9FC5E8}
-            />
-            <Dot // Music Dot
-                ref={musicSphere}
-                name="musicSphere"
-                color={0xD970A7}
-            />
+            <Dot ref={effectSphere} name="effectSphere" color={0xF9CB9C} />
+            <Dot ref={synthSphere} name="synthSphere" color={0x9FC5E8} />
+            <Dot ref={musicSphere} name="musicSphere" color={0xD970A7} />
             <spotLight // Music
                 target={musicSphere.current}
                 color='#D970A7'
@@ -233,7 +178,7 @@ function Scene(props) {
             <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[1]} />
             <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[2]} />
             <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[3]} />
-        </group>
+        </>
     )
 }
 
@@ -242,7 +187,7 @@ function Cnvs() {
         <Canvas
             camera={{
                 position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
-                aspect: window.innerWidth / window.innerHeight,
+                aspect: window.innerWidth / window.innerHeight, // 16 / 9 ??
             }}
         >
             <Scene />

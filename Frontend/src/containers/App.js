@@ -1,4 +1,4 @@
-import Canvas from '../components/threeJS/Canvas';
+import Canvas from '../components/threeJS/canvas';
 import Menu from '../components/menu'
 import React from 'react';
 import Loopcontrols from "./loopcontrols";
