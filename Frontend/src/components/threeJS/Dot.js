@@ -19,21 +19,6 @@ const Dot = forwardRef((props, ref) => {
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 
-    // method called when position changes (e.g.) on drag event
-    const changeParameters = useCallback(() => {
-        if (!musicCtrl[canvasId]) return;
-        camera.updateMatrixWorld();
-        let pos = ref.current.position.clone();
-        pos.project(camera);
-        if (props.name === 'effectSphere') {
-            musicCtrl[canvasId].setParameterEffect(pos.x, pos.y);
-        } else if (props.name === 'synthSphere') {
-            musicCtrl[canvasId].setParameterSynth(pos.x, pos.y);
-        } else if (props.name === 'musicSphere') {
-            musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
-        }
-    }, [camera, canvasId, musicCtrl, props.name, ref])
-
     // when canvas changes, change position accordingly
     useEffect(() => {
         setPosition([
@@ -41,8 +26,7 @@ const Dot = forwardRef((props, ref) => {
             canvases[canvasId][props.name].y,
             0
         ])
-        changeParameters();
-    }, [canvasId, canvases, props.name, changeParameters])
+    }, [canvasId, canvases, props.name])
 
     // drag event handlers bound to the mesh
     const bind = useGesture({
@@ -70,6 +54,21 @@ const Dot = forwardRef((props, ref) => {
             setCanvases(newCanvases);
         }
     }, { pointerEvents: true, eventOptions: { capture: true } });
+
+        // method called when position changes (e.g.) on drag event
+        const changeParameters = useCallback(() => {
+            if (!musicCtrl[canvasId]) return;
+            camera.updateMatrixWorld();
+            let pos = ref.current.position.clone();
+            pos.project(camera);
+            if (props.name === 'effectSphere') {
+                musicCtrl[canvasId].setParameterEffect(pos.x, pos.y);
+            } else if (props.name === 'synthSphere') {
+                musicCtrl[canvasId].setParameterSynth(pos.x, pos.y);
+            } else if (props.name === 'musicSphere') {
+                musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
+            }
+        }, [camera, canvasId, musicCtrl, props.name, ref])
 
     return (
         <mesh
