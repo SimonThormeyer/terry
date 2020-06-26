@@ -54,7 +54,7 @@ export class IsomorphicLayout {
 
         //switch(mood){
         //    case major:
-                this.scales = [this.fourth, this.major6, this.penta1, this.lydian];
+        this.scales = [this.fourth, this.major6, this.penta1, this.lydian];
         //    break;
         //    case minor:
         //        this.scales = [this.minor7, this.minor6, this.penta2, this.dorian]
@@ -77,6 +77,13 @@ export class IsomorphicLayout {
     }
 
     coordinateToNote(valueX, valueY) {
+
+        // checking if values are in range
+        valueX = valueX > 1 ? 1 : valueX
+        valueX = valueX < 0 ? 0 : valueX
+        valueY = valueY > 1 ? 1 : valueY
+        valueY = valueY < 0 ? 0 : valueY
+
         // swapping X&Y to map values to scale
         this.coordY = valueX
         this.coordX = valueY
@@ -96,13 +103,13 @@ export class IsomorphicLayout {
     }
 
     changeOctave(value) {
-        let normalizeInvertedValue = 1 - (value + 1)/2;
+        let normalizeInvertedValue = 1 - (value + 1) / 2;
         let highestNoteInArray = Math.round(normalizeInvertedValue * 5);
         let n = 0;
-        if(this.controlValue !== highestNoteInArray) {
+        if (this.controlValue !== highestNoteInArray) {
             this.controlValue = highestNoteInArray;
-            for(let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
-                this.currentArray[n] = this.scale[i]; 
+            for (let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
+                this.currentArray[n] = this.scale[i];
                 n++;
             }
         }
