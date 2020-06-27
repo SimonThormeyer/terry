@@ -131,19 +131,16 @@ function Scene(props) {
             looperLights[i].current.intensity = Math.max(0, looperLights[i].current.intensity - .1)
         }
     });
-
-
-
-    const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), [canvasBackground1]);
-    const texture2 = new TextureLoader().load(canvasBackground2);
-    const texture3 = new TextureLoader().load(canvasBackground3);
+    // texture for backgroundimage
+    const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), []);
+    const texture2 = useMemo(() => new TextureLoader().load(canvasBackground2), []);
+    const texture3 = useMemo(() => new TextureLoader().load(canvasBackground3), []);
 
     texture1.wrapS = RepeatWrapping;
     texture1.wrapT = RepeatWrapping;
     texture1.offset.set(0.5, 0.4);
     texture1.repeat.set(22, 22);
     //texture1.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
-
 
     texture2.wrapS = RepeatWrapping;
     texture2.wrapT = RepeatWrapping;
