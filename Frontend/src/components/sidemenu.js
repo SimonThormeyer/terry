@@ -15,7 +15,6 @@ import { useGlobalState } from "../GlobalState";
 
 
 
-
 function SideMenu() {
 
     //global 
@@ -39,7 +38,7 @@ function SideMenu() {
     // set the global state 'overlayIsOpen' to true if an overlay is open
     useEffect(() => {
         setOverlayIsOpen(saveOverlay || openOverlay || recordOverlay);
-    }, [saveOverlay, openOverlay, setOverlayIsOpen, recordOverlay])
+    }, [saveOverlay, openOverlay, recordOverlay, setOverlayIsOpen])
 
 
 
@@ -111,7 +110,7 @@ function SideMenu() {
                 <div id="sideMenuIcons">
                     {record ?
                         <RecordIcon id="recordbutton" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> :
-                        <RecordStopIcon id="stoprecordbutton" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true) }} />}
+                        <RecordStopIcon id="stoprecordbutton" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />}
                     {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
                         {openSaveHelpIcon && !record ?
                         <>

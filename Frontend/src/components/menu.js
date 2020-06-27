@@ -67,21 +67,14 @@ function Menu(props) {
     
     return (
         <>
-            <ul id="menu">
-                <li id="randombutton" onClick={() => { setRandom(!random); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") }}}>
-                    {random ?
-                        <RandomIcon /> :
-                        <PauseIcon />}
-                </li>
-                <li id="loopbutton" onClick={() => {
-                    loopFunction(loop);
-                    setLoop(!loop);
-                }}>
-                    {loop ?
-                        <LooperIcon /> :
-                        <StopIcon onClick={() => { if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") }}}  />}
-                </li>
-            </ul>
+            <div id="menu">
+                {loop ?
+                    <LooperIcon id="loopbutton" onClick={() => { loopFunction(loop); setLoop(!loop); }} /> :
+                    <StopIcon id="loopbutton" onClick={() => { loopFunction(loop); setLoop(!loop); if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") } }} />}
+                {random ?
+                    <RandomIcon id="randombutton" onClick={() => { setRandom(false); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }} /> :
+                    <PauseIcon id="randombutton" onClick={() => { setRandom(true); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }}/>}
+            </div>
 
         </>
     );
