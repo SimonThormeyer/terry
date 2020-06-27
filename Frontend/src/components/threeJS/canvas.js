@@ -1,9 +1,17 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo } from 'react';
 import * as THREE from 'three';
 import { Canvas, useThree, useFrame } from 'react-three-fiber'
 import { useGlobalState } from "../../GlobalState.js"
 import Dot from './Dot'
+
+import canvasBackground1 from "../../img/canvasBackground1.png";
+import canvasBackground2 from "../../img/canvasBackground2.png";
+import canvasBackground3 from "../../img/canvasBackground3.png";
+import { TextureLoader, RepeatWrapping } from 'three';
+
+
 function Scene(props) {
+
 
     //HOW TO GET CANVAS INFO
     /**
@@ -124,9 +132,31 @@ function Scene(props) {
         }
     });
 
+
+
+    const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), [canvasBackground1]);
+    const texture2 = new TextureLoader().load(canvasBackground2);
+    const texture3 = new TextureLoader().load(canvasBackground3);
+
+    texture1.wrapS = RepeatWrapping;
+    texture1.wrapT = RepeatWrapping;
+    texture1.offset.set(0.5, 0.4);
+    texture1.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+
+    texture2.wrapS = RepeatWrapping;
+    texture2.wrapT = RepeatWrapping;
+    texture2.offset.set(0.5, 0.4);
+    texture2.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+
+    texture3.wrapS = RepeatWrapping;
+    texture3.wrapT = RepeatWrapping;
+    texture3.offset.set(0.5, 0.4);
+    texture3.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+
+
     return (
         <>
-            <ambientLight color='white' intensity={0.6} />
+            <ambientLight color='white' intensity={0.8} />
             <mesh
                 ref={background}
                 position={[0, -5, -1]}
@@ -134,7 +164,15 @@ function Scene(props) {
                 onClick={onMouseClick}
             >
                 <planeBufferGeometry attach="geometry" args={[window.innerWidth, window.innerHeight]} />
-                <meshPhongMaterial attach="material" color='white' />
+                {id === 0 &&
+                    <meshPhongMaterial attach="material" map={texture1} />
+                }
+                {id === 1 &&
+                    <meshPhongMaterial attach="material" map={texture2} />
+                }
+                {id === 2 &&
+                    <meshPhongMaterial attach="material" map={texture3} />
+                }
             </mesh>
 
             <Dot ref={effectSphere} name="effectSphere" color={0xF9CB9C} />
