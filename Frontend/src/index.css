@@ -275,38 +275,53 @@ canvas {
   z-index: 999999999999999;
 }
 
-#openIcon {
-  animation: openIconAnimation 0.3s ease;
+#recordbutton {
+  animation: recordbuttonAnimation 0.3s ease;
 }
 
-@keyframes openIconAnimation {
+@keyframes recordbuttonAnimation {
   from {
     opacity: 0;
     margin-top: -2vw;
   }
 }
 
-#saveIcon {
-  animation: saveIconAnimation 0.3s ease;
+#openIcon {
+  animation: openIconAnimation 0.3s ease;
   margin-top: 4vw;
+  transition: 0.5s ease;
 }
 
-@keyframes saveIconAnimation {
+@keyframes openIconAnimation {
   from {
     opacity: 0;
     margin-top: 0vw;
   }
 }
 
+#saveIcon {
+  animation: saveIconAnimation 0.3s ease;
+  margin-top: 8vw;
+  transition: 0.5s ease;
+}
+
+@keyframes saveIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 2vw;
+  }
+}
+
 #helpIcon {
   animation: helpIconAnimation 0.3s ease;
-  margin-top: 8vw;
+  margin-top: 12vw;
+  transition: 0.5s ease;
 }
 
 @keyframes helpIconAnimation {
   from {
     opacity: 0;
-    margin-top: 2vw;
+    margin-top: 4vw;
   }
 }
 
