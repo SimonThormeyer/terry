@@ -8,15 +8,14 @@ function MultitrackNav(props) {
     // global
     const [canvasId, setCanvasId] = useGlobalState('canvasId');
     const [canvases,] = useGlobalState('canvases');
-    const [loading, ] = useGlobalState('loading');
 
     let synthesizerNames = ['Marimba', 'Synth1', 'mids', 'percussion']
 
     return (
         <div id="multitrackingNav">
-            {!loading && canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => setCanvasId(canvasId - 1)} />}
+            {canvasId > 0 && <ArrowBack id="arrowBack" onClick={() => setCanvasId(canvasId - 1)} />}
             <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
-            {!loading && canvasId < canvases.length - 1 && <ArrowForward id="arrowForward"onClick={() => setCanvasId(canvasId + 1)} />}
+            {canvasId < canvases.length - 1 && <ArrowForward id="arrowForward"onClick={() => setCanvasId(canvasId + 1)} />}
         </div>
     );
 };
