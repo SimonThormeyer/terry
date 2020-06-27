@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { Canvas, useThree, useFrame } from 'react-three-fiber'
 import { useGlobalState } from "../../GlobalState.js"
 import Dot from './Dot'
-
 import canvasBackground1 from "../../img/canvasBackground1.png";
 import canvasBackground2 from "../../img/canvasBackground2.png";
 import canvasBackground3 from "../../img/canvasBackground3.png";
@@ -132,8 +131,6 @@ function Scene(props) {
         }
     });
 
-
-
     const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), [canvasBackground1]);
     const texture2 = new TextureLoader().load(canvasBackground2);
     const texture3 = new TextureLoader().load(canvasBackground3);
@@ -161,12 +158,14 @@ function Scene(props) {
     return (
         <>
             <ambientLight color='white' intensity={0.8} />
+
             <mesh
                 ref={background}
                 position={[0, -5, -1]}
                 receiveShadow={true}
                 onClick={onMouseClick}
             >
+
                 {/*<planeBufferGeometry attach="geometry" args={[window.innerWidth, window.innerHeight]} />*/}
                 <planeBufferGeometry attach="geometry" args={[1920, 1080]} />
                 {id === 0 &&
@@ -193,6 +192,7 @@ function Scene(props) {
                 penumbra={.2}
                 decay={2}
                 distance={50}
+
             />
             <spotLight // Synth
                 target={synthSphere.current}
@@ -205,6 +205,7 @@ function Scene(props) {
                 decay={2}
                 distance={50}
             />
+
             <spotLight // Effect
                 target={effectSphere.current}
                 color='#F9CB9C'
@@ -237,5 +238,4 @@ function Cnvs() {
         </Canvas>
     );
 }
-
 export default Cnvs;

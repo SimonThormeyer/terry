@@ -16,10 +16,6 @@ body {
 
 /************ CANVAS ****************/
 
-.canvas {
-  user-select: none;
-}
-
 canvas {
   width: 100% !important;
   height: 100% !important;
