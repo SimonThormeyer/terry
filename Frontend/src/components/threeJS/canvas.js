@@ -141,17 +141,21 @@ function Scene(props) {
     texture1.wrapS = RepeatWrapping;
     texture1.wrapT = RepeatWrapping;
     texture1.offset.set(0.5, 0.4);
-    texture1.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+    texture1.repeat.set(22, 22);
+    //texture1.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+
 
     texture2.wrapS = RepeatWrapping;
     texture2.wrapT = RepeatWrapping;
     texture2.offset.set(0.5, 0.4);
-    texture2.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+    texture2.repeat.set(22, 22);
+    //texture2.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
 
     texture3.wrapS = RepeatWrapping;
     texture3.wrapT = RepeatWrapping;
     texture3.offset.set(0.5, 0.4);
-    texture3.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
+    texture3.repeat.set(22, 22);
+    //texture3.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
 
 
     return (
@@ -163,7 +167,8 @@ function Scene(props) {
                 receiveShadow={true}
                 onClick={onMouseClick}
             >
-                <planeBufferGeometry attach="geometry" args={[window.innerWidth, window.innerHeight]} />
+                {/*<planeBufferGeometry attach="geometry" args={[window.innerWidth, window.innerHeight]} />*/}
+                <planeBufferGeometry attach="geometry" args={[1920, 1080]} />
                 {id === 0 &&
                     <meshPhongMaterial attach="material" map={texture1} />
                 }
