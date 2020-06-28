@@ -12,13 +12,13 @@ function App() {
 
   return (
     <div className="App">
-      <SideMenu />
       <MultitrackNav />
       <Loopcontrols />
-      <Canvas className='Canvas'/>
+      <Canvas className='Canvas' />
       <Menu />
-      <StartOverlay />
       <HelpDialogue />
+      <SideMenu />
+      <StartOverlay />
     </div>
   );
 }
