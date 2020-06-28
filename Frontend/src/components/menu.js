@@ -1,13 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ReactComponent as RandomIcon } from '../img/random.svg';
 import { ReactComponent as LooperIcon } from '../img/looper.svg';
-import { ReactComponent as PlayIcon } from '../img/play.svg';
-import { ReactComponent as RecordIcon } from '../img/record.svg';
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as StopIcon } from '../img/stop.svg';
-import { ReactComponent as DownloadIcon } from '../img/download.svg';
-import { ReactComponent as DeleteIcon } from '../img/delete.svg';
-import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { useGlobalState } from "../GlobalState"
 import { Looper } from '../components/toneJS/Looper'
 import useEventListener from "./../UseEventListener"
@@ -17,18 +12,15 @@ function Menu(props) {
     // Global state - see GlobalState.js for explanation, needed for functional logic of menu buttons 
     const [listeningLooper, setListeningLooper] = useGlobalState('listeningLooper')
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
-    const [musicCtrl,] = useGlobalState('musicCtrl');
-    const [overlayIsOpen, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
+    const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
     const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
     const [randomNotes,] = useGlobalState('randomNotes');
 
     // state of Component (used for appearance of buttons)
-    const [play, setPlay] = useState(true)
     const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
-    const [record, setRecord] = useState(true)
-    const [recordOverlay, setRecordOverlay] = useState(false)
+
 
 
     const loopFunction = useCallback(
@@ -45,26 +37,10 @@ function Menu(props) {
         }, [listeningLooper, nextLooperID, runningLoopers, setListeningLooper, setNextLooperID, setRunningLoopers])
     
 
-    // set the global state 'overlayIsOpen' to true if an overlay is open
-    useEffect(() => {
-        setOverlayIsOpen(recordOverlay);
-    }, [recordOverlay, setOverlayIsOpen])
-
-    const playFunction = () => {
-        musicCtrl[0].startStopSoundbed()
-    }
-
     const randomFunction = () => {
         randomNotes.toggleRandomNotes();
     }
 
-    const recordFunction = () => {
-        musicCtrl[0].startStopRecorder()
-    }
-
-    const downloadFunction = () => {
-        musicCtrl[0].saveRecording()
-    }
 
     // KEY BINDINGS
 
@@ -87,59 +63,21 @@ function Menu(props) {
         [handleSpaceKeyDown, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
     );
 
-
-
     useEventListener("keydown", handleKeyDown);
     
-
-
     return (
         <>
-            <ul id="menu">
-                <li id="playbutton" onClick={() => { setPlay(!play); playFunction(); if (activeHelpDialogue === "soundBed") { setActiveHelpDialogue("random") }}}>
-                    {play ?
-                        <PlayIcon /> :
-                        <PauseIcon />}
-                </li>
-                <li id="randombutton" onClick={() => { setRandom(!random); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") }}}>
-                    {random ?
-                        <RandomIcon /> :
-                        <PauseIcon />}
-                </li>
-                <li id="loopbutton" onClick={() => {
-                    loopFunction(loop);
-                    setLoop(!loop);
-                }}>
-                    {loop ?
-                        <LooperIcon /> :
-                        <StopIcon onClick={() => { if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") }}}  />}
-                </li>
-                <li id="recordbutton" onClick={() => { setRecord(!record); recordFunction() }}>
-                    {record ?
-                        <RecordIcon /> :
-                        <StopIcon onClick={() => { setRecordOverlay(true) }} />}
-                </li>
-            </ul>
-            {recordOverlay &&
-                <>
-                    <div id="underlay"></div>
-                    <div id="overlay">
-
-                        <DeleteIcon id="closeOverlay" onClick={() => { setRecordOverlay(false); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") }}} />
-
-                        <LogoIcon id="logoIcon" />
-
-                        <p>Download your Track?</p>
-
-                        <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction(); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
-
-                    </div>
-                </>
-            }
+            <div id="menu">
+                {loop ?
+                    <LooperIcon id="loopbutton" onClick={() => { loopFunction(loop); setLoop(!loop); }} /> :
+                    <StopIcon id="loopbutton" onClick={() => { loopFunction(loop); setLoop(!loop); if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") } }} />}
+                {random ?
+                    <RandomIcon id="randombutton" onClick={() => { setRandom(false); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }} /> :
+                    <PauseIcon id="randombutton" onClick={() => { setRandom(true); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }}/>}
+            </div>
 
         </>
     );
 }
-
 
 export default Menu;
