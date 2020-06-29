@@ -19,10 +19,10 @@ function MultitrackNav(props) {
         <div id="multitrackingNav">
             {/* // if there is no previous canvas, the visibilty of the arrow is changed to hidden. thereby the synthesizer name stays in center and doesn't move */}
             <ArrowBack style={canvasId === 0 ? invisible : {}} id="arrowBack"
-                onClick={canvasId === 0 ? {} : () => setCanvasId(canvasId - 1)} />
+                onClick={() => setCanvasId(canvasId - 1)} />
             <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
             <ArrowForward style={canvasId >= canvases.length - 1 ? invisible : {}} id="arrowForward"
-                onClick={canvasId >= canvases.length - 1 ? {} : () => setCanvasId(canvasId + 1)} />
+                onClick={() => setCanvasId(canvasId + 1)} />
         </div>
     );
 };
