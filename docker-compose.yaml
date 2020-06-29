@@ -13,18 +13,17 @@ services:
       - FLASK_APP=Backend/api/__init__.py
 #      - WAIT_HOSTS=mongo:27017
 #      - MONGO_HOST=mongo
+      - URL_PREFIX=/projects
     volumes:
       - .:/code
 
   app:
     container_name: SoundGroup-Frontend
     image: sg-frontend
-    command: nodemon server.js
+    command: nodemon index.js
     build: ./Frontend/
     ports:
       - "3000:3000"
-    volumes:
-      - ./Frontend:/app
     tty: true
 
   mongo:
