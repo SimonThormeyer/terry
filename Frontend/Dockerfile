@@ -2,17 +2,17 @@ FROM node:12
 
 WORKDIR /app
 
-RUN npm install -g nodemon
-
 COPY package.json ./
-
-RUN npm install
 
 RUN rm -rf node_modules
 
-RUN npm ci \
- && npm cache clean --force \
- && mv /app/node_modules /node_modules
+RUN yarn
+
+RUN yarn global add react-scripts
+
+RUN yarn global add nodemon
+
+RUN yarn install
 
 COPY . .
 
@@ -20,4 +20,4 @@ ENV PORT 3000
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+CMD ["yarn", "run", "start"]
