@@ -26,8 +26,7 @@ function Scene(props) {
     const [id,] = useGlobalState('canvasId');
 
     // THREE-Objects
-    const { camera, raycaster, viewport, size } = useThree();
-    const aspect = size.width / viewport.width;
+    const { camera, raycaster, size } = useThree();
     const mouse = useRef(new THREE.Vector2());
     const lightForRegularClick = useRef();
     const looperLights = [useRef(), useRef(), useRef(), useRef()];
@@ -112,7 +111,7 @@ function Scene(props) {
         x = x / size.width;
         y = y / size.height; 
         canvasClick([x, y])
-    }, [canvasClick]);
+    }, [canvasClick, size]);
 
     // -> use useGesture() for all the click events -> native touch support
     //Touch on display (mobile/tablet) 
