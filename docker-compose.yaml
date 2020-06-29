@@ -13,6 +13,7 @@ services:
       - FLASK_APP=Backend/api/__init__.py
 #      - WAIT_HOSTS=mongo:27017
 #      - MONGO_HOST=mongo
+      - URL_PREFIX=/projects
     volumes:
       - .:/code
 
