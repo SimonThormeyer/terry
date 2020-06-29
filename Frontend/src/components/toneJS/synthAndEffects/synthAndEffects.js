@@ -53,6 +53,15 @@ export class SynthAndEffects {
                 })
                 this.mainSoundSource.volume.value = -6
             }
+
+            else if (this.soundType==="Kalimba"){
+                console.log("HELLLO")
+                this.mainSoundSource = new Tone.Sampler({
+                    "C3": "samples/KalimbaDX7C3.wav"
+                })
+                this.mainSoundSource.volume.value = -8
+            }
+
             else {
                 this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
                     oscillator: {
