@@ -26,8 +26,8 @@ function Scene(props) {
     const [id,] = useGlobalState('canvasId');
 
     // THREE-Objects
-    const { camera, raycaster, } = useThree();
-    // const aspect = size.width / viewport.width;
+    const { camera, raycaster, viewport, size } = useThree();
+    const aspect = size.width / viewport.width;
     const mouse = useRef(new THREE.Vector2());
     const lightForRegularClick = useRef();
     const looperLights = [useRef(), useRef(), useRef(), useRef()];
@@ -40,7 +40,6 @@ function Scene(props) {
     const canvasClick = useCallback((coordinates, canvasId = id, playback = false) => {
         mouse.current.x = (coordinates[0]) * 2 - 1;
         mouse.current.y = -(coordinates[1]) * 2 + 1;
-        // x / aspect, -y / aspect
 
         raycaster.setFromCamera(mouse.current, camera);
 
@@ -49,9 +48,7 @@ function Scene(props) {
         if (playback && (canvasId === id)) {
             looperLights[counter.current].current.position.x = intersections[0].point.x;
             looperLights[counter.current].current.position.y = intersections[0].point.y;
-            // set light color depending on canvasId
-            // looperLights.current[counter.current].color.set( canvases[canvasId].color); 
-            looperLights[counter.current].current.intensity = 0.5;
+            looperLights[counter.current].current.intensity = 0.2;
 
             // more elegant: use modulo instead of if / else
             if (counter.current >= looperLights.length - 1) {
@@ -107,10 +104,14 @@ function Scene(props) {
     //CLICK FUNCTION ON CANVAS
     const onMouseClick = useCallback((event) => {
         // if anything more than the background is intersected, don't do anything
-        if (event.intersections.length > 1) return;
+        if (event.intersections.length !== 1) return;
+
         // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-        canvasClick([event.clientX / window.innerWidth, event.clientY / window.innerHeight]);
-        // }
+        let x = event.clientX - size.left;
+        let y = event.clientY - size.top;
+        x = x / size.width;
+        y = y / size.height; 
+        canvasClick([x, y])
     }, [canvasClick]);
 
     // -> use useGesture() for all the click events -> native touch support
@@ -125,9 +126,9 @@ function Scene(props) {
 
     // make lights disappear over time
     useFrame(() => {
-        lightForRegularClick.current.intensity = Math.max(0, lightForRegularClick.current.intensity - .05);
+        lightForRegularClick.current.intensity = Math.max(0, lightForRegularClick.current.intensity - .005);
         for (let i = 0; i < looperLights.length; i++) {
-            looperLights[i].current.intensity = Math.max(0, looperLights[i].current.intensity - .1)
+            looperLights[i].current.intensity = Math.max(0, looperLights[i].current.intensity - .005)
         }
     });
 
@@ -219,10 +220,10 @@ function Scene(props) {
                 distance={50}
             />
             <pointLight ref={lightForRegularClick} color='white' intensity={0} distance={6000} />
-            <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[0]} />
-            <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[1]} />
-            <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[2]} />
-            <pointLight args={[0x38761D, 0.0, 6000]} ref={looperLights[3]} />
+            <pointLight args={['white', 0.0, 6000]} ref={looperLights[0]} />
+            <pointLight args={['white', 0.0, 6000]} ref={looperLights[1]} />
+            <pointLight args={['white', 0.0, 6000]} ref={looperLights[2]} />
+            <pointLight args={['white', 0.0, 6000]} ref={looperLights[3]} />
         </>
     )
 }
@@ -232,7 +233,7 @@ function Cnvs() {
         <Canvas
             camera={{
                 position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
-                aspect: window.innerWidth / window.innerHeight, // 16 / 9 ??
+                aspect: 16 / 9, // 16 / 9 ??
             }}
         >
             <Scene />
