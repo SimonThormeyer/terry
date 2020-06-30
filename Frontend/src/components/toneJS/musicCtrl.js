@@ -24,7 +24,7 @@ export class MusicCtrl {
         this.synthAndEffects.setFilter(valueX, valueY)
         this.synthAndEffects.setNoteLength(valueY)
         // this.synthAndEffects.setOscillatorType(valueX)
-        this.synthAndEffects.setSynthADSR(valueY)
+        this.synthAndEffects.setADSR(valueY)
     }
 
     setParameterEffect(valueX, valueY) {

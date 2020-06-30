@@ -6,10 +6,14 @@ export class SynthAndEffects {
     blob = undefined
     saveRecording;
 
-    constructor() {
+    constructor(soundType) {
         this.initialized = false;
         import('tone').then(module => {
+
             Tone = module.default;
+
+            //
+            this.soundType = soundType
 
             // Settings
             this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
@@ -33,19 +37,41 @@ export class SynthAndEffects {
             //Effects
             this.limiter = new Tone.Limiter(-1).toMaster()
             this.limiter.connect(this.destination)
-            this.compressor = new Tone.Compressor(-20, 12).connect(this.limiter)
-            this.volume = new Tone.Volume(-50).connect(this.compressor);
-            this.reverb = new Tone.Reverb(2).connect(this.volume)
-            this.pan = new Tone.Panner(1).connect(this.volume)
-            this.delay = new Tone.PingPongDelay(0.1, 0).connect(this.pan)
+            this.compressor = new Tone.Compressor(-20, 12)
+            this.volume = new Tone.Volume(-50)
+            this.reverb = new Tone.Reverb(2)
+            this.pan = new Tone.Panner(1)
+            this.delay = new Tone.FeedbackDelay(0.1, 0)
 
             //Synth
-            this.filter = new Tone.Filter(400, 'lowpass', -12).connect(this.delay)
-            this.polySynth = new Tone.PolySynth(8, Tone.FMSynth, {
-                oscillator: {
-                    type: "sine",
-                }
-            }).connect(this.filter);
+            this.filter = new Tone.Filter(400, 'lowpass', -12)
+
+
+            if (this.soundType==="Marimba"){
+                this.mainSoundSource = new Tone.Sampler({
+                    "C3": "samples/marimbaC3.wav"
+                })
+                this.mainSoundSource.volume.value = -6
+            }
+
+            else if (this.soundType==="Kalimba"){
+                console.log("HELLLO")
+                this.mainSoundSource = new Tone.Sampler({
+                    "C3": "samples/KalimbaDX7C3.wav"
+                })
+                this.mainSoundSource.volume.value = -8
+            }
+
+            else {
+                this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
+                    oscillator: {
+                        type: "sine",
+                    }
+                })
+            }
+
+            this.mainSoundSource.chain(this.filter, this.delay, this.pan, this.reverb, this.volume,
+                this.compressor, this.limiter, Tone.Master)
 
             //LFOs
             this.panLfo = new Tone.LFO(5, 0, 1);
@@ -63,7 +89,6 @@ export class SynthAndEffects {
             this.delayCounter = 0
             this.reverbCounter = 0
 
-
             // INITIALISING
             this.reverb.generate() // reverb needs to be initialised
             this.reverb.wet.value = 0.1
@@ -80,7 +105,8 @@ export class SynthAndEffects {
 
     /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
-        this.polySynth.triggerAttackRelease(note, this.noteLength);
+        this.mainSoundSource.triggerAttackRelease(note, this.noteLength);
+        console.log(Tone.Master.defaults)
     }
 
     setFilter(valueX) {
@@ -101,9 +127,9 @@ export class SynthAndEffects {
         this.noteLength = this.noteLengthOptions[position]
     }
 
-    setSynthADSR(value) {
+    setADSR(value) {
         if (!this.initialized) return
-        this.polySynth.set({
+        this.mainSoundSource.set({
             "envelope": {
                 "sustain": (this._normalizeRange(value) * 0.9) + 0.1,
                 "attack": (this._normalizeRange(value) * 0.2)
@@ -120,7 +146,7 @@ export class SynthAndEffects {
         let numberOfWaveformOptions = this.waveforms.length - 1
         let position = Math.round(((value + 1) / 2) * numberOfWaveformOptions)
         let waveform = this.waveforms[position]
-        this.polySynth.set(
+        this.mainSoundSource.set(
             {
                 oscillator: {
                     type: waveform
@@ -171,7 +197,7 @@ export class SynthAndEffects {
         return ((value + 1) / 2)
     }
 
-    _setVolumeForAll(){
+    _setVolumeForAll() {
         this.volume.volume.value =
             this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
         //console.log("ALL VOLUMES:  "+this.volume.volume.value)
@@ -190,7 +216,7 @@ export class SynthAndEffects {
 
         this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
         this.recorder.onstop = evt => {
-            this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' })
+            this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
 
             this.saveRecording = () => {
                 if (this.blob) {

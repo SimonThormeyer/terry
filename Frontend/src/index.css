@@ -11,51 +11,49 @@
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
+  background-color: #777777;
 }
 
 /************ CANVAS ****************/
 
-#canvas {
-  line-height: 0;
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+  z-index: -1;
+  display: block;
+}
+
+.App {
+  width: 100% !important;
+  height: 100% !important;
 }
 
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
 
 #menu {
-  background-color: white;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   position: fixed;
+  margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 0;
-  margin: 0 auto;
-  padding: 1vw 0;
-  width: 35vw;
-  border-top-left-radius: 2vw;
-  border-top-right-radius: 2vw;
+  bottom: 1.5vw;
+  width: 15vw;
 }
 
-#playbutton, #randombutton {
+#randombutton {
   width: 3vw;
   height: 3vw;
-  margin-right: 3vw;
-  cursor: pointer;
-}
-
-#recordbutton {
-  width: 3vw;
-  height: 3vw;
-  margin-left: 3vw;
+  margin-left: 1.25vw;
   cursor: pointer;
 }
 
 #loopbutton {
   width: 5vw;
   height: 5vw;
-  margin: 0 2vw;
+  margin-right: 1.25vw;
   cursor: pointer;
 }
 
@@ -236,6 +234,13 @@ body {
 
 /**********SIDEMENU***************/
 
+#recordbutton {
+  width: 3vw;
+  height: 3vw;
+  margin-left: 3vw;
+  cursor: pointer;
+}
+
 #sidemenu {
   position: absolute;
   right: 1vw;
@@ -266,38 +271,53 @@ body {
   z-index: 999999999999999;
 }
 
-#openIcon {
-  animation: openIconAnimation 0.3s ease;
+#recordbutton {
+  animation: recordbuttonAnimation 0.3s ease;
 }
 
-@keyframes openIconAnimation {
+@keyframes recordbuttonAnimation {
   from {
     opacity: 0;
     margin-top: -2vw;
   }
 }
 
-#saveIcon {
-  animation: saveIconAnimation 0.3s ease;
+#openIcon {
+  animation: openIconAnimation 0.3s ease;
   margin-top: 4vw;
+  transition: 0.5s ease;
 }
 
-@keyframes saveIconAnimation {
+@keyframes openIconAnimation {
   from {
     opacity: 0;
     margin-top: 0vw;
   }
 }
 
+#saveIcon {
+  animation: saveIconAnimation 0.3s ease;
+  margin-top: 8vw;
+  transition: 0.5s ease;
+}
+
+@keyframes saveIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 2vw;
+  }
+}
+
 #helpIcon {
   animation: helpIconAnimation 0.3s ease;
-  margin-top: 8vw;
+  margin-top: 12vw;
+  transition: 0.5s ease;
 }
 
 @keyframes helpIconAnimation {
   from {
     opacity: 0;
-    margin-top: 2vw;
+    margin-top: 4vw;
   }
 }
 
@@ -500,6 +520,7 @@ body {
   text-align: center;
   margin-top: 2vw;
   height: 0;
+  z-index: 999999999999999;
 }
 
 #arrowForward {
@@ -569,9 +590,10 @@ body {
   font-size: 1vw
 }
 
-#outerButton{
+#outerButton {
   text-align: center;
 }
+
 #startButton {
   background-color: #2fecfd;
   border-radius: 2vw;

@@ -52,6 +52,7 @@ export class IsomorphicLayout {
             ["C3", "F#3", "B3", "E4", "A4", "D5", "G5", "C6"]
         ]
 
+
         this.scales = [this.fourth, this.major6, this.penta1, this.lydian];
 
         this.currentArray = [
@@ -96,6 +97,7 @@ export class IsomorphicLayout {
 
     changeOctave(value) {
         let normalizeInvertedValue = 1 - (value + 1) / 2;
+
         let highestNoteInArray = Math.round(normalizeInvertedValue * 4);
         let n = 0;
         if (this.octaveControl !== highestNoteInArray || this.scaleControl !== this.normalizeRoundValue) {

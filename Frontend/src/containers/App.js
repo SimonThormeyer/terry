@@ -1,4 +1,4 @@
-import Canvas from '../components/threeJS/canvas'
+import Canvas from '../components/threeJS/canvas';
 import Menu from '../components/menu'
 import React from 'react';
 import Loopcontrols from "./loopcontrols";
@@ -12,13 +12,13 @@ function App() {
 
   return (
     <div className="App">
-      <SideMenu />
       <MultitrackNav />
       <Loopcontrols />
-      <Canvas />
+      <Canvas className='Canvas' />
       <Menu />
-      <StartOverlay />
       <HelpDialogue />
+      <SideMenu />
+      <StartOverlay />
     </div>
   );
 }
