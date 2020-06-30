@@ -52,19 +52,9 @@ export class IsomorphicLayout {
             ["C3", "F#3", "B3", "E4", "A4", "D5", "G5", "C6"]
         ]
 
-        //switch(mood){
-        //    case major:
+
         this.scales = [this.fourth, this.major6, this.penta1, this.lydian];
-        //    break;
-        //    case minor:
-        //        this.scales = [this.minor7, this.minor6, this.penta2, this.dorian]
-        //    break;
-        //    case fourth:
-        //        this.scales = [this.fourth1, this.fourth2, this.fourth3, this.fourth4]
-        //    break;
-        //    default:
-        //        this.scales = [this.major7, this.major6, this.penta1, this.lydian];
-        //}
+
         this.currentArray = [
             ["E4", "G4", "A4", "C5", "D5", "E5", "G5", "A5"],
             ["A3", "C4", "D4", "E4", "G4", "A4", "C4", "D4"],
@@ -73,7 +63,9 @@ export class IsomorphicLayout {
             ["C2", "D2", "E2", "G2", "A2", "C3", "D3", "E3"]
         ]
         this.scale = this.currentArray;
-        this.controlValue = 0;
+        this.octaveControl = 0;
+        this.scaleControl = 0;
+        this.normalizeRoundValue = 0;
     }
 
     coordinateToNote(valueX, valueY) {
@@ -99,15 +91,18 @@ export class IsomorphicLayout {
     changeScale(value) {
         let lengthOfScales = this.scales.length - 1;
         let normalizeValue = (value + 1) / 2;
-        this.scale = this.scales[Math.round(normalizeValue * lengthOfScales)];
+        this.normalizeRoundValue = Math.round(normalizeValue * lengthOfScales)
+        this.scale = this.scales[this.normalizeRoundValue];
     }
 
     changeOctave(value) {
         let normalizeInvertedValue = 1 - (value + 1) / 2;
-        let highestNoteInArray = Math.round(normalizeInvertedValue * 5);
+
+        let highestNoteInArray = Math.round(normalizeInvertedValue * 4);
         let n = 0;
-        if (this.controlValue !== highestNoteInArray) {
-            this.controlValue = highestNoteInArray;
+        if (this.octaveControl !== highestNoteInArray || this.scaleControl !== this.normalizeRoundValue) {
+            this.octaveControl = highestNoteInArray;
+            this.scaleControl = this.normalizeRoundValue;
             for (let i = highestNoteInArray; i < (highestNoteInArray + 5); i++) {
                 this.currentArray[n] = this.scale[i];
                 n++;

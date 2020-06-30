@@ -15,10 +15,6 @@ function MultitrackNav(props) {
         visibility: 'hidden'
     };
 
-    let invisible = {
-        visibility: 'hidden'
-    };
-
     return (
         <div id="multitrackingNav">
             {/* // if there is no previous canvas, the visibilty of the arrow is changed to hidden. thereby the synthesizer name stays in center and doesn't move */}
