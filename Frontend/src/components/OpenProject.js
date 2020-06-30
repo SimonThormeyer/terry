@@ -10,12 +10,11 @@ function OpenProject() {
 
     const [apiResponse, setApiResponse] = useState([]);
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
-    // const [globalFunctions,] = useGlobalState('globalFunctions');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
-    const [backendUrl,] = useGlobalState('backend_url');
 
 
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
     const items = [];
     
 

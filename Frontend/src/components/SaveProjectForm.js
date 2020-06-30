@@ -6,8 +6,8 @@ function SaveProjectForm(props) {
 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [canvases, ] = useGlobalState('canvases');
-    const [backendUrl,] = useGlobalState('backend_url');
-  
+    
+    const backendUrl = process.env.BACKEND_URL || "http://localhost:5000";
 
     let getGlobalState = () => {
         let loopers = [];
