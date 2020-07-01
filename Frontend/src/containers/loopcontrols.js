@@ -11,16 +11,21 @@ function Loopcontrols() {
     const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
     const [updated, forceUpdate] = useState(true);
 
-    let looperIDs = [];
+    // build an array containing only the keys of the Loopers belonging to current track / canvas
+    let displayedLoopersIDs = [];
+    Array.from(runningLoopers.keys()).forEach((id) => {
+        if(runningLoopers.get(id).canvasID === canvasId)
+        displayedLoopersIDs.push(id);
+    })
 
     //----------- KEY-BINDINGS ------------
     const handleKeyDown = event => {
             if (overlayIsOpen) return;
             // start/stop muting with Number Keys
             let keyNumber = event.keyCode - 49;
-            if (keyNumber < 10 && keyNumber < looperIDs.length) {
-                if (runningLoopers.get(looperIDs[keyNumber])) {
-                    runningLoopers.get(looperIDs[keyNumber]).toggleMute();
+            if (keyNumber < 10 && keyNumber < displayedLoopersIDs.length) {
+                if (runningLoopers.get(displayedLoopersIDs[keyNumber])) {
+                    runningLoopers.get(displayedLoopersIDs[keyNumber]).toggleMute();
                     forceUpdate(!updated); // forces children to re-render and thus update their state (show that they are muted)
                 }
             }
@@ -31,14 +36,8 @@ function Loopcontrols() {
     return (
         < div className="loopcontrols" >
             {
-                Array.from(runningLoopers.keys()).map((id) => {
-                    // hotkeys for muting only avaiable for current track
-                   if(runningLoopers.get(id).canvasID === canvasId) looperIDs.push(id);
-                    return <div key={`loopControl__${id}`}>
-                        {/* show controls only for loopers of current canvas */}
-                        {runningLoopers.get(id).canvasID === canvasId &&
-                            <Loopicon id={id} muted={runningLoopers.get(id).muted} />}
-                    </div>
+               displayedLoopersIDs.map((id) => {
+                    return <Loopicon id={id} key={`loop_${id}`} muted={runningLoopers.get(id).muted} />
                 })
             }
 
