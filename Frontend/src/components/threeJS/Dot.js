@@ -1,7 +1,8 @@
 import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
-import { useThree } from 'react-three-fiber'
+import {useFrame, useThree} from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
+import * as THREE from "three";
 
 const Dot = forwardRef((props, ref) => {
 
@@ -18,6 +19,56 @@ const Dot = forwardRef((props, ref) => {
         [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y])
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
+
+    //--RANDOM MOVING DOTS--//
+    let randomDirection = new THREE.Vector3 ((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
+
+
+    useFrame(() => {
+        moveRandomDots()
+    });
+
+
+    function changeDirection(){
+
+        //right side or left side
+        if(ref.current.position.x>20 || ref.current.position.x< -20){
+            randomDirection.set(-randomDirection.x,(2*Math.random()-1)*0.1,0);
+        }
+        //upper or lower bar
+        else if(ref.current.position.y> 9 || ref.current.position.y < -9){
+            randomDirection.set((2*Math.random()-1)*0.1,-randomDirection.y,0);
+        }
+
+
+       // randomDirection.set((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
+
+        //
+      /**  setTimeout(function (){
+            changeDirection(); },Math.random()*2000+2000)**/
+    }
+
+
+
+    function moveRandomDots(){
+        camera.updateMatrix();
+        camera.updateMatrixWorld();
+        let frustum = new THREE.Frustum();
+        frustum.setFromProjectionMatrix(new THREE.Matrix4().multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse));
+
+        //
+        ref.current.translateX(randomDirection.x);
+        ref.current.translateY(randomDirection.y);
+
+        // Your 3d point to check
+        if (!frustum.containsPoint(ref.current.position.clone())) {
+            changeDirection();
+        }
+
+    }
+
+
+
 
     // when canvas changes, change position accordingly
     useEffect(() => {
