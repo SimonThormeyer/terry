@@ -10,6 +10,7 @@ const Dot = forwardRef((props, ref) => {
     const [canvases, setCanvases] = useGlobalState("canvases");
     const [canvasId] = useGlobalState('canvasId');
     const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [randomNotes,] = useGlobalState('randomNotes');
 
     // local
     const [dragging, setDragging] = useState(false);
@@ -20,12 +21,21 @@ const Dot = forwardRef((props, ref) => {
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 
+    let movingRandom = false;
+
     //--RANDOM MOVING DOTS--//
+
     let randomDirection = new THREE.Vector3 ((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
 
 
     useFrame(() => {
-        moveRandomDots()
+        //needs to be toggled on and off
+        if(randomNotes){
+            movingRandom =true;
+            moveRandomDots();
+        }
+        //else toggle movingRandom = false;
+
     });
 
 
@@ -39,18 +49,10 @@ const Dot = forwardRef((props, ref) => {
         else if(ref.current.position.y> 9 || ref.current.position.y < -9){
             randomDirection.set((2*Math.random()-1)*0.1,-randomDirection.y,0);
         }
-
-
-       // randomDirection.set((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
-
-        //
-      /**  setTimeout(function (){
-            changeDirection(); },Math.random()*2000+2000)**/
     }
 
-
-
     function moveRandomDots(){
+
         camera.updateMatrix();
         camera.updateMatrixWorld();
         let frustum = new THREE.Frustum();
@@ -64,6 +66,7 @@ const Dot = forwardRef((props, ref) => {
         if (!frustum.containsPoint(ref.current.position.clone())) {
             changeDirection();
         }
+        changeParameters();
 
     }
 
@@ -82,15 +85,21 @@ const Dot = forwardRef((props, ref) => {
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
-            setDragging(true);
-            // position to be added to the current movement onDrag
-            beforeDragPosition.current =
-                [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y]
+            if(movingRandom === false){
+                setDragging(true);
+                // position to be added to the current movement onDrag
+                beforeDragPosition.current =
+                    [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y]
+            }
+
         },
         onDrag: (({ movement: [x, y] }) => {
-            const [, , z] = position;
-            setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
-            changeParameters();
+            if(movingRandom === false){
+                const [, , z] = position;
+                setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
+                changeParameters();
+            }
+
         }),
         onDragEnd: () => {
             setDragging(false);
