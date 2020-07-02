@@ -109,34 +109,41 @@ function SideMenu() {
                 }
                 <div id="sideMenuIcons">
                     {record ?
-                        <RecordIcon id="recordbutton" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> :
-                        <RecordStopIcon id="stoprecordbutton" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />}
+                        <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> :
+                        <RecordStopIcon id="stoprecordbutton" title="stop record"onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />}
                     {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
                         {openSaveHelpIcon && !record ?
                         <>
-                            <OpenIcon id="openIcon" />
-                            <SaveIcon id="saveIcon" />
-                            <Helpicon id="helpIcon" />
+                            <OpenIcon id="openIcon" title="open project"/>
+                            <SaveIcon id="saveIcon" title="save project"/>
+                            <Helpicon id="helpIcon" title="help dialogue"/>
                         </> :
                         openSaveHelpIcon && <>
-                            <OpenIcon id="openIcon" onClick={() => { setSideMenu(false); setOpenOverlay(true) }} />
-                            <SaveIcon id="saveIcon" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
-                            <Helpicon id="helpIcon" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
+                            <OpenIcon id="openIcon" title="open project" onClick={() => { setSideMenu(false); setOpenOverlay(true) }} />
+                            <SaveIcon id="saveIcon" title="save project" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
+                            <Helpicon id="helpIcon" title="help dialogue" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
                         </>}
 
                     </div>
                 </>
             }
+            <div id="sidemenu">
+                {/* if record is active, the side menu may not be closed, so the stop record button is always reachable. */}
+                {sideMenuIcon ?
+                    <SideMenuIcon id="sideMenuIcon" title="side menu" onClick={() => { setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setSideMenu(!sideMenu); if (activeHelpDialogue === "saveOpen") { setActiveHelpDialogue("") } }} /> :
+                    <SideMenuIcon id="sideMenuIcon" title="side menu" />
+                }
+            </div>
 
             {recordOverlay &&
                 <>
                     <div id="underlay"></div>
                     <div id="overlay">
 
-                        <DeleteIcon id="closeOverlay" onClick={() => { setRecordOverlay(false); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
+                    <DeleteIcon id="closeOverlay" title="close overlay" onClick={() => { setRecordOverlay(false); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
                         <LogoIcon id="logoIcon" />
                         <p>Download your Track?</p>
-                        <DownloadIcon id="downloadbutton" onClick={() => { downloadFunction(); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
+                    <DownloadIcon id="downloadbutton" title="download your track" onClick={() => { downloadFunction(); if (activeHelpDialogue === "record") { setActiveHelpDialogue("saveOpen") } }} />
 
                     </div>
                 </>
@@ -148,7 +155,7 @@ function SideMenu() {
                     <div className="saveOpenUnderlay"></div>
                     <div id="saveOverlay">
 
-                        <DeleteIcon id="closeSaveOverlay" onClick={() => { setSaveOverlay(false) }} />
+                        <DeleteIcon id="closeSaveOverlay" title="close overlay" onClick={() => { setSaveOverlay(false) }} />
                         <p id="headerSave">Save your Track?</p>
                         <SaveProjectForm />
 
@@ -162,7 +169,7 @@ function SideMenu() {
                 <>
                     <div className="saveOpenUnderlay"></div>
                     <div id="openOverlay">
-                        <DeleteIcon id="closeOpenOverlay" onClick={() => { setOpenOverlay(false) }} />
+                        <DeleteIcon id="closeOpenOverlay" title="close overlay" onClick={() => { setOpenOverlay(false) }} />
 
                         <p id="headerOpen">Open a Track?</p>
                         <form>
@@ -176,13 +183,7 @@ function SideMenu() {
                 </>
             }
 
-            <div id="sidemenu">
-                {/* if record is active, the side menu may not be closed, so the stop record button is always reachable. */}
-                {sideMenuIcon ?
-                    <SideMenuIcon id="sideMenuIcon" onClick={() => { setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setSideMenu(!sideMenu); if (activeHelpDialogue === "saveOpen") { setActiveHelpDialogue("") } }} /> :
-                    <SideMenuIcon id="sideMenuIcon" />
-                }
-            </div>
+            
         </>
     );
 }

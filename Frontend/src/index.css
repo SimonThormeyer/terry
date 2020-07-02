@@ -169,6 +169,7 @@ canvas {
   align-items: center;
   /* Specify a stack order in case you're using a different order for other elements */
   border-radius: 15vw;
+  text-align: center;
 }
 
 @keyframes overlayAnimation {
@@ -183,10 +184,6 @@ canvas {
   vertical-align: middle;
   text-align: center;
   color: #4d4b4b;
-}
-
-#overlay {
-  text-align: center;
 }
 
 #underlay {
@@ -234,13 +231,6 @@ canvas {
 
 /**********SIDEMENU***************/
 
-#recordbutton {
-  width: 3vw;
-  height: 3vw;
-  margin-left: 3vw;
-  cursor: pointer;
-}
-
 #sidemenu {
   position: absolute;
   right: 1vw;
@@ -269,6 +259,13 @@ canvas {
   right: 1.5vw;
   top: 5.5vw;
   z-index: 999999999999999;
+}
+
+#recordbutton {
+  width: 3vw;
+  height: 3vw;
+  margin-left: 3vw;
+  cursor: pointer;
 }
 
 #recordbutton {
@@ -333,23 +330,18 @@ canvas {
 
 #saveOverlay {
   position: absolute;
-  /* Sit on top of the page content */
   opacity: 0;
-  /* Hidden by default */
   animation: overlayAnimation 2s ease 0.25s forwards;
   width: 25vw;
-  /* Full width (cover the whole page) */
   height: 25vw;
-  /* Full height (cover the whole page) */
   background-color: rgba(255, 255, 255);
-  /* Black background with opacity */
   margin-top: 5vw;
   margin-left: 37.5%;
   top: 0;
   align-items: center;
-  /* Specify a stack order in case you're using a different order for other elements */
   border-radius: 15vw;
   z-index: 999999999999999999999;
+  text-align: center;
 }
 
 .saveOpenUnderlay {
@@ -380,10 +372,6 @@ canvas {
 #headerSave {
   font-size: 1.75vw;
   margin-bottom: 2.75vw;
-}
-
-#saveOverlay {
-  text-align: center;
 }
 
 #username, #projectname {
@@ -511,7 +499,7 @@ canvas {
   color: #a5a4a4;
 }
 
-/*********** Navigation Multitracking **************/
+/*********** NAVIGATION MULTITRACKING **************/
 
 #multitrackingNav {
   position: absolute;
@@ -710,4 +698,252 @@ canvas {
 #SaveOpenDialogue {
   top: 2vw;
   left: 82vw;
+}
+
+/**MOBILE VERSION*/
+
+/*Landscape Modus */
+
+@media only screen and (max-width: 800px) {
+  /*STARTOVERLAY*/
+  #startOverlay {
+    font-size: 2.25vw;
+  }
+  #startLogo {
+    width: 15vw;
+    height: 15vw;
+    margin: 5vh 0;
+  }
+  #startOverlay p {
+    margin-bottom: 1vw;
+    width: 90vw;
+    text-align: center;
+    line-height: 5vw;
+    color: white;
+  }
+  #startButton {
+    border-radius: 4vw;
+    font-size: 2.5vw;
+    padding: 1.25vw 3vw;
+    margin: 3vw 2vw 5vw 0;
+    display: inline-block;
+  }
+  #startHelpButton {
+    border-radius: 4vw;
+    font-size: 2.5vw;
+    padding: 1.25vw 3vw;
+    margin: 3vw 0 5vw 2vw;
+    display: inline-block;
+  }
+  #credits {
+    font-size: 1.8vw;
+  }
+  /*MENU ICONS*/
+  #randombutton {
+    width: 5.5vw;
+    height: 5.5vw;
+  }
+  #loopbutton {
+    width: 8vw;
+    height: 8vw;
+  }
+  /**SIDEMENU*/
+  #sideMenuIcon {
+    width: 3.5vw;
+    height: 3.5vw;
+    margin-right: 0.5vw;
+  }
+  #sideMenuIcons svg {
+    width: 5.5vw;
+    height: 5.5vw;
+  }
+  #recordbutton, #stoprecordbutton {
+    margin-top: 2vw;
+  }
+  #openIcon {
+    margin-top: 9vw;
+  }
+  #saveIcon {
+    margin-top: 16vw;
+  }
+  #helpIcon {
+    margin-top: 23vw;
+  }
+  /******MULTITRACKING NAV******/
+  #arrowForward {
+    width: 4vw;
+    height: 4vw;
+  }
+  #arrowBack {
+    width: 4vw;
+    height: 4vw;
+  }
+  #synthesizerName {
+    font-size: 2.5vw;
+    margin-top: -2.3vw;
+  }
+  /******LOOPCONTROLS*********/
+  .progress-ring {
+    width: 5.5vw;
+    height: 5.5vw;
+  }
+  .progress-ring__circle {
+    r: 2.5vw;
+  }
+  @keyframes slide {
+    to {
+      margin-left: -6.5vw;
+    }
+  }
+  /*interactive Icons for loopicons*/
+  .loop ul li {
+    width: 4vw;
+    height: 4vw;
+  }
+  .loopPausePlay {
+    margin: 7.75vw 0 0 1.75vw;
+  }
+  .loopDelete {
+    margin: 19.75vw 0 0 1.75vw;
+  }
+  .loopMute {
+    margin: 13.75vw 0 0 1.75vw;
+  }
+  /******OVERLAYS******/
+  /*Record Overlay*/
+  #overlay {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    margin-top: 0;
+    margin-left: 0;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+  }
+  #overlay p {
+    font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #downloadbutton {
+    width: 8vw;
+    height: 8vw;
+    margin-top: 6vw;
+  }
+  #closeOverlay {
+    width: 4.5vw;
+    height: 4.5vw;
+    margin: 1.5vw;
+    right: 0;
+    top: 0;
+    position: absolute;
+  }
+  #logoIcon {
+    width: 15vw;
+    height: 15vw;
+    margin: 5vh 0;
+  }
+  /*Open Overlay*/
+  #openOverlay {
+    position: absolute;
+    width: 100%;
+    min-height: 100%;
+    height: auto;
+    margin: 0;
+    left: 0;
+    top: 0;
+    border-radius: 0;
+  }
+  #closeOpenOverlay {
+    width: 4.5vw;
+    height: 4.5vw;
+    margin: 1.5vw;
+    right: 0;
+    top: 0;
+    position: absolute;
+  }
+  #headerOpen {
+    font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #usernameProject {
+    margin: 4vw 13vw 0.5vw 13vw;
+    width: 70vw;
+    height: 3vw;
+    padding: 1vw 2vw;
+    font-size: 2.25vw;
+  }
+  #findProject {
+    margin-left: 19vw;
+    margin-top: 2.75vw;
+    font-size: 2vw;
+    padding: 0 0.6vw;
+  }
+  #databaseTable {
+    width: 72vw;
+    height: auto;
+    margin-top: 1.5vw;
+    margin-left: 13vw;
+    font-size: 1.15vw;
+    margin-bottom: 4vw;
+    overflow-y: auto;
+  }
+  #databaseTable::before {
+    display: none;
+  }
+  #databaseTable::after {
+    display: none;
+  }
+  #databaseTable li {
+    font-size: 2.25vw;
+    padding: 1vw 0 1vw 2vw;
+  }
+  /*Save Overlay*/
+  #saveOverlay {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    margin-top: 0;
+    margin-left: 0;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+  }
+  #saveButton {
+    border-radius: 4vw;
+    font-size: 2.5vw;
+    padding: 1.25vw 3vw;
+    margin: 6vw 0 5vw 0vw;
+  }
+  #headerSave {
+    font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #username, #projectname {
+    margin-left: 23vw;
+    width: 50vw;
+    height: 3vw;
+    margin-top: 6vw;
+    padding: 1vw 2vw;
+    font-size: 2.25vw;
+  }
+  #labelProjectname, #labelUsername {
+    margin-left: -20vw;
+    margin-top: -1.2vw;
+    font-size: 2vw;
+    padding: 0 0.6vw;
+  }
+  #labelProjectname {
+    margin-top: 4.7vw;
+  }
+  #closeSaveOverlay {
+    width: 4.5vw;
+    height: 4.5vw;
+    margin: 1.5vw;
+    right: 0;
+    top: 0;
+    position: absolute;
+  }
 }
