@@ -34,7 +34,6 @@ const Dot = forwardRef((props, ref) => {
 
 
     function changeDirection() {
-        return;
         //right side or left side
         if (ref.current.position.x > 20 || ref.current.position.x < -20) {
             randomDirection.set(-randomDirection.x, (2 * Math.random() - 1) * 0.1, 0);
@@ -60,23 +59,10 @@ const Dot = forwardRef((props, ref) => {
         if (!frustum.containsPoint(ref.current.position.clone())) {
             changeDirection();
         }
-
-        let position = ref.current.position.clone();
-        console.log(position)
-        let newCanvases = Array.from(canvases);
-        let newDot = {};
-        newDot[props.name] = {
-            x: position.x,
-            y: position.y
-        }
-        let newCanvas = { ...canvases[canvasId], ...newDot };
-        newCanvases[canvasId] = newCanvas;
-        setCanvases(newCanvases);
     }
 
     // when canvas changes, change position accordingly
     useEffect(() => {
-        if(randomNotesRunning) return;
         setPosition([
             canvases[canvasId][props.name].x,
             canvases[canvasId][props.name].y,
@@ -91,8 +77,9 @@ const bind = useGesture({
         if (!randomNotesRunning) {
             setDragging(true);
             // position to be added to the current movement onDrag
+            let position = ref.current.position.clone();
             beforeDragPosition.current =
-                [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y]
+                [position.x, position.y]
         }
 
     },
