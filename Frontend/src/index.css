@@ -341,6 +341,7 @@ canvas {
   align-items: center;
   border-radius: 15vw;
   z-index: 999999999999999999999;
+  text-align: center;
 }
 
 .saveOpenUnderlay {
@@ -371,10 +372,6 @@ canvas {
 #headerSave {
   font-size: 1.75vw;
   margin-bottom: 2.75vw;
-}
-
-#saveOverlay {
-  text-align: center;
 }
 
 #username, #projectname {
@@ -802,23 +799,23 @@ canvas {
   .loop ul li {
     width: 4vw;
     height: 4vw;
-    margin-left: 2vw;
   }
   .loopPausePlay {
-    margin: 7.75vw 0 0 0;
+    margin: 7.75vw 0 0 1.75vw;
   }
   .loopDelete {
-    margin: 19.75vw 0 0 0;
+    margin: 19.75vw 0 0 1.75vw;
   }
   .loopMute {
-    margin: 13.75vw 0 0 0;
+    margin: 13.75vw 0 0 1.75vw;
   }
   /******OVERLAYS******/
   /*Record Overlay*/
   #overlay {
-    position: fixed;
+    position: absolute;
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     margin-top: 0;
     margin-left: 0;
     top: 0;
@@ -849,9 +846,10 @@ canvas {
   }
   /*Open Overlay*/
   #openOverlay {
-    position: fixed;
+    position: absolute;
     width: 100%;
-    height: 100%;
+    min-height: 100%;
+    height: auto;
     margin: 0;
     left: 0;
     top: 0;
@@ -870,7 +868,7 @@ canvas {
     margin-top: 4vw;
   }
   #usernameProject {
-    margin: 4vw 15vw;
+    margin: 4vw 13vw 0.5vw 13vw;
     width: 70vw;
     height: 3vw;
     padding: 1vw 2vw;
@@ -883,31 +881,69 @@ canvas {
     padding: 0 0.6vw;
   }
   #databaseTable {
-    width: 37vw;
+    width: 72vw;
+    height: auto;
     margin-top: 1.5vw;
-    margin-left: 1.5vw;
+    margin-left: 13vw;
     font-size: 1.15vw;
-    height: 16vw;
-    overflow-y: scroll;
+    margin-bottom: 4vw;
+    overflow-y: auto;
   }
   #databaseTable::before {
-    content: "";
-    position: absolute;
-    right: 1.5vw;
-    width: 3vw;
-    height: 16vw;
-    background: linear-gradient(to left, white, rgba(0, 0, 0, 0));
+    display: none;
   }
   #databaseTable::after {
-    content: "";
-    position: absolute;
-    top: 10.5vw;
-    left: 1.5vw;
-    width: 3vw;
-    height: 16.5vw;
-    background: linear-gradient(to right, white, rgba(0, 0, 0, 0));
+    display: none;
   }
   #databaseTable li {
-    padding: 0.6vw 0 0.6vw 2vw;
+    font-size: 2.25vw;
+    padding: 1vw 0 1vw 2vw;
+  }
+  /*Save Overlay*/
+  #saveOverlay {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+    margin-top: 0;
+    margin-left: 0;
+    top: 0;
+    left: 0;
+    border-radius: 0;
+  }
+  #saveButton {
+    border-radius: 4vw;
+    font-size: 2.5vw;
+    padding: 1.25vw 3vw;
+    margin: 6vw 0 5vw 0vw;
+  }
+  #headerSave {
+    font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #username, #projectname {
+    margin-left: 23vw;
+    width: 50vw;
+    height: 3vw;
+    margin-top: 6vw;
+    padding: 1vw 2vw;
+    font-size: 2.25vw;
+  }
+  #labelProjectname, #labelUsername {
+    margin-left: -20vw;
+    margin-top: -1.2vw;
+    font-size: 2vw;
+    padding: 0 0.6vw;
+  }
+  #labelProjectname {
+    margin-top: 4.7vw;
+  }
+  #closeSaveOverlay {
+    width: 4.5vw;
+    height: 4.5vw;
+    margin: 1.5vw;
+    right: 0;
+    top: 0;
+    position: absolute;
   }
 }
