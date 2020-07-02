@@ -5,14 +5,12 @@ import { ReactComponent as PlayIcon } from '../img/play.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as MuteIcon } from '../img/mute.svg';
 import { ReactComponent as VolumeIcon } from '../img/volume.svg';
-import useEventListener from "./../UseEventListener"
 
 
-function Loopicon({ id }) {
+function Loopicon({ id, muted }) {
 
   //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
-  const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
   const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
   //local state to toogle icons
@@ -95,33 +93,8 @@ function Loopicon({ id }) {
     if (looperIsStopped) animationPause();
     setMute(looperIsMuted)
     if (looperIsMuted) muteLook();
-  }, [id, runningLoopers, animationPause, muteLook])
-
-
-
-  //----------- KEY-BINDINGS ------------
-  const handleKeyDown = useCallback(
-    (event) => {
-      if (overlayIsOpen) return;
-      // start/stop muting with Number Keys
-      let keyNumber = event.keyCode - 48
-      if (id < 10 && id === keyNumber) {
-        if (runningLoopers.get(keyNumber)) {
-          runningLoopers.get(keyNumber).toggleMute();
-          setMute(!mute);
-          if (!mute) {
-            muteLook();
-          } else {
-            if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") };
-            unmuteLook();
-          }
-        }
-      }
-    },
-    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
-  );
-
-  useEventListener("keydown", handleKeyDown);
+    else unmuteLook();
+  }, [id, runningLoopers, muted, animationPause, muteLook, unmuteLook])
 
 
   return (

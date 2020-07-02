@@ -2,13 +2,12 @@ import { MusicCtrl } from "./musicCtrl"
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 
 
-export class Marimba extends MusicCtrl {
+export class Kalimba extends MusicCtrl {
 
     constructor() {
         super()
-        this.synthAndEffects = new SynthAndEffects("Marimba")
+        this.synthAndEffects = new SynthAndEffects("Kalimba")
 
-        //this.synthAndEffects.changeMainSoundSource()
     }
 
 
