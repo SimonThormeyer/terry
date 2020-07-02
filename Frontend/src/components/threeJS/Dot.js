@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
+import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
 import {useFrame, useThree} from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
@@ -21,21 +21,15 @@ const Dot = forwardRef((props, ref) => {
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
 
-    let movingRandom = false;
-
     //--RANDOM MOVING DOTS--//
-
     let randomDirection = new THREE.Vector3 ((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
 
 
     useFrame(() => {
         //needs to be toggled on and off
-        if(randomNotes){
-            movingRandom =true;
+        if(randomNotes.running){
             moveRandomDots();
         }
-        //else toggle movingRandom = false;
-
     });
 
 
@@ -66,9 +60,7 @@ const Dot = forwardRef((props, ref) => {
         if (!frustum.containsPoint(ref.current.position.clone())) {
             changeDirection();
         }
-        changeParameters();
-
-    }
+        }
 
 
 
@@ -85,7 +77,7 @@ const Dot = forwardRef((props, ref) => {
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
-            if(movingRandom === false){
+            if(!randomNotes.running){
                 setDragging(true);
                 // position to be added to the current movement onDrag
                 beforeDragPosition.current =
@@ -94,10 +86,9 @@ const Dot = forwardRef((props, ref) => {
 
         },
         onDrag: (({ movement: [x, y] }) => {
-            if(movingRandom === false){
+            if(!randomNotes.running){
                 const [, , z] = position;
                 setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
-                changeParameters();
             }
 
         }),
@@ -115,8 +106,8 @@ const Dot = forwardRef((props, ref) => {
         }
     }, { pointerEvents: true, eventOptions: { capture: true } });
 
-        // method called when position changes (e.g.) on drag event
-        const changeParameters = useCallback(() => {
+        // changeParameters: useEffect called when position changes (e.g.) on drag event
+        useEffect(() => {
             if (!musicCtrl[canvasId]) return;
             camera.updateMatrixWorld();
             let pos = ref.current.position.clone();
@@ -128,7 +119,7 @@ const Dot = forwardRef((props, ref) => {
             } else if (props.name === 'musicSphere') {
                 musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
             }
-        }, [camera, canvasId, musicCtrl, props.name, ref])
+        }, [position, camera, canvasId, musicCtrl, props.name, ref])
 
     return (
         <mesh
