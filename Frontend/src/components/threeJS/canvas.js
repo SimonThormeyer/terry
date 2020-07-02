@@ -232,7 +232,7 @@ function Cnvs() {
         <Canvas
             camera={{
                 position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
-                aspect: 16 / 9, // 16 / 9 ??
+                aspect: 16 / 9 // 16 / 9 ??
             }}
         >
             <Scene />

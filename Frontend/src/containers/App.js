@@ -10,6 +10,16 @@ import HelpDialogue from '../components/helpDialogue';
 
 function App() {
 
+  let landscapeMode = () => { 
+    let height = window.innerHeight;
+    let width = window.innerWidth;
+    if (width <= height) {
+      alert("Mach Landscape Modus!")
+    }
+  }
+  
+window.addEventListener('resize', landscapeMode);
+
   return (
     <div className="App">
       <MultitrackNav />

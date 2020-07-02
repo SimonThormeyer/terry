@@ -17,16 +17,12 @@ body {
 /************ CANVAS ****************/
 
 canvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: -1;
   display: block;
 }
 
-.App {
-  width: 100% !important;
-  height: 100% !important;
-}
 
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
 
