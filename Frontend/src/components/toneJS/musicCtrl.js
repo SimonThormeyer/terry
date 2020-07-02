@@ -1,16 +1,26 @@
-import {IsomorphicLayout} from "./scales/isomorphicLayout";
-import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
+import { IsomorphicLayout } from "./scales/isomorphicLayout";
+import { SynthAndEffects } from "./synthAndEffects/synthAndEffects";
 
 
 export class MusicCtrl {
 
-    constructor() {
+    constructor(callbackAfterInit) {
         this.isomorphicLayout = new IsomorphicLayout()
         this.synthAndEffects = new SynthAndEffects()
     }
 
+    initialize() {
+        return new Promise((resolve, reject) => {
+            this.synthAndEffects.initialize().then(() =>
+                resolve()
+            ).catch(e =>
+                reject(e)
+            )
+        })
+    }
+
     triggerSynth(valueX, valueY) {
-        this.note = this.isomorphicLayout.coordinateToNote(valueX,valueY)
+        this.note = this.isomorphicLayout.coordinateToNote(valueX, valueY)
         this.synthAndEffects.triggerSynth(this.note);
     }
 
@@ -25,7 +35,7 @@ export class MusicCtrl {
         this.synthAndEffects.setDelayFeedback(valueX)
         this.synthAndEffects.setDelayWet(valueY)
         this.synthAndEffects.setReverbWet(valueX)
-        this.synthAndEffects.setPanningEffect(valueX,valueY)
+        this.synthAndEffects.setPanningEffect(valueX, valueY)
     }
 
     setParameterMusic(valueX, valueY) {
@@ -33,11 +43,11 @@ export class MusicCtrl {
         this.isomorphicLayout.changeOctave(valueY);
     }
 
-    startStopRecorder(){
+    startStopRecorder() {
         this.synthAndEffects.startStopRecording()
     }
 
-    saveRecording(){
+    saveRecording() {
         this.synthAndEffects.saveRecording()
     }
 
