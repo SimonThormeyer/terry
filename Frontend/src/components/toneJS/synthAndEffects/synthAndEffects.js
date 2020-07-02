@@ -26,17 +26,25 @@ export class SynthAndEffects {
             this.context.lookAhead = 0.1
 
             //RECORDER
-            this.recorderStarted = false
-            this.destination = this.context.createMediaStreamDestination()
-            MediaRecorder.mimeType = "audio/mp3"
-            this.recorder = new MediaRecorder(this.destination.stream)
-            this.fileSaver = require('file-saver');
-            this.blob = undefined
+            if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
+                this.recorderStarted = false
+                this.destination = this.context.createMediaStreamDestination()
+                MediaRecorder.mimeType = "audio/mp3"
+                this.recorder = new MediaRecorder(this.destination.stream)
+                this.fileSaver = require('file-saver');
+                this.blob = undefined
+                this.isChrome = true
+            } else {
+                this.isChrome = false
+            }
+
 
             // INSTRUMENT_CHAIN
             //Effects
             this.limiter = new Tone.Limiter(-1).toMaster()
-            this.limiter.connect(this.destination)
+            if (this.isChrome) {
+                this.limiter.connect(this.destination)
+            }
             this.compressor = new Tone.Compressor(-20, 12)
             this.volume = new Tone.Volume(-50)
             this.reverb = new Tone.Reverb(2)
@@ -47,22 +55,18 @@ export class SynthAndEffects {
             this.filter = new Tone.Filter(400, 'lowpass', -12)
 
 
-            if (this.soundType==="Marimba"){
+            if (this.soundType === "Marimba") {
                 this.mainSoundSource = new Tone.Sampler({
                     "C3": "samples/marimbaC3.wav"
                 })
                 this.mainSoundSource.volume.value = -6
-            }
-
-            else if (this.soundType==="Kalimba"){
+            } else if (this.soundType === "Kalimba") {
                 console.log("HELLLO")
                 this.mainSoundSource = new Tone.Sampler({
                     "C3": "samples/KalimbaDX7C3.wav"
                 })
                 this.mainSoundSource.volume.value = -8
-            }
-
-            else {
+            } else {
                 this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
                     oscillator: {
                         type: "sine",
@@ -206,25 +210,35 @@ export class SynthAndEffects {
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {
-        if (!this.recorderStarted) {
-            this.recorder.start()
-            this.recorderStarted = true
-        } else {
-            this.recorder.stop()
-            this.recorderStarted = false
+        if (this.isChrome) {
+            if (!this.recorderStarted) {
+                this.recorder.start()
+                this.recorderStarted = true
+            } else {
+                this.recorder.stop()
+                this.recorderStarted = false
+            }
+
+            this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
+            this.recorder.onstop = evt => {
+                this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
+
+                this.saveRecording = () => {
+                    if(this.isChrome) {
+                        if (this.blob) {
+                            this.fileSaver.saveAs(this.blob)
+                        }
+                    }
+
+
+                };
+            }
+        }
+        else{
+            alert("Recording is not supported in your browser.")
         }
 
-        this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
-        this.recorder.onstop = evt => {
-            this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
 
-            this.saveRecording = () => {
-                if (this.blob) {
-                    this.fileSaver.saveAs(this.blob)
-                }
-
-            };
-        }
     }
 }
 
