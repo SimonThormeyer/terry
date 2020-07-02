@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
-import {useFrame, useThree} from 'react-three-fiber'
+import { useFrame, useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
 import * as THREE from "three";
 
@@ -10,7 +10,7 @@ const Dot = forwardRef((props, ref) => {
     const [canvases, setCanvases] = useGlobalState("canvases");
     const [canvasId] = useGlobalState('canvasId');
     const [musicCtrl,] = useGlobalState('musicCtrl');
-    const [randomNotes,] = useGlobalState('randomNotes');
+    const [randomNotesRunning,] = useGlobalState('randomNotesRunning');
 
     // local
     const [dragging, setDragging] = useState(false);
@@ -22,30 +22,30 @@ const Dot = forwardRef((props, ref) => {
     const aspect = size.width / viewport.width;
 
     //--RANDOM MOVING DOTS--//
-    let randomDirection = new THREE.Vector3 ((2*Math.random()-1)*0.1,(2*Math.random()-1)*0.1,0);
+    let randomDirection = new THREE.Vector3((2 * Math.random() - 1) * 0.1, (2 * Math.random() - 1) * 0.1, 0);
 
 
     useFrame(() => {
         //needs to be toggled on and off
-        if(randomNotes.running){
+        if (randomNotesRunning) {
             moveRandomDots();
         }
     });
 
 
-    function changeDirection(){
-
+    function changeDirection() {
+        return;
         //right side or left side
-        if(ref.current.position.x>20 || ref.current.position.x< -20){
-            randomDirection.set(-randomDirection.x,(2*Math.random()-1)*0.1,0);
+        if (ref.current.position.x > 20 || ref.current.position.x < -20) {
+            randomDirection.set(-randomDirection.x, (2 * Math.random() - 1) * 0.1, 0);
         }
         //upper or lower bar
-        else if(ref.current.position.y> 9 || ref.current.position.y < -9){
-            randomDirection.set((2*Math.random()-1)*0.1,-randomDirection.y,0);
+        else if (ref.current.position.y > 9 || ref.current.position.y < -9) {
+            randomDirection.set((2 * Math.random() - 1) * 0.1, -randomDirection.y, 0);
         }
     }
 
-    function moveRandomDots(){
+    function moveRandomDots() {
 
         camera.updateMatrix();
         camera.updateMatrixWorld();
@@ -60,85 +60,96 @@ const Dot = forwardRef((props, ref) => {
         if (!frustum.containsPoint(ref.current.position.clone())) {
             changeDirection();
         }
+
+        let position = ref.current.position.clone();
+        console.log(position)
+        let newCanvases = Array.from(canvases);
+        let newDot = {};
+        newDot[props.name] = {
+            x: position.x,
+            y: position.y
         }
-
-
-
+        let newCanvas = { ...canvases[canvasId], ...newDot };
+        newCanvases[canvasId] = newCanvas;
+        setCanvases(newCanvases);
+    }
 
     // when canvas changes, change position accordingly
     useEffect(() => {
+        if(randomNotesRunning) return;
         setPosition([
             canvases[canvasId][props.name].x,
             canvases[canvasId][props.name].y,
             0
         ])
-    }, [canvasId, canvases, props.name])
+    }, [canvasId, canvases, props.name, randomNotesRunning])
 
-    // drag event handlers bound to the mesh
-    const bind = useGesture({
-        onDragStart: () => {
-            if(!randomNotes.running){
-                setDragging(true);
-                // position to be added to the current movement onDrag
-                beforeDragPosition.current =
-                    [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y]
-            }
 
-        },
-        onDrag: (({ movement: [x, y] }) => {
-            if(!randomNotes.running){
-                const [, , z] = position;
-                setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
-            }
-
-        }),
-        onDragEnd: () => {
-            setDragging(false);
-            let newCanvases = Array.from(canvases);
-            let newDot = {};
-            newDot[props.name] = {
-                x: position[0],
-                y: position[1]
-            }
-            let newCanvas = { ...canvases[canvasId], ...newDot };
-            newCanvases[canvasId] = newCanvas;
-            setCanvases(newCanvases);
+// drag event handlers bound to the mesh
+const bind = useGesture({
+    onDragStart: () => {
+        if (!randomNotesRunning) {
+            setDragging(true);
+            // position to be added to the current movement onDrag
+            beforeDragPosition.current =
+                [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y]
         }
-    }, { pointerEvents: true, eventOptions: { capture: true } });
 
-        // changeParameters: useEffect called when position changes (e.g.) on drag event
-        useEffect(() => {
-            if (!musicCtrl[canvasId]) return;
-            camera.updateMatrixWorld();
-            let pos = ref.current.position.clone();
-            pos.project(camera);
-            if (props.name === 'effectSphere') {
-                musicCtrl[canvasId].setParameterEffect(pos.x, pos.y);
-            } else if (props.name === 'synthSphere') {
-                musicCtrl[canvasId].setParameterSynth(pos.x, pos.y);
-            } else if (props.name === 'musicSphere') {
-                musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
-            }
-        }, [position, camera, canvasId, musicCtrl, props.name, ref])
+    },
+    onDrag: (({ movement: [x, y] }) => {
+        if (!randomNotesRunning) {
+            const [, , z] = position;
+            setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
+        }
 
-    return (
-        <mesh
-            {...props}
-            position={position} {...bind()}
-            ref={ref}
-        >
-            <sphereGeometry
-                attach="geometry"
-                args={[1, 16, 16]}
-            />
-            <meshPhongMaterial
-                attach="material"
-                dithering
-                color={props.color}
-                emissive={dragging ? props.color : 'black'}
-            />
-        </mesh>
-    );
+    }),
+    onDragEnd: () => {
+        setDragging(false);
+        let newCanvases = Array.from(canvases);
+        let newDot = {};
+        newDot[props.name] = {
+            x: position[0],
+            y: position[1]
+        }
+        let newCanvas = { ...canvases[canvasId], ...newDot };
+        newCanvases[canvasId] = newCanvas;
+        setCanvases(newCanvases);
+    }
+}, { pointerEvents: true, eventOptions: { capture: true } });
+
+// changeParameters: useEffect called when position changes (e.g.) on drag event
+useEffect(() => {
+    if (!musicCtrl[canvasId]) return;
+    camera.updateMatrixWorld();
+    let pos = ref.current.position.clone();
+    pos.project(camera);
+    if (props.name === 'effectSphere') {
+        musicCtrl[canvasId].setParameterEffect(pos.x, pos.y);
+    } else if (props.name === 'synthSphere') {
+        musicCtrl[canvasId].setParameterSynth(pos.x, pos.y);
+    } else if (props.name === 'musicSphere') {
+        musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
+    }
+}, [position, camera, canvasId, musicCtrl, props.name, ref])
+
+return (
+    <mesh
+        {...props}
+        position={position} {...bind()}
+        ref={ref}
+    >
+        <sphereGeometry
+            attach="geometry"
+            args={[1, 16, 16]}
+        />
+        <meshPhongMaterial
+            attach="material"
+            dithering
+            color={props.color}
+            emissive={dragging ? props.color : 'black'}
+        />
+    </mesh>
+);
 
 })
 
