@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
+import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
 import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
@@ -39,7 +39,6 @@ const Dot = forwardRef((props, ref) => {
         onDrag: (({ movement: [x, y] }) => {
             const [, , z] = position;
             setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
-            changeParameters();
         }),
         onDragEnd: () => {
             setDragging(false);
@@ -55,8 +54,8 @@ const Dot = forwardRef((props, ref) => {
         }
     }, { pointerEvents: true, eventOptions: { capture: true } });
 
-        // method called when position changes (e.g.) on drag event
-        const changeParameters = useCallback(() => {
+        // useEffect called when position changes (e.g.) on drag event - changes musicCtrl parameters
+        useEffect(() => {
             if (!musicCtrl[canvasId]) return;
             camera.updateMatrixWorld();
             let pos = ref.current.position.clone();
@@ -68,7 +67,7 @@ const Dot = forwardRef((props, ref) => {
             } else if (props.name === 'musicSphere') {
                 musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
             }
-        }, [camera, canvasId, musicCtrl, props.name, ref])
+        }, [camera, canvasId, musicCtrl, props.name, ref, position])
 
     return (
         <mesh

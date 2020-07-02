@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState";
-import { MusicCtrl } from "../components/toneJS/musicCtrl"
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
-import {Marimba} from "./toneJS/Marimba";
-import {Kalimba} from "./toneJS/Kalimba";
+import MusicCtrlWrapper from "../containers/MusicCtrlWrapper"
 
 function StartOverlay() {
 
-    const [startOverlay, setStartOverlay] = useState(true);
+    // global
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
-    const [, setMusicCtrl] = useGlobalState('musicCtrl');
     const [, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
+    const [toneIsInitialized,] = useGlobalState("toneIsInitialized")
+
+    // local 
+    const [startOverlay, setStartOverlay] = useState(true);
+    const [startApp, setStartApp] = useState(false)
 
 
     useEffect(() => {
@@ -18,11 +20,11 @@ function StartOverlay() {
     }, [startOverlay, setOverlayIsOpen])
 
     const playFunction = () => {
-        setMusicCtrl([new Marimba(), new MusicCtrl(), new Kalimba()]);
+        setStartApp(true);
     }
 
     const helpFunction = () => {
-        setMusicCtrl(new MusicCtrl());
+        playFunction();
         setActiveHelpDialogue("canvas");
     }
 
@@ -31,9 +33,11 @@ function StartOverlay() {
     return (
 
         <>
+            {startApp && <MusicCtrlWrapper />}
             {
-                startOverlay &&
-                    <>
+                // show overlay when enabled or when toneJS has not yet been initialized.
+                (startOverlay || !toneIsInitialized) &&
+                <>
                     <div id="startUnderlay"></div>
                     <div id="startOverlay">
                         <LogoIcon id="startLogo" />
@@ -43,18 +47,25 @@ function StartOverlay() {
                         </p>
 
                         <p id="credits">Created by: Chantal, Freddy, Luca, Malte, Maluna, Niklas, Simon.</p>
-                        <div id="outerButton">
-                        <button id="startButton" onClick={() => { setStartOverlay(false); playFunction() }}>Let's play music!</button>
-                            <button id="startHelpButton" onClick={() => { setStartOverlay(false); helpFunction() }}>Start with tutorial!</button>
-                        </div>
-                        </div>
+                        {/* display loading text when overlay should be disabled already but toneJS has not yet been initialized */}
+                        {startOverlay ?
+                            <div id="outerButton">
+                                <button id="startButton" onClick={() => { setStartOverlay(false); playFunction() }}>
+                                    Let's play music!
+                                </button>
+                                <button id="startHelpButton" onClick={() => { setStartOverlay(false); helpFunction() }}>
+                                    Start with tutorial!
+                                </button>
+                            </div> :
+                            <p>Loading...</p>}
+                    </div>
 
-                    </> 
-                
+                </>
+
             }
         </>
-        
-             
+
+
     );
 };
 
