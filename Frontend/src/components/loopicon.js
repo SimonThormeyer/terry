@@ -104,21 +104,21 @@ function Loopicon({ id, muted }) {
           setPlay(!play); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") }
         }} >
           {play ?
-            <PauseIcon key={`loopPauseButton_${id}`} onClick={() => {
+            <PauseIcon title="pause loop" key={`loopPauseButton_${id}`} onClick={() => {
               runningLoopers.get(id).pause(); animationPause();
             }} /> :
-            <PlayIcon key={`loopPlayButton_${id}`} onClick={() => {
+            <PlayIcon title="play loop" key={`loopPlayButton_${id}`} onClick={() => {
               runningLoopers.get(id).play(); animationRun();
             }} />}
         </li>
 
         <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") } }}>
           {mute ?
-            <MuteIcon key={`loopMuteButton_${id}`} onClick={() => {
+            <MuteIcon title="unmute loop" key={`loopMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute();
               unmuteLook();
             }} /> :
-            <VolumeIcon key={`loopOnMuteButton_${id}`} onClick={() => {
+            <VolumeIcon title="mute loop" key={`loopOnMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute()
               muteLook();
             }} />
@@ -134,7 +134,7 @@ function Loopicon({ id, muted }) {
             runningLoopers.delete(id);
             setRunningLoopers(new Map(runningLoopers));
           }, 600);
-        }}><DeleteIcon key={`loopDeleteButton_${id}`} />
+        }}><DeleteIcon title="delete loop" key={`loopDeleteButton_${id}`} />
         </li>
 
       </ul>
