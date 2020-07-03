@@ -51,4 +51,9 @@ export class MusicCtrl {
         this.synthAndEffects.saveRecording()
     }
 
+    setVolume(value){
+        this.synthAndEffects.controllableVolume(value)
+
+    }
+
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useGlobalState } from "../GlobalState"
 import { MusicCtrl } from "../components/toneJS/musicCtrl"
 import { Marimba } from "../components/toneJS/Marimba";
-import { Kalimba } from "../components/toneJS/Kalimba"
+import { Harp } from "../components/toneJS/Harp"
 
 //this container is designed to initialize musicCtrl Objetcs and set a global state variable after initialization.
 
@@ -15,7 +15,7 @@ export default function MusicCtrlWrapper() {
     const countInitialized = useRef(0);
 
     useEffect(() => {
-        setMusicCtrl([new Marimba(), new MusicCtrl(), new Kalimba()]);
+        setMusicCtrl([new Marimba(), new MusicCtrl(), new Harp()]);
     }, [setMusicCtrl])
 
     useEffect(() => {
