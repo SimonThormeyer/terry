@@ -98,8 +98,11 @@ export class SynthAndEffects {
                 // INITIALISING
                 this.reverb.generate() // reverb needs to be initialised
                 this.reverb.wet.value = 0.1
-                this.initialized = true;
-                resolve();
+                // when all buffers are loaded, initializing is finished.
+                Tone.Buffer.on('load', () => {
+                    this.initialized = true;
+                    resolve();
+                })
             }).catch(e => reject(e));
         })
     }
