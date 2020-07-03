@@ -24,10 +24,11 @@ export default function MusicCtrlWrapper() {
                 countInitialized.current += 1;
                 if (countInitialized.current === 3) {
                     setToneIsInitialized(true);
-                    console.log(`all musicCtrls successfully initialized`)
                 }
-            }).catch(e =>
-                console.log(`error while initializing: ${e}`)
+            }).catch(e => {
+                console.error(`error while initializing:`)
+                console.error(e)
+            }
             )
         }
     }, [musicCtrl, countInitialized, setToneIsInitialized])
