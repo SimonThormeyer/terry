@@ -6,13 +6,11 @@ COPY package.json ./
 
 RUN rm -rf node_modules
 
-RUN yarn
+RUN yarn install && \
+    yarn global add \
+    react-scripts \
+    nodemon
 
-RUN yarn global add react-scripts
-
-RUN yarn global add nodemon
-
-RUN yarn install
 
 COPY . .
 
