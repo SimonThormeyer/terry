@@ -9,7 +9,7 @@ function MultitrackNav(props) {
     const [canvasId, setCanvasId] = useGlobalState('canvasId');
     const [canvases,] = useGlobalState('canvases');
 
-    let synthesizerNames = ['Marimba', 'Synth1', 'Kalimba', 'percussion']
+    let synthesizerNames = ['Marimba', 'Synth', 'Harp', 'percussion']
 
     let invisible = {
         visibility: 'hidden'

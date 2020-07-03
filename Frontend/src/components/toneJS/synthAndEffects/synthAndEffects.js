@@ -47,6 +47,7 @@ export class SynthAndEffects {
                 if (this.isChrome) {
                     this.limiter.connect(this.destination)
                 }
+                this.controllableVolume = new Tone.Volume(-1)
                 this.compressor = new Tone.Compressor(-20, 12)
                 this.volume = new Tone.Volume(-50)
                 this.reverb = new Tone.Reverb(2)
@@ -62,9 +63,9 @@ export class SynthAndEffects {
                         "C3": "samples/marimbaC3.wav"
                     })
                     this.mainSoundSource.volume.value = -6
-                } else if (this.soundType === "Kalimba") {
+                } else if (this.soundType === "Harp") {
                     this.mainSoundSource = new Tone.Sampler({
-                        "C3": "samples/KalimbaDX7C3.wav"
+                        "C5": "samples/harpc3.wav"
                     })
                     this.mainSoundSource.volume.value = -8
                 } else {
@@ -76,7 +77,7 @@ export class SynthAndEffects {
                 }
 
                 this.mainSoundSource.chain(this.filter, this.delay, this.pan, this.reverb, this.volume,
-                    this.compressor, this.limiter, Tone.Master)
+                    this.compressor, this.controllableVolume, this.limiter, Tone.Master)
 
                 //LFOs
                 this.panLfo = new Tone.LFO(5, 0, 1);
@@ -210,6 +211,13 @@ export class SynthAndEffects {
             this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
         //console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
+
+    /*** VOLUME FUNCTIONS ***/
+    setcontrollableVolume(value){
+        // expects value to be between 0 - 1
+        this.controllableVolume.volume = value * 100 - 100
+    }
+
 
 
     /*** RECORDER FUNCTIONS ***/
