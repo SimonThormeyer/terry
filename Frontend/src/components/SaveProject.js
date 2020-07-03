@@ -59,31 +59,18 @@ function SaveProjectForm(props) {
       })
   }
 
-  return ( <
-    >
-    <
-    form id = "saveForm" >
-    <
-    label id = "labelUsername" > Username < /label> <
-    input name = "username"
-    id = "username"
-    maxLength = "5"
-    required > < /input> <
-    label id = "labelProjectname" > Project name < /label> <
-    input name = "projectname"
-    id = "projectname"
-    maxLength = "255"
-    required > < /input> < /
-    form > <
-    button id = "saveButton"
-    onClick = {
-      () => {
-        handleSaveButtonClick()
-      }
-    } > Save < /button>
+    return (
+        <>
+            <p id="headerSave">Save your Track?</p>
+            <form id="saveForm">
+                <label id="labelUsername">Username</label>
+                <input name="username" id="username" maxLength="5" required></input>
+                <label id="labelProjectname">Project name</label>
+                <input name="projectname" id="projectname" maxLength="255" required></input>
+            </form>
+            <button id="saveButton" onClick={() => { handleSaveButtonClick() }}>Save</button>
 
-    <
-    />
+    </>
   )
 }
 

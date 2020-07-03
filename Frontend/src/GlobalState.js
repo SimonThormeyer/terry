@@ -45,6 +45,7 @@ const initialState = {
     nextLooperId: 1,
     activeHelpDialogue : "",
     randomNotes: new RandomNotes(),
+    toneIsInitialized: false,
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

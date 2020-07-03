@@ -8,93 +8,102 @@ export class SynthAndEffects {
 
     constructor(soundType) {
         this.initialized = false;
-        import('tone').then(module => {
+        this.soundType = soundType
+        // Settings
+        this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
+        this.waveforms = ["sine", "sawtooth6", "square"]
+        this.noteLength = this.noteLengthOptions[2]
+    }
 
-            Tone = module.default;
+    initialize() {
+        return new Promise((resolve, reject) => {
+            import('tone').then(module => {
 
-            //
-            this.soundType = soundType
-
-            // Settings
-            this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
-            this.waveforms = ["sine", "sawtooth6", "square"]
-            this.noteLength = this.noteLengthOptions[2]
-
-            //GENERAL TONEJS SETTINGS
-            this.context = Tone.context
-            this.context.latencyHint = "balanced"
-            this.context.lookAhead = 0.1
-
-            //RECORDER
-            this.recorderStarted = false
-            this.destination = this.context.createMediaStreamDestination()
-            MediaRecorder.mimeType = "audio/mp3"
-            this.recorder = new MediaRecorder(this.destination.stream)
-            this.fileSaver = require('file-saver');
-            this.blob = undefined
-
-            // INSTRUMENT_CHAIN
-            //Effects
-            this.limiter = new Tone.Limiter(-1).toMaster()
-            this.limiter.connect(this.destination)
-            this.compressor = new Tone.Compressor(-20, 12)
-            this.volume = new Tone.Volume(-50)
-            this.reverb = new Tone.Reverb(2)
-            this.pan = new Tone.Panner(1)
-            this.delay = new Tone.FeedbackDelay(0.1, 0)
-
-            //Synth
-            this.filter = new Tone.Filter(400, 'lowpass', -12)
+                Tone = module.default;
 
 
-            if (this.soundType==="Marimba"){
-                this.mainSoundSource = new Tone.Sampler({
-                    "C3": "samples/marimbaC3.wav"
-                })
-                this.mainSoundSource.volume.value = -6
-            }
+                //GENERAL TONEJS SETTINGS
+                this.context = Tone.context
+                this.context.latencyHint = "balanced"
+                this.context.lookAhead = 0.1
 
-            else if (this.soundType==="Kalimba"){
-                console.log("HELLLO")
-                this.mainSoundSource = new Tone.Sampler({
-                    "C3": "samples/KalimbaDX7C3.wav"
-                })
-                this.mainSoundSource.volume.value = -8
-            }
+                //RECORDER
+                if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
+                    this.recorderStarted = false
+                    this.destination = this.context.createMediaStreamDestination()
+                    MediaRecorder.mimeType = "audio/mp3"
+                    this.recorder = new MediaRecorder(this.destination.stream)
+                    this.fileSaver = require('file-saver');
+                    this.blob = undefined
+                    this.isChrome = true
+                } else {
+                    this.isChrome = false
+                }
 
-            else {
-                this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
-                    oscillator: {
-                        type: "sine",
-                    }
-                })
-            }
 
-            this.mainSoundSource.chain(this.filter, this.delay, this.pan, this.reverb, this.volume,
-                this.compressor, this.limiter, Tone.Master)
+                // INSTRUMENT_CHAIN
+                //Effects
+                this.limiter = new Tone.Limiter(-1).toMaster()
+                if (this.isChrome) {
+                    this.limiter.connect(this.destination)
+                }
+                this.controllableVolume = new Tone.Volume(-1)
+                this.compressor = new Tone.Compressor(-20, 12)
+                this.volume = new Tone.Volume(-50)
+                this.reverb = new Tone.Reverb(2)
+                this.pan = new Tone.Panner(1)
+                this.delay = new Tone.FeedbackDelay(0.1, 0)
 
-            //LFOs
-            this.panLfo = new Tone.LFO(5, 0, 1);
-            this.panLfo.connect(this.pan.pan);
-            this.panLfo.start()
+                //Synth
+                this.filter = new Tone.Filter(400, 'lowpass', -12)
 
-            // Volume Adjustments
-            this.volumeFilterAdj = -8
-            this.volumeADSRAdj = -6
-            this.volumeReverbAdj = 4
-            this.volumeValue = -5
-            this.volume.volume.value = this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
 
-            //UTILITY
-            this.delayCounter = 0
-            this.reverbCounter = 0
+                if (this.soundType === "Marimba") {
+                    this.mainSoundSource = new Tone.Sampler({
+                        "C3": "samples/marimbaC3.wav"
+                    })
+                    this.mainSoundSource.volume.value = -6
+                } else if (this.soundType === "Harp") {
+                    this.mainSoundSource = new Tone.Sampler({
+                        "C5": "samples/harpc3.wav"
+                    })
+                    this.mainSoundSource.volume.value = -8
+                } else {
+                    this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
+                        oscillator: {
+                            type: "sine",
+                        }
+                    })
+                }
 
-            // INITIALISING
-            this.reverb.generate() // reverb needs to be initialised
-            this.reverb.wet.value = 0.1
-            this.initialized = true;
+                this.mainSoundSource.chain(this.filter, this.delay, this.pan, this.reverb, this.volume,
+                    this.compressor, this.controllableVolume, this.limiter, Tone.Master)
+
+                //LFOs
+                this.panLfo = new Tone.LFO(5, 0, 1);
+                this.panLfo.connect(this.pan.pan);
+                this.panLfo.start()
+
+                // Volume Adjustments
+                this.volumeFilterAdj = -8
+                this.volumeADSRAdj = -6
+                this.volumeReverbAdj = 4
+                this.volumeValue = -5
+                this.volume.volume.value = this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
+
+                //UTILITY
+                this.delayCounter = 0
+                this.reverbCounter = 0
+
+                // INITIALISING
+                this.reverb.generate() // reverb needs to be initialised
+                this.reverb.wet.value = 0.1
+                this.initialized = true;
+                resolve();
+            }).catch(e => reject(e));
         })
     }
+
 
 
     /*** UTILITY FUNCTIONS ***/
@@ -203,28 +212,45 @@ export class SynthAndEffects {
         //console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
+    /*** VOLUME FUNCTIONS ***/
+    setcontrollableVolume(value){
+        // expects value to be between 0 - 1
+        this.controllableVolume.volume = value * 100 - 100
+    }
+
+
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {
-        if (!this.recorderStarted) {
-            this.recorder.start()
-            this.recorderStarted = true
-        } else {
-            this.recorder.stop()
-            this.recorderStarted = false
+        if (this.isChrome) {
+            if (!this.recorderStarted) {
+                this.recorder.start()
+                this.recorderStarted = true
+            } else {
+                this.recorder.stop()
+                this.recorderStarted = false
+            }
+
+            this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
+            this.recorder.onstop = evt => {
+                this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' })
+
+                this.saveRecording = () => {
+                    if (this.isChrome) {
+                        if (this.blob) {
+                            this.fileSaver.saveAs(this.blob)
+                        }
+                    }
+
+
+                };
+            }
+        }
+        else {
+            alert("Recording is not supported in your browser.")
         }
 
-        this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
-        this.recorder.onstop = evt => {
-            this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
 
-            this.saveRecording = () => {
-                if (this.blob) {
-                    this.fileSaver.saveAs(this.blob)
-                }
-
-            };
-        }
     }
 }
 
