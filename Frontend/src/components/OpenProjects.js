@@ -11,7 +11,8 @@ function OpenProject({ user, projectName }) {
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
-    const [backendUrl,] = useGlobalState('backend_url');
+
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
     //get Request
     useEffect(() => {

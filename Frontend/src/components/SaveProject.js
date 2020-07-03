@@ -11,7 +11,6 @@ function SaveProjectForm(props) {
 
   // needs to have suffix of REACT_APP_...
   const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
-  console.log(`backendUrl: ${backendUrl}`)
 
   let getGlobalState = () => {
     let loopers = [];
