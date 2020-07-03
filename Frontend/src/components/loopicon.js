@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState"
+import useEventListener from "./../UseEventListener";
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
@@ -7,10 +8,11 @@ import { ReactComponent as MuteIcon } from '../img/mute.svg';
 import { ReactComponent as VolumeIcon } from '../img/volume.svg';
 
 
-function Loopicon({ id, muted }) {
+function Loopicon({ id, positionOnScreen }) {
 
   //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
+  const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
   const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
   //local state to toogle icons
@@ -32,21 +34,11 @@ function Loopicon({ id, muted }) {
     progressRingCircleRun.style.webkitAnimationPlayState = "running";
   }
 
-  //if the loop is muted the icon is transparent
-  const muteLook = useCallback(
-    () => {
-      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-      loopId.style.opacity = 0.6;
-
-    }, [id])
-
-  //if the loop is not muted the icon is not transparent
-  const unmuteLook = useCallback(
-    () => {
-      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-      loopId.style.opacity = 1;
-    }, [id])
-
+  // if the loop is muted the icon is transparent, otherwise completely opaque
+  useEffect(() => {
+      let loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
+      loopId.style.opacity = mute ? 0.6 : 1;
+    }, [id, mute])
 
   //slides the loopicons if the user deletes one 
   const slide = () => {
@@ -92,9 +84,22 @@ function Loopicon({ id, muted }) {
     setPlay(!looperIsStopped)
     if (looperIsStopped) animationPause();
     setMute(looperIsMuted)
-    if (looperIsMuted) muteLook();
-    else unmuteLook();
-  }, [id, runningLoopers, muted, animationPause, muteLook, unmuteLook])
+  }, [id, runningLoopers, animationPause])
+
+  //----------- HOT KEY (Number) mutes looper, if it matches the position on screen ------------
+  const handleKeyDown = event => {
+    if (overlayIsOpen) return;
+    // start/stop muting with Number Keys
+    let keyNumber = event.keyCode - 49;
+    if (keyNumber < 10 && keyNumber === positionOnScreen) {
+      if (runningLoopers.get(id)) {
+        runningLoopers.get(id).toggleMute();
+        setMute(!mute);
+      }
+    }
+  }
+
+  useEventListener("keydown", handleKeyDown);
 
 
   return (
@@ -116,11 +121,9 @@ function Loopicon({ id, muted }) {
           {mute ?
             <MuteIcon title="unmute loop" key={`loopMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute();
-              unmuteLook();
             }} /> :
             <VolumeIcon title="mute loop" key={`loopOnMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute()
-              muteLook();
             }} />
           }
         </li>
@@ -149,6 +152,3 @@ function Loopicon({ id, muted }) {
 }
 
 export default Loopicon;
-
-
-
