@@ -1,3 +1,6 @@
+### .env File for Frontend containing the backend URL in production environment: BACKEND_URL="https://terry.beuth-media.de/db"
+Frontend/.env
+
 site-packages/
 yarn.lock
 

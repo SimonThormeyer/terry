@@ -5,9 +5,10 @@ import { useGlobalState } from "../GlobalState";
 function SaveProjectForm(props) {
 
     const [runningLoopers,] = useGlobalState('runningLoopers');
-    const [canvases, ] = useGlobalState('canvases');
-    const [backendUrl,] = useGlobalState('backend_url');
-  
+    const [canvases,] = useGlobalState('canvases');
+
+    // needs to have suffix of REACT_APP_...
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
     let getGlobalState = () => {
         let loopers = [];
@@ -55,18 +56,16 @@ function SaveProjectForm(props) {
             })
     }
 
-    return (
-        <>
-            <form id="saveForm">
-                <label id="labelUsername">Username</label>
-                <input name="username" id="username" maxLength="5" required></input>
-                <label id="labelProjectname">Project name</label>
-                <input name="projectname" id="projectname" maxLength="255" required></input>
-            </form>
-            <button id="saveButton" onClick={() => { handleSaveButtonClick() }}>Save</button>
-
-        </>
-    )
+    return <>
+        <p id="headerSave">Save your Track?</p>
+        <form id="saveForm">
+            <label id="labelUsername">Username</label>
+            <input name="username" id="username" maxLength="5" required></input>
+            <label id="labelProjectname">Project name</label>
+            <input name="projectname" id="projectname" maxLength="255" required></input>
+        </form>
+        <button id="saveButton" onClick={() => { handleSaveButtonClick() }}>Save</button>
+    </>
 }
 
 

@@ -9,7 +9,7 @@ function MultitrackNav(props) {
     const [canvasId, setCanvasId] = useGlobalState('canvasId');
     const [canvases,] = useGlobalState('canvases');
 
-    let synthesizerNames = ['Marimba', 'Synth1', 'Kalimba', 'percussion']
+    let synthesizerNames = ['Marimba', 'Synth', 'Harp', 'percussion']
 
     let invisible = {
         visibility: 'hidden'
@@ -18,10 +18,10 @@ function MultitrackNav(props) {
     return (
         <div id="multitrackingNav">
             {/* // if there is no previous canvas, the visibilty of the arrow is changed to hidden. thereby the synthesizer name stays in center and doesn't move */}
-            <ArrowBack style={canvasId === 0 ? invisible : {}} id="arrowBack"
+            <ArrowBack title="previous canvas" style={canvasId === 0 ? invisible : {}} id="arrowBack"
                 onClick={() => setCanvasId(canvasId - 1)} />
             <span id="synthesizerName">{synthesizerNames[canvasId]}</span>
-            <ArrowForward style={canvasId >= canvases.length - 1 ? invisible : {}} id="arrowForward"
+            <ArrowForward title="next canvas" style={canvasId >= canvases.length - 1 ? invisible : {}} id="arrowForward"
                 onClick={() => setCanvasId(canvasId + 1)} />
         </div>
     );

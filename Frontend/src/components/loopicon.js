@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useGlobalState } from "../GlobalState"
+import useEventListener from "./../UseEventListener";
 import { ReactComponent as PauseIcon } from '../img/pause.svg';
 import { ReactComponent as PlayIcon } from '../img/play.svg';
 import { ReactComponent as DeleteIcon } from '../img/delete.svg';
 import { ReactComponent as MuteIcon } from '../img/mute.svg';
 import { ReactComponent as VolumeIcon } from '../img/volume.svg';
-import useEventListener from "./../UseEventListener"
 
 
-function Loopicon({ id }) {
+function Loopicon({ id, positionOnScreen }) {
 
   //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
@@ -34,21 +34,11 @@ function Loopicon({ id }) {
     progressRingCircleRun.style.webkitAnimationPlayState = "running";
   }
 
-  //if the loop is muted the icon is transparent
-  const muteLook = useCallback(
-    () => {
-      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-      loopId.style.opacity = 0.6;
-
-    }, [id])
-
-  //if the loop is not muted the icon is not transparent
-  const unmuteLook = useCallback(
-    () => {
-      var loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
-      loopId.style.opacity = 1;
-    }, [id])
-
+  // if the loop is muted the icon is transparent, otherwise completely opaque
+  useEffect(() => {
+      let loopId = document.getElementById(`loop_${id}`).getElementsByClassName("progress-ring")[0];
+      loopId.style.opacity = mute ? 0.6 : 1;
+    }, [id, mute])
 
   //slides the loopicons if the user deletes one 
   const slide = () => {
@@ -94,32 +84,20 @@ function Loopicon({ id }) {
     setPlay(!looperIsStopped)
     if (looperIsStopped) animationPause();
     setMute(looperIsMuted)
-    if (looperIsMuted) muteLook();
-  }, [id, runningLoopers, animationPause, muteLook])
+  }, [id, runningLoopers, animationPause])
 
-
-
-  //----------- KEY-BINDINGS ------------
-  const handleKeyDown = useCallback(
-    (event) => {
-      if (overlayIsOpen) return;
-      // start/stop muting with Number Keys
-      let keyNumber = event.keyCode - 48
-      if (id < 10 && id === keyNumber) {
-        if (runningLoopers.get(keyNumber)) {
-          runningLoopers.get(keyNumber).toggleMute();
-          setMute(!mute);
-          if (!mute) {
-            muteLook();
-          } else {
-            if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") };
-            unmuteLook();
-          }
-        }
+  //----------- HOT KEY (Number) mutes looper, if it matches the position on screen ------------
+  const handleKeyDown = event => {
+    if (overlayIsOpen) return;
+    // start/stop muting with Number Keys
+    let keyNumber = event.keyCode - 49;
+    if (keyNumber < 10 && keyNumber === positionOnScreen) {
+      if (runningLoopers.get(id)) {
+        runningLoopers.get(id).toggleMute();
+        setMute(!mute);
       }
-    },
-    [mute, id, runningLoopers, muteLook, unmuteLook, overlayIsOpen, activeHelpDialogue, setActiveHelpDialogue]
-  );
+    }
+  }
 
   useEventListener("keydown", handleKeyDown);
 
@@ -131,23 +109,21 @@ function Loopicon({ id }) {
           setPlay(!play); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") }
         }} >
           {play ?
-            <PauseIcon key={`loopPauseButton_${id}`} onClick={() => {
+            <PauseIcon title="pause loop" key={`loopPauseButton_${id}`} onClick={() => {
               runningLoopers.get(id).pause(); animationPause();
             }} /> :
-            <PlayIcon key={`loopPlayButton_${id}`} onClick={() => {
+            <PlayIcon title="play loop" key={`loopPlayButton_${id}`} onClick={() => {
               runningLoopers.get(id).play(); animationRun();
             }} />}
         </li>
 
         <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") } }}>
           {mute ?
-            <MuteIcon key={`loopMuteButton_${id}`} onClick={() => {
+            <MuteIcon title="unmute loop" key={`loopMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute();
-              unmuteLook();
             }} /> :
-            <VolumeIcon key={`loopOnMuteButton_${id}`} onClick={() => {
+            <VolumeIcon title="mute loop" key={`loopOnMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute()
-              muteLook();
             }} />
           }
         </li>
@@ -161,7 +137,7 @@ function Loopicon({ id }) {
             runningLoopers.delete(id);
             setRunningLoopers(new Map(runningLoopers));
           }, 600);
-        }}><DeleteIcon key={`loopDeleteButton_${id}`} />
+        }}><DeleteIcon title="delete loop" key={`loopDeleteButton_${id}`} />
         </li>
 
       </ul>
@@ -176,6 +152,3 @@ function Loopicon({ id }) {
 }
 
 export default Loopicon;
-
-
-

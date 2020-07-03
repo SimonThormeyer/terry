@@ -45,9 +45,8 @@ const initialState = {
     nextLooperId: 1,
     activeHelpDialogue : "",
     randomNotes: new RandomNotes(),
-    randomNotesRunning: false,
-    backend_url: "http://localhost:5000",
-    // backend_url:"https://terry.beuth-media.de/db",  
+    randomNotesRunning: false,  
+    toneIsInitialized: false,
 };
 
 export const { useGlobalState } = createGlobalState(initialState)
