@@ -46,8 +46,6 @@ const initialState = {
     activeHelpDialogue : "",
     randomNotes: new RandomNotes(),
     toneIsInitialized: false,
-    backend_url: "http://localhost:5000",
-    // backend_url:"https://terry.beuth-media.de/db",  
 };
 
 export const { useGlobalState } = createGlobalState(initialState)
