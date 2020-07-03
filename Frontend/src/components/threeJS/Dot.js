@@ -2,6 +2,7 @@ import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
 import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
+import { clamp } from 'lodash'
 
 const Dot = forwardRef((props, ref) => {
 
@@ -28,6 +29,8 @@ const Dot = forwardRef((props, ref) => {
         ])
     }, [canvasId, canvases, props.name])
 
+
+    const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2]
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
@@ -38,7 +41,11 @@ const Dot = forwardRef((props, ref) => {
         },
         onDrag: (({ movement: [x, y] }) => {
             const [, , z] = position;
-            setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
+            const [left, right, top, bottom] = bounds;
+            setPosition([
+                clamp(beforeDragPosition.current[0] + x / aspect, left, right),
+                clamp(- y / aspect + beforeDragPosition.current[1], top, bottom),
+                z]);
         }),
         onDragEnd: () => {
             setDragging(false);
