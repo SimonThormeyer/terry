@@ -266,9 +266,6 @@ canvas {
   height: 3vw;
   margin-left: 3vw;
   cursor: pointer;
-}
-
-#recordbutton {
   animation: recordbuttonAnimation 0.3s ease;
 }
 
@@ -279,42 +276,55 @@ canvas {
   }
 }
 
-#openIcon {
-  animation: openIconAnimation 0.3s ease;
+#mixerIcon {
+  animation: mixerbuttonAnimation 0.3s ease;
   margin-top: 4vw;
   transition: 0.5s ease;
 }
 
-@keyframes openIconAnimation {
+@keyframes mixerbuttonAnimation {
   from {
     opacity: 0;
     margin-top: 0vw;
   }
 }
 
-#saveIcon {
-  animation: saveIconAnimation 0.3s ease;
+#openIcon {
+  animation: openIconAnimation 0.3s ease;
   margin-top: 8vw;
   transition: 0.5s ease;
 }
 
-@keyframes saveIconAnimation {
+@keyframes openIconAnimation {
   from {
     opacity: 0;
     margin-top: 2vw;
   }
 }
 
+#saveIcon {
+  animation: saveIconAnimation 0.3s ease;
+  margin-top: 12vw;
+  transition: 0.5s ease;
+}
+
+@keyframes saveIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 4vw;
+  }
+}
+
 #helpIcon {
   animation: helpIconAnimation 0.3s ease;
-  margin-top: 12vw;
+  margin-top: 16vw;
   transition: 0.5s ease;
 }
 
 @keyframes helpIconAnimation {
   from {
     opacity: 0;
-    margin-top: 4vw;
+    margin-top: 6vw;
   }
 }
 
@@ -497,6 +507,80 @@ canvas {
   background-color: white;
   padding: 0 0.2vw;
   color: #a5a4a4;
+}
+
+/*************VOLUMEN MIXER OVERLAY****************/
+
+.rangeslider__handle {
+  border-radius: 50%;
+  border: none !important;
+  height: 1.5vw !important;
+  width: 1.5vw !important;
+  left: 0 !important;
+  margin: 0 0 0 -0.45vw !important
+}
+
+.rangeslider__handle-tooltip {
+  display: none !important;
+}
+
+.rangeslider-vertical {
+  border: none !important;
+  border-radius: 1vw;
+  box-shadow: none !important;
+  background-color: #a5a4a4 !important;
+}
+
+.rangeslider__fill {
+  border-radius: 0.3vw;
+}
+
+.rangeslider {
+  border: none !important;
+  border-radius: 0.3vw;
+  height: 10vw !important;
+  width: 0.6vw !important;
+  padding: 0 !important;
+  max-width: initial !important;
+  max-height: initial !important;
+  margin: 0 auto 1vw auto !important;
+}
+
+#volume1 .rangeslider__handle, #volume1 .rangeslider__fill {
+  background-color: purple;
+}
+
+#volume2 .rangeslider__handle, #volume2 .rangeslider__fill {
+  background-color: green;
+}
+
+#volume3 .rangeslider__handle, #volume3 .rangeslider__fill {
+  background-color: orange;
+}
+
+#mixer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#volume1 {
+  display: inline;
+  margin-right: 2vw;
+}
+
+#volume2 {
+  display: inline;
+}
+
+#volume3 {
+  float: left;
+  margin-left: 2vw;
+}
+
+.mixerValue {
+  width: 3vw !important;
+  font-size: 1vw;
 }
 
 /*********** NAVIGATION MULTITRACKING **************/
@@ -760,14 +844,17 @@ canvas {
   #recordbutton, #stoprecordbutton {
     margin-top: 2vw;
   }
-  #openIcon {
+  #mixerIcon {
     margin-top: 9vw;
   }
-  #saveIcon {
+  #openIcon {
     margin-top: 16vw;
   }
-  #helpIcon {
+  #saveIcon {
     margin-top: 23vw;
+  }
+  #helpIcon {
+    margin-top: 30vw;
   }
   /******MULTITRACKING NAV******/
   #arrowForward {
