@@ -2,11 +2,11 @@ import { MusicCtrl } from "./musicCtrl"
 import {SynthAndEffects} from "./synthAndEffects/synthAndEffects";
 
 
-export class Kalimba extends MusicCtrl {
+export class Harp extends MusicCtrl {
 
     constructor() {
         super()
-        this.synthAndEffects = new SynthAndEffects("Kalimba")
+        this.synthAndEffects = new SynthAndEffects("Harp")
 
     }
 
