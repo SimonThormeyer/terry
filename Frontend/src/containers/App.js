@@ -22,9 +22,9 @@ function App() {
         <Canvas className='Canvas' />
         <Menu />
         <Routes>
-          <Route path="projects" element={<OpenProjectsContainer />} />
-          <Route path="projects/:user" element={<OpenProjectsContainer />} />
-          <Route path="projects/:user/:projectName" element={<OpenProjectsContainer />} />
+          <Route path="share" element={<OpenProjectsContainer />} />
+          <Route path="share/:user" element={<OpenProjectsContainer />} />
+          <Route path="share/:user/:projectName" element={<OpenProjectsContainer />} />
         </Routes>
         <StartOverlay />
       </Router>
