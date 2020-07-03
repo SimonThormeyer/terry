@@ -5,9 +5,9 @@ import { useGlobalState } from "../GlobalState";
 function SaveProjectForm(props) {
 
     const [runningLoopers,] = useGlobalState('runningLoopers');
-    const [canvases, ] = useGlobalState('canvases');
+    const [canvases,] = useGlobalState('canvases');
     const [backendUrl,] = useGlobalState('backend_url');
-  
+
 
     let getGlobalState = () => {
         let loopers = [];
@@ -57,6 +57,7 @@ function SaveProjectForm(props) {
 
     return (
         <>
+            <p id="headerSave">Save your Track?</p>
             <form id="saveForm">
                 <label id="labelUsername">Username</label>
                 <input name="username" id="username" maxLength="5" required></input>
