@@ -1,5 +1,7 @@
 let Tone;
 
+const publicUrl = process.env.REACT_APP_PUBLIC_URL || "http://localhost:3000";
+
 export class SynthAndEffects {
     audio;
     chunks = []
@@ -60,12 +62,12 @@ export class SynthAndEffects {
 
                 if (this.soundType === "Marimba") {
                     this.mainSoundSource = new Tone.Sampler({
-                        "C3": "samples/marimbaC3.wav"
+                        "C3": publicUrl + "/samples/marimbaC3.wav"
                     })
                     this.mainSoundSource.volume.value = -6
                 } else if (this.soundType === "Harp") {
                     this.mainSoundSource = new Tone.Sampler({
-                        "C5": "samples/harpc3.wav"
+                        "C5": publicUrl + "/samples/harpc3.wav"
                     })
                     this.mainSoundSource.volume.value = -8
                 } else {
@@ -103,6 +105,10 @@ export class SynthAndEffects {
                     this.initialized = true;
                     resolve();
                 })
+                Tone.Buffer.on("error", (error) => {
+                    reject(error);
+                })
+
             }).catch(e => reject(e));
         })
     }
@@ -118,7 +124,6 @@ export class SynthAndEffects {
     /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
         this.mainSoundSource.triggerAttackRelease(note, this.noteLength);
-        console.log(Tone.Master.defaults)
     }
 
     setFilter(valueX) {
