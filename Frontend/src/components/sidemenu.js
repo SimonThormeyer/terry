@@ -35,9 +35,9 @@ function SideMenu() {
     const [sideMenuIcon, setSideMenuIcon] = useState(true);
     const [openSaveHelpIcon, setOpenSaveHelpIcon] = useState(true);
     const [mixerOverlay, setMixerOverlay] = useState(false);
-    const [volume1, setVolume1] = useState(50);
-    const [volume2, setVolume2] = useState(50);
-    const [volume3, setVolume3] = useState(50);
+    const [volume1, setVolume1] = useState(100);
+    const [volume2, setVolume2] = useState(100);
+    const [volume3, setVolume3] = useState(100);
 
 
 
@@ -77,8 +77,8 @@ function SideMenu() {
     }
 
     const mixerFunction = (canvas, volume) => {
-        //musicCtrl[canvas].setVolume(volume)
-        console.log("Canvas " + canvas + " volume: " + volume)
+        musicCtrl[canvas].setVolume(volume)
+        console.log("Canvas " + canvas + " volume: " + volume);
     }
 
 

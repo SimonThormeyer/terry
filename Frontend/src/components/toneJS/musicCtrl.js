@@ -52,7 +52,7 @@ export class MusicCtrl {
     }
 
     setVolume(value){
-        this.synthAndEffects.controllableVolume(value)
+        this.synthAndEffects.setcontrollableVolume(value)
     }
 
 }

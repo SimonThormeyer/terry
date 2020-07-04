@@ -215,7 +215,7 @@ export class SynthAndEffects {
     /*** VOLUME FUNCTIONS ***/
     setcontrollableVolume(value){
         // expects value to be between 0 - 1
-        this.controllableVolume.volume = value * 100 - 100
+        this.controllableVolume.volume.value = value * 100 - 100
     }
 
 
