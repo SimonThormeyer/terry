@@ -77,8 +77,7 @@ function SideMenu() {
     }
 
     const mixerFunction = (canvas, volume) => {
-        musicCtrl[canvas].setVolume(volume)
-        console.log("Canvas " + canvas + " volume: " + volume);
+        musicCtrl[canvas].setVolume(volume);
     }
 
 
@@ -176,7 +175,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume1}
-                                    onChange={value => { setVolume1(value); console.log(value / 100); mixerFunction(0, value/100) }}
+                                    onChange={value => { setVolume1(value); mixerFunction(0, value/100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume1}</div>
@@ -187,7 +186,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume2}
-                                    onChange={value => { setVolume2(value); console.log(value / 100); mixerFunction(1, value/100) }}
+                                    onChange={value => { setVolume2(value); mixerFunction(1, value/100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume2}</div>
@@ -198,7 +197,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume3}
-                                    onChange={value => { setVolume3(value); console.log(value / 100); mixerFunction(2, value/100) }}
+                                    onChange={value => { setVolume3(value); mixerFunction(2, value/100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume3}</div>
