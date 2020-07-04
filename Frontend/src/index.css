@@ -266,9 +266,6 @@ canvas {
   height: 3vw;
   margin-left: 3vw;
   cursor: pointer;
-}
-
-#recordbutton {
   animation: recordbuttonAnimation 0.3s ease;
 }
 
@@ -279,42 +276,55 @@ canvas {
   }
 }
 
-#openIcon {
-  animation: openIconAnimation 0.3s ease;
+#mixerIcon {
+  animation: mixerbuttonAnimation 0.3s ease;
   margin-top: 4vw;
   transition: 0.5s ease;
 }
 
-@keyframes openIconAnimation {
+@keyframes mixerbuttonAnimation {
   from {
     opacity: 0;
     margin-top: 0vw;
   }
 }
 
-#saveIcon {
-  animation: saveIconAnimation 0.3s ease;
+#openIcon {
+  animation: openIconAnimation 0.3s ease;
   margin-top: 8vw;
   transition: 0.5s ease;
 }
 
-@keyframes saveIconAnimation {
+@keyframes openIconAnimation {
   from {
     opacity: 0;
     margin-top: 2vw;
   }
 }
 
+#saveIcon {
+  animation: saveIconAnimation 0.3s ease;
+  margin-top: 12vw;
+  transition: 0.5s ease;
+}
+
+@keyframes saveIconAnimation {
+  from {
+    opacity: 0;
+    margin-top: 4vw;
+  }
+}
+
 #helpIcon {
   animation: helpIconAnimation 0.3s ease;
-  margin-top: 12vw;
+  margin-top: 16vw;
   transition: 0.5s ease;
 }
 
 @keyframes helpIconAnimation {
   from {
     opacity: 0;
-    margin-top: 4vw;
+    margin-top: 6vw;
   }
 }
 
@@ -497,6 +507,98 @@ canvas {
   background-color: white;
   padding: 0 0.2vw;
   color: #a5a4a4;
+}
+
+/*************VOLUMEN MIXER OVERLAY****************/
+
+.rangeslider__handle {
+  border-radius: 50%;
+  border: none !important;
+  height: 1.5vw !important;
+  width: 1.5vw !important;
+  left: 0 !important;
+  margin: 0 0 0 -0.45vw !important
+}
+
+.rangeslider {
+  border: none !important;
+  border-radius: 0.3vw !important;
+  height: 10vw !important;
+  width: 0.6vw !important;
+  padding: 0 !important;
+  max-width: initial !important;
+  max-height: initial !important;
+  margin: 0 auto 1vw auto !important;
+}
+
+.rangeslider__handle-tooltip {
+  display: none !important;
+}
+
+.rangeslider__labels {
+  display: none !important;
+}
+
+.rangeslider-vertical {
+  border: none !important;
+  border-radius: 1vw;
+  box-shadow: none !important;
+  background-color: #a5a4a4 !important;
+}
+
+.rangeslider__fill {
+  border-bottom-right-radius: 0.3vw !important;
+  border-bottom-left-radius: 0.3vw !important;
+  padding-top: 1vw;
+}
+
+#volume1 .rangeslider__fill {
+  background-image: linear-gradient(to bottom, #DD8AB7, #BED5FB);
+}
+
+#volume1 .rangeslider__handle {
+  background-color: #DD8AB7;
+}
+
+#volume2 .rangeslider__fill {
+  background-image: linear-gradient(to bottom, #4DE6CF, #D3F8AE);
+}
+
+#volume2 .rangeslider__handle {
+  background-color: #4DE6CF;
+}
+
+#volume3 .rangeslider__fill {
+  background-image: linear-gradient(to bottom, #FFB696, #FF7B95);
+}
+
+#volume3 .rangeslider__handle {
+  background-color: #FFB696;
+}
+
+#mixer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#volume1 {
+  display: inline;
+  margin-right: 2vw;
+}
+
+#volume2 {
+  display: inline;
+}
+
+#volume3 {
+  float: left;
+  margin-left: 2vw;
+}
+
+.mixerValue {
+  width: 3vw !important;
+  font-size: 1vw;
 }
 
 /*********** NAVIGATION MULTITRACKING **************/
@@ -760,14 +862,17 @@ canvas {
   #recordbutton, #stoprecordbutton {
     margin-top: 2vw;
   }
-  #openIcon {
+  #mixerIcon {
     margin-top: 9vw;
   }
-  #saveIcon {
+  #openIcon {
     margin-top: 16vw;
   }
-  #helpIcon {
+  #saveIcon {
     margin-top: 23vw;
+  }
+  #helpIcon {
+    margin-top: 30vw;
   }
   /******MULTITRACKING NAV******/
   #arrowForward {
@@ -945,5 +1050,28 @@ canvas {
     right: 0;
     top: 0;
     position: absolute;
+  }
+  /*Mixer Overlay*/
+  .rangeslider__handle {
+    height: 3.5vw !important;
+    width: 3.5vw !important;
+    margin: 0 0 0 -1.05vw !important
+  }
+  .rangeslider {
+    height: 25vw !important;
+    width: 1.4vw !important;
+    border-radius: 0.6vw !important;
+    margin: 4vw auto 2vw auto !important;
+  }
+  .rangeslider__fill {
+    border-bottom-right-radius: 0.6vw !important;
+    border-bottom-left-radius: 0.6vw !important;
+  }
+  .mixerValue {
+    width: 6vw !important;
+    font-size: 2.25vw;
+  }
+  #volume2 {
+    margin: 0 10vw;
   }
 }
