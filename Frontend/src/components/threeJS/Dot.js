@@ -1,6 +1,9 @@
 import React, { useState, forwardRef, useRef, useEffect } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
-import { useFrame, useThree } from 'react-three-fiber'
+import {
+    // useFrame, 
+    useThree
+} from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
 // import * as THREE from "three";
 // import { sample } from 'lodash';
@@ -23,22 +26,36 @@ const Dot = forwardRef((props, ref) => {
         [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y])
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
+    const timeout = useRef();
 
-    const { x, y } = useSpring({
-        config: { mass: 1050 },
-        to: async (next, cancel) => {
-            await next({
-                x: Math.random() * viewport.width - viewport.width / 2,
-                y: Math.random() * viewport.height - viewport.height / 2
-            })
+    const [{ x, y }, set,] = useSpring(() => ({
+        config: {
+            duration: 1000,
         },
-        from: { x: position[0], y: position[1] }
-    })
-
-    useFrame(() => {
-        if (randomNotesRunning)
+        from: { x: position[0], y: position[1] },
+        onFrame: () => {
             setPosition([x.value, y.value, 0]);
-    });
+        },
+        onRest: () => {
+            console.log(`x: ${x.value}, y: ${y.value}`);
+        }
+    }))
+
+    useEffect(() => {
+        if (!randomNotesRunning) {
+            clearTimeout(timeout.current);
+            set({ x: beforeDragPosition.current[0], y: beforeDragPosition.current[1] })
+        } else {
+            (function loopSet() {
+                set({
+                    x: Math.random() * viewport.width - viewport.width / 2,
+                    y: Math.random() * viewport.height - viewport.height / 2
+                })
+                timeout.current = setTimeout(loopSet, 1000);
+            })();
+        }
+    }, [randomNotesRunning, set, viewport.width, viewport.height])
+
 
     // when canvas changes, change position accordingly
     useEffect(() => {
