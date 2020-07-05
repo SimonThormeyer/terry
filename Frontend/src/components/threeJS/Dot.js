@@ -38,26 +38,23 @@ const Dot = forwardRef((props, ref) => {
         },
         onRest: () => {
             console.log(`x: ${x.value}, y: ${y.value}`);
+            beforeDragPosition.current = [x.value, y.value];
         }
     }))
 
     useEffect(() => {
-        if (!randomNotesRunning) {
-            set({immediate: true});
-            clearTimeout(timeout.current);
-            set({ immediate: false, 
-                x: beforeDragPosition.current[0], 
-                y: beforeDragPosition.current[1] })
-        } else {
-            (function loopSet() {
-                set({
-                    immediate: false,
-                    x: Math.random() * viewport.width - viewport.width / 2,
-                    y: Math.random() * viewport.height - viewport.height / 2
-                })
-                timeout.current = setTimeout(loopSet, 1000);
-            })();
+        function loop() {
+            set({
+                immediate: false,
+                x: randomNotesRunning ? Math.random() * viewport.width - viewport.width / 2 : beforeDragPosition.current[0],
+                y: randomNotesRunning ? Math.random() * viewport.height - viewport.height / 2 : beforeDragPosition.current[1]
+            })
+            if (randomNotesRunning)
+                timeout.current = setTimeout(loop, 1000);
         }
+        if (randomNotesRunning)
+            loop();
+        else clearTimeout(timeout.current);
     }, [randomNotesRunning, set, viewport.width, viewport.height])
 
 
@@ -68,7 +65,7 @@ const Dot = forwardRef((props, ref) => {
             canvases[canvasId][props.name].y,
             0
         ])
-    }, [canvasId, canvases, props.name, randomNotesRunning])
+    }, [canvasId, canvases, props.name])
 
 
     // drag event handlers bound to the mesh
