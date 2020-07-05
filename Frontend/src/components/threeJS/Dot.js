@@ -27,6 +27,7 @@ const Dot = forwardRef((props, ref) => {
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
     const timeout = useRef();
+    const oldCanvasId = useRef(0);
 
     const [{ x, y }, set,] = useSpring(() => ({
         config: {
@@ -36,10 +37,9 @@ const Dot = forwardRef((props, ref) => {
         onFrame: () => {
             setPosition([x.value, y.value, 0]);
         },
-        onRest: () => {
-            console.log(`x: ${x.value}, y: ${y.value}`);
-            beforeDragPosition.current = [x.value, y.value];
-        }
+        // onRest: () => {
+        //     // console.log(`x: ${x.value}, y: ${y.value}`);
+        // }
     }))
 
     useEffect(() => {
@@ -60,11 +60,14 @@ const Dot = forwardRef((props, ref) => {
 
     // when canvas changes, change position accordingly
     useEffect(() => {
+        if(canvasId !== oldCanvasId.current) {
+        oldCanvasId.current = canvasId;
         setPosition([
             canvases[canvasId][props.name].x,
             canvases[canvasId][props.name].y,
             0
         ])
+    }
     }, [canvasId, canvases, props.name])
 
 
@@ -80,10 +83,15 @@ const Dot = forwardRef((props, ref) => {
             }
 
         },
-        onDrag: (({ movement: [x, y] }) => {
+        onDrag: (({ down, movement: [mx, my] }) => {
             if (!randomNotesRunning) {
-                const [, , z] = position;
-                setPosition([beforeDragPosition.current[0] + x / aspect, - y / aspect + beforeDragPosition.current[1], z]);
+                // setPosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], z]);
+                set({
+                    x: beforeDragPosition.current[0] + mx / aspect,
+                    y: beforeDragPosition.current[1] - my / aspect, 
+                    immediate: down
+                })
+
             }
 
         }),
@@ -99,7 +107,7 @@ const Dot = forwardRef((props, ref) => {
             newCanvases[canvasId] = newCanvas;
             setCanvases(newCanvases);
         }
-    }, { pointerEvents: true, eventOptions: { capture: true } });
+    }, { pointerEvents: true, drag: { initial: () => [x.value, y.value] }, eventOptions: { capture: true } });
 
     // changeParameters: useEffect called when position changes (e.g.) on drag event
     useEffect(() => {
