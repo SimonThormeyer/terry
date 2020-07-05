@@ -43,11 +43,15 @@ const Dot = forwardRef((props, ref) => {
 
     useEffect(() => {
         if (!randomNotesRunning) {
+            set({immediate: true});
             clearTimeout(timeout.current);
-            set({ x: beforeDragPosition.current[0], y: beforeDragPosition.current[1] })
+            set({ immediate: false, 
+                x: beforeDragPosition.current[0], 
+                y: beforeDragPosition.current[1] })
         } else {
             (function loopSet() {
                 set({
+                    immediate: false,
                     x: Math.random() * viewport.width - viewport.width / 2,
                     y: Math.random() * viewport.height - viewport.height / 2
                 })
