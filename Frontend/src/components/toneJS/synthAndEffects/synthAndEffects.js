@@ -117,7 +117,6 @@ export class SynthAndEffects {
 
     /*** UTILITY FUNCTIONS ***/
     startContext() {
-        console.log(this.context.isContext)
         this.context = Tone.context
     }
 
