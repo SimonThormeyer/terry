@@ -8,6 +8,7 @@ import { useGesture } from "react-use-gesture"
 // import * as THREE from "three";
 // import { sample } from 'lodash';
 import { useSpring } from 'react-spring'
+import { a } from "@react-spring/three"
 
 
 const Dot = forwardRef((props, ref) => {
@@ -28,87 +29,84 @@ const Dot = forwardRef((props, ref) => {
     const aspect = size.width / viewport.width;
     const timeout = useRef();
     const oldCanvasId = useRef(0);
+    const switchingCanvas = useRef(false);
 
-    const [{ x, y }, set,] = useSpring(() => ({
-        config: {
-            duration: 1000,
-        },
-        from: { x: position[0], y: position[1] },
-        onFrame: () => {
-            setPosition([x.value, y.value, 0]);
-        },
-        // onRest: () => {
-        //     // console.log(`x: ${x.value}, y: ${y.value}`);
-        // }
-    }))
+    const refreshCanvases = () => {
+        let newCanvases = Array.from(canvases);
+        let newDot = {};
+        newDot[props.name] = {
+            x: position[0],
+            y: position[1]
+        }
+        let newCanvas = { ...canvases[canvasId], ...newDot };
+        newCanvases[canvasId] = newCanvas;
+        setCanvases(newCanvases);
+    }
+
+    const { posX, posY } = useSpring({
+        posX: position[0], posY: position[1],
+        // immediate when dragging, when switching canvas 500 ms, else (during random notes) 5000
+        config: { duration: dragging ? 0 : switchingCanvas.current ? 500 : 5000 },
+        onRest: () => refreshCanvases(),
+        pause: (!randomNotesRunning && !dragging && !switchingCanvas.current)
+    })
 
     useEffect(() => {
-        function loop() {
-            set({
-                immediate: false,
-                x: randomNotesRunning ? Math.random() * viewport.width - viewport.width / 2 : beforeDragPosition.current[0],
-                y: randomNotesRunning ? Math.random() * viewport.height - viewport.height / 2 : beforeDragPosition.current[1]
-            })
-            if (randomNotesRunning)
-                timeout.current = setTimeout(loop, 1000);
+        let loopPosition = () => {
+            let x = randomNotesRunning ? Math.random() * viewport.width - viewport.width / 2
+                : beforeDragPosition.current[0];
+            let y = randomNotesRunning ? Math.random() * viewport.height - viewport.height / 2
+                : beforeDragPosition.current[1];
+            setPosition([x, y, 0]);
+            if (randomNotesRunning) {
+                timeout.current = setTimeout(() => loopPosition(), 5000)
+            }
         }
-        if (randomNotesRunning)
-            loop();
-        else clearTimeout(timeout.current);
-    }, [randomNotesRunning, set, viewport.width, viewport.height])
+        if (randomNotesRunning) {
+            loopPosition();
+
+        } else {
+
+            clearTimeout(timeout.current);
+        }
+
+    }, [randomNotesRunning, viewport.height, viewport.width])
 
 
     // when canvas changes, change position accordingly
     useEffect(() => {
-        if(canvasId !== oldCanvasId.current) {
-        oldCanvasId.current = canvasId;
-        setPosition([
-            canvases[canvasId][props.name].x,
-            canvases[canvasId][props.name].y,
-            0
-        ])
-    }
+        if (canvasId !== oldCanvasId.current) {
+            switchingCanvas.current = true;
+            oldCanvasId.current = canvasId;
+            setPosition([
+                canvases[canvasId][props.name].x,
+                canvases[canvasId][props.name].y,
+                0
+            ])
+        }
     }, [canvasId, canvases, props.name])
 
 
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
-            if (!randomNotesRunning) {
-                setDragging(true);
-                // position to be added to the current movement onDrag
-                let position = ref.current.position.clone();
-                beforeDragPosition.current =
-                    [position.x, position.y]
-            }
+            setDragging(true);
+            // position to be added to the current movement onDrag
+            let position = ref.current.position.clone();
+            beforeDragPosition.current =
+                [position.x, position.y]
 
         },
-        onDrag: (({ down, movement: [mx, my] }) => {
-            if (!randomNotesRunning) {
-                // setPosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], z]);
-                set({
-                    x: beforeDragPosition.current[0] + mx / aspect,
-                    y: beforeDragPosition.current[1] - my / aspect, 
-                    immediate: down
-                })
-
-            }
-
+        onDrag: (({ movement: [mx, my] }) => {
+            setPosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], 0]);
         }),
         onDragEnd: () => {
             setDragging(false);
-            let newCanvases = Array.from(canvases);
-            let newDot = {};
-            newDot[props.name] = {
-                x: position[0],
-                y: position[1]
-            }
-            let newCanvas = { ...canvases[canvasId], ...newDot };
-            newCanvases[canvasId] = newCanvas;
-            setCanvases(newCanvases);
+            refreshCanvases();
         }
-    }, { pointerEvents: true, drag: { initial: () => [x.value, y.value] }, eventOptions: { capture: true } });
+    }, { pointerEvents: true, eventOptions: { capture: true } });
 
+    const posXY = {x: posX.get(), y: posY.get()}
     // changeParameters: useEffect called when position changes (e.g.) on drag event
     useEffect(() => {
         if (!musicCtrl[canvasId]) return;
@@ -122,14 +120,16 @@ const Dot = forwardRef((props, ref) => {
         } else if (props.name === 'musicSphere') {
             musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
         }
-    }, [position, camera, canvasId, musicCtrl, props.name, ref])
+    }, [posXY, camera, canvasId, musicCtrl, props.name, ref])
 
 
 
     return (
-        <mesh
+        <a.mesh
             {...props}
-            position={position} {...bind()}
+            position-x={posX}
+            position-y={posY}
+            {...bind()}
             ref={ref}
         >
             <sphereGeometry
@@ -142,7 +142,7 @@ const Dot = forwardRef((props, ref) => {
                 color={props.color}
                 emissive={dragging ? props.color : 'black'}
             />
-        </mesh>
+        </a.mesh>
     );
 
 })
