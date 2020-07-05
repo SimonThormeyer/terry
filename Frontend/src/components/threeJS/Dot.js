@@ -23,6 +23,7 @@ const Dot = forwardRef((props, ref) => {
     const [dragging, setDragging] = useState(false);
     const [position, setPosition] = useState(
         [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y, 0]);
+    const [animatePosition, setAnimatePosition] = useState(position);
     const beforeDragPosition = useRef(
         [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y])
     const { camera, size, viewport } = useThree();
@@ -44,33 +45,37 @@ const Dot = forwardRef((props, ref) => {
     }
 
     const { posX, posY } = useSpring({
-        posX: position[0], posY: position[1],
+        posX: animatePosition[0], posY: animatePosition[1],
         // immediate when dragging, when switching canvas 500 ms, else (during random notes) 5000
-        config: { duration: dragging ? 0 : switchingCanvas.current ? 500 : 5000 },
-        onRest: () => refreshCanvases(),
-        pause: (!randomNotesRunning && !dragging && !switchingCanvas.current)
+        onRest: () => {
+            refreshCanvases()
+        },
+        onChange: ({ posX, posY }) => {
+            setPosition([posX, posY, 0]);
+        }
     })
 
     useEffect(() => {
         let loopPosition = () => {
-            let x = randomNotesRunning ? Math.random() * viewport.width - viewport.width / 2
-                : beforeDragPosition.current[0];
-            let y = randomNotesRunning ? Math.random() * viewport.height - viewport.height / 2
-                : beforeDragPosition.current[1];
-            setPosition([x, y, 0]);
+            let x = Math.random() * viewport.width - viewport.width / 2
+            let y = Math.random() * viewport.height - viewport.height / 2
+            setAnimatePosition([x, y, 0]);
             if (randomNotesRunning) {
                 timeout.current = setTimeout(() => loopPosition(), 5000)
             }
         }
         if (randomNotesRunning) {
+            posX.start({ config: {duration: 5000 }});
+            posY.start({ config: {duration: 5000 }});
             loopPosition();
 
         } else {
-
             clearTimeout(timeout.current);
+            posX.start({ pause: true });
+            posY.start({ pause: true });
         }
 
-    }, [randomNotesRunning, viewport.height, viewport.width])
+    }, [posX, posY, randomNotesRunning, viewport.height, viewport.width])
 
 
     // when canvas changes, change position accordingly
@@ -78,19 +83,30 @@ const Dot = forwardRef((props, ref) => {
         if (canvasId !== oldCanvasId.current) {
             switchingCanvas.current = true;
             oldCanvasId.current = canvasId;
-            setPosition([
+            posX.start({ config: {duration: 500 }});
+            posY.start({ config: {duration: 500 }});
+            setAnimatePosition([
                 canvases[canvasId][props.name].x,
                 canvases[canvasId][props.name].y,
                 0
             ])
-        }
-    }, [canvasId, canvases, props.name])
+            switchingCanvas.current = false;
+            if (randomNotesRunning) {
+                let x = Math.random() * viewport.width - viewport.width / 2
+                let y = Math.random() * viewport.height - viewport.height / 2
+                setAnimatePosition([x, y, 0]);
+            }
+        } else { switchingCanvas.current = false; }
+    }, [posX, posY, canvasId, canvases, props.name, randomNotesRunning, viewport.width, viewport.height])
+
 
 
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
             setDragging(true);
+            posX.start({ config: {duration: 0 }});
+            posY.start({ config: {duration: 0 }});
             // position to be added to the current movement onDrag
             let position = ref.current.position.clone();
             beforeDragPosition.current =
@@ -99,14 +115,21 @@ const Dot = forwardRef((props, ref) => {
         },
         onDrag: (({ movement: [mx, my] }) => {
             setPosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], 0]);
+            setAnimatePosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], 0]);
         }),
         onDragEnd: () => {
             setDragging(false);
             refreshCanvases();
+            posX.start({ config: {duration: 5000 }});
+            posY.start({ config: {duration: 5000 }});
+            if (randomNotesRunning) {
+                let x = Math.random() * viewport.width - viewport.width / 2
+                let y = Math.random() * viewport.height - viewport.height / 2
+                setAnimatePosition([x, y, 0]);
+            }
         }
     }, { pointerEvents: true, eventOptions: { capture: true } });
 
-    const posXY = {x: posX.get(), y: posY.get()}
     // changeParameters: useEffect called when position changes (e.g.) on drag event
     useEffect(() => {
         if (!musicCtrl[canvasId]) return;
@@ -120,15 +143,14 @@ const Dot = forwardRef((props, ref) => {
         } else if (props.name === 'musicSphere') {
             musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
         }
-    }, [posXY, camera, canvasId, musicCtrl, props.name, ref])
+    }, [position, camera, canvasId, musicCtrl, props.name, ref])
 
 
 
     return (
         <a.mesh
             {...props}
-            position-x={posX}
-            position-y={posY}
+            position={position}
             {...bind()}
             ref={ref}
         >
