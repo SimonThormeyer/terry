@@ -1,5 +1,7 @@
 let Tone;
 
+const publicUrl = process.env.REACT_APP_PUBLIC_URL || "http://localhost:3000";
+
 export class SynthAndEffects {
     audio;
     chunks = []
@@ -60,12 +62,12 @@ export class SynthAndEffects {
 
                 if (this.soundType === "Marimba") {
                     this.mainSoundSource = new Tone.Sampler({
-                        "C3": "samples/marimbaC3.wav"
+                        "C3": publicUrl + "/samples/marimbaC3.wav"
                     })
                     this.mainSoundSource.volume.value = -6
                 } else if (this.soundType === "Harp") {
                     this.mainSoundSource = new Tone.Sampler({
-                        "C5": "samples/harpc3.wav"
+                        "C5": publicUrl + "/samples/harpc3.wav"
                     })
                     this.mainSoundSource.volume.value = -8
                 } else {
@@ -98,8 +100,15 @@ export class SynthAndEffects {
                 // INITIALISING
                 this.reverb.generate() // reverb needs to be initialised
                 this.reverb.wet.value = 0.1
-                this.initialized = true;
-                resolve();
+                // when all buffers are loaded, initializing is finished.
+                Tone.Buffer.on('load', () => {
+                    this.initialized = true;
+                    resolve();
+                })
+                Tone.Buffer.on("error", (error) => {
+                    reject(error);
+                })
+
             }).catch(e => reject(e));
         })
     }
@@ -108,14 +117,12 @@ export class SynthAndEffects {
 
     /*** UTILITY FUNCTIONS ***/
     startContext() {
-        console.log(this.context.isContext)
         this.context = Tone.context
     }
 
     /*** SYNTH FUNCTIONS ***/
     triggerSynth(note) {
         this.mainSoundSource.triggerAttackRelease(note, this.noteLength);
-        console.log(Tone.Master.defaults)
     }
 
     setFilter(valueX) {
@@ -215,7 +222,7 @@ export class SynthAndEffects {
     /*** VOLUME FUNCTIONS ***/
     setcontrollableVolume(value){
         // expects value to be between 0 - 1
-        this.controllableVolume.volume = value * 100 - 100
+        this.controllableVolume.volume.value = value * 100 - 100
     }
 
 

@@ -1,15 +1,11 @@
 import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
-import {
-    // useFrame, 
-    useThree
-} from 'react-three-fiber'
+import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
-// import * as THREE from "three";
-// import { sample } from 'lodash';
 import { useSpring } from 'react-spring'
 import { a } from "@react-spring/three"
 
+import { clamp } from 'lodash'
 
 const Dot = forwardRef((props, ref) => {
 
@@ -29,7 +25,7 @@ const Dot = forwardRef((props, ref) => {
     const aspect = size.width / viewport.width;
     const oldCanvasId = useRef(0);
     const [switchingCanvas, setSwitchingCanvas] = useState(false);
-    
+
     // save current dot position into canvas with the given id.
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
         let newCanvases = Array.from(canvases);
@@ -41,7 +37,7 @@ const Dot = forwardRef((props, ref) => {
         let newCanvas = { ...canvases[canvasId], ...newDot };
         newCanvases[canvasId] = newCanvas;
         setCanvases(newCanvases);
-    },[animatedPosition, canvases, props.name, setCanvases])
+    }, [animatedPosition, canvases, props.name, setCanvases])
 
     useSpring({
         posX: position[0], posY: position[1],
@@ -83,11 +79,13 @@ const Dot = forwardRef((props, ref) => {
                 canvases[canvasId][props.name].y,
                 0
             ])
-        } 
+        }
     }, [setSwitchingCanvas, saveCurrentPositionInGlobalState, canvasId, canvases, props.name])
 
 
 
+
+    const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2]
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
@@ -99,7 +97,11 @@ const Dot = forwardRef((props, ref) => {
 
         },
         onDrag: (({ movement: [mx, my] }) => {
-            setPosition([beforeDragPosition.current[0] + mx / aspect, - my / aspect + beforeDragPosition.current[1], 0]);
+            const [left, right, top, bottom] = bounds;
+            setPosition([
+                clamp(beforeDragPosition.current[0] + mx / aspect, left, right),
+                clamp(- my / aspect + beforeDragPosition.current[1], top, bottom),
+                0]);
         }),
         onDragEnd: () => {
             setDragging(false);
