@@ -25,6 +25,7 @@ const Dot = forwardRef((props, ref) => {
     const aspect = size.width / viewport.width;
     const oldCanvasId = useRef(0);
     const [switchingCanvas, setSwitchingCanvas] = useState(false);
+    const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2]
 
     // save current dot position into canvas with the given id.
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
@@ -42,7 +43,8 @@ const Dot = forwardRef((props, ref) => {
     useSpring({
         posX: position[0], posY: position[1],
         // immediate when dragging, when switching canvas 500 ms, else (during random notes) 5000
-        config: { duration: dragging ? 0 : switchingCanvas ? 500 : randomNotesRunning ? 5000 : 0 },
+        config: dragging ? { mass: 5, tension: 1000, friction: 50, precision: 0.0001 } :
+            { duration: switchingCanvas ? 500 : randomNotesRunning ? 5000 : 0 },
         // pause if none of the states are active that need changes of position
         pause: !(randomNotesRunning || dragging || switchingCanvas),
         onRest: () => {
@@ -55,7 +57,11 @@ const Dot = forwardRef((props, ref) => {
             }
         },
         onChange: ({ posX, posY }) => {
-            setAnimatedPosition([posX, posY, 0]);
+            const [left, right, top, bottom] = bounds;
+            setAnimatedPosition([
+                clamp(posX, left, right),
+                clamp(posY, top, bottom),
+                0]);
         }
     })
 
@@ -82,10 +88,6 @@ const Dot = forwardRef((props, ref) => {
         }
     }, [setSwitchingCanvas, saveCurrentPositionInGlobalState, canvasId, canvases, props.name])
 
-
-
-
-    const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2]
     // drag event handlers bound to the mesh
     const bind = useGesture({
         onDragStart: () => {
