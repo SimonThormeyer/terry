@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useRef, useEffect } from 'react';
+import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
 import { useGlobalState } from "../../GlobalState.js"
 import {
     // useFrame, 
@@ -29,8 +29,9 @@ const Dot = forwardRef((props, ref) => {
     const aspect = size.width / viewport.width;
     const oldCanvasId = useRef(0);
     const [switchingCanvas, setSwitchingCanvas] = useState(false);
-
-    const refreshCanvases = () => {
+    
+    // save current dot position into canvas with the given id.
+    const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
         let newCanvases = Array.from(canvases);
         let newDot = {};
         newDot[props.name] = {
@@ -40,7 +41,7 @@ const Dot = forwardRef((props, ref) => {
         let newCanvas = { ...canvases[canvasId], ...newDot };
         newCanvases[canvasId] = newCanvas;
         setCanvases(newCanvases);
-    }
+    },[animatedPosition, canvases, props.name, setCanvases])
 
     useSpring({
         posX: position[0], posY: position[1],
@@ -49,12 +50,12 @@ const Dot = forwardRef((props, ref) => {
         // pause if none of the states are active that need changes of position
         pause: !(randomNotesRunning || dragging || switchingCanvas),
         onRest: () => {
-            if (!switchingCanvas) refreshCanvases()
+            saveCurrentPositionInGlobalState(canvasId);
+            setSwitchingCanvas(false);
             if (randomNotesRunning && !dragging) {
                 let x = Math.random() * viewport.width - viewport.width / 2;
                 let y = Math.random() * viewport.height - viewport.height / 2;
                 setPosition([x, y, 0]);
-                setSwitchingCanvas(false);
             }
         },
         onChange: ({ posX, posY }) => {
@@ -74,6 +75,7 @@ const Dot = forwardRef((props, ref) => {
     // when canvas changes, change position accordingly
     useEffect(() => {
         if (canvasId !== oldCanvasId.current) {
+            saveCurrentPositionInGlobalState(oldCanvasId.current);
             setSwitchingCanvas(true);
             oldCanvasId.current = canvasId;
             setPosition([
@@ -82,7 +84,7 @@ const Dot = forwardRef((props, ref) => {
                 0
             ])
         } 
-    }, [setSwitchingCanvas, canvasId, canvases, props.name])
+    }, [setSwitchingCanvas, saveCurrentPositionInGlobalState, canvasId, canvases, props.name])
 
 
 
@@ -101,7 +103,7 @@ const Dot = forwardRef((props, ref) => {
         }),
         onDragEnd: () => {
             setDragging(false);
-            refreshCanvases();
+            saveCurrentPositionInGlobalState(canvasId);
         }
     }, { pointerEvents: true, eventOptions: { capture: true } });
 
