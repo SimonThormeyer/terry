@@ -17,6 +17,7 @@ const Dot = forwardRef((props, ref) => {
 
     // local
     const [dragging, setDragging] = useState(false);
+    const dragAnimationRunning = useRef(false);
     const [animatedPosition, setAnimatedPosition] = useState([canvases[canvasId][props.name].x, canvases[canvasId][props.name].y, 0]);
     const [position, setPosition] = useState(animatedPosition);
     const beforeDragPosition = useRef(
@@ -40,15 +41,23 @@ const Dot = forwardRef((props, ref) => {
         setCanvases(newCanvases);
     }, [animatedPosition, canvases, props.name, setCanvases])
 
+
+
+
     useSpring({
         posX: position[0], posY: position[1],
         // immediate when dragging, when switching canvas 500 ms, else (during random notes) 5000
-        config: dragging ? { mass: 5, tension: 1000, friction: 50, precision: 0.0001 } :
-            { duration: switchingCanvas ? 500 : randomNotesRunning ? 5000 : 0 },
+        config: 
+        // dragging ? 
+        { mass: 5, tension: 1000, friction: 200, precision: 0.0001 } 
+        // :
+            // { duration: switchingCanvas ? 500 : randomNotesRunning ? 5000 : 0 }
+            ,
         // pause if none of the states are active that need changes of position
-        pause: !(randomNotesRunning || dragging || switchingCanvas),
+        pause: !(randomNotesRunning || dragAnimationRunning.current || switchingCanvas),
         onRest: () => {
             saveCurrentPositionInGlobalState(canvasId);
+            dragAnimationRunning.current = false;
             setSwitchingCanvas(false);
             if (randomNotesRunning && !dragging) {
                 let x = Math.random() * viewport.width - viewport.width / 2;
@@ -100,6 +109,7 @@ const Dot = forwardRef((props, ref) => {
         },
         onDrag: (({ movement: [mx, my] }) => {
             const [left, right, top, bottom] = bounds;
+            dragAnimationRunning.current = true;
             setPosition([
                 clamp(beforeDragPosition.current[0] + mx / aspect, left, right),
                 clamp(- my / aspect + beforeDragPosition.current[1], top, bottom),
