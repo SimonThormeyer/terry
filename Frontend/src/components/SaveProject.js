@@ -1,14 +1,19 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useState } from "react";
 import { useGlobalState } from "../GlobalState";
+import { ReactComponent as CopyLinkIcon } from '../img/copyLink.svg';
 
 function SaveProjectForm(props) {
 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [canvases,] = useGlobalState('canvases');
 
+    const [showShareLink, setShowShareLink] = useState(false);
+
+
     // needs to have suffix of REACT_APP_...
     const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+    const frontendURL = "http://localhost:3000" //"https://terry.beuth-media.de/";
 
     let getGlobalState = () => {
         let loopers = [];
@@ -21,9 +26,11 @@ function SaveProjectForm(props) {
         }
     }
 
+  
+
     const handleSaveButtonClick = () => {
-        let userName = document.getElementById("username").value;
-        let projectName = document.getElementById("projectname").value;
+       let userName = document.getElementById("username").value;
+       let projectName = document.getElementById("projectname").value;
         let saveForm = document.getElementById("saveForm");
         if (userName === "" || projectName === "") {
             alert("please enter a name for user and project")
@@ -42,7 +49,8 @@ function SaveProjectForm(props) {
             .post(`${backendUrl}/projects/user/${username}/project/${projectName}`, getGlobalState())
             .then(res => {
                 console.log(`successful: ${res.statusText}`);
-                alert("Saved successfully");
+                setShowShareLink(true);
+                createShareLink(username, projectName); 
             })
             // Ende Post
 
@@ -56,16 +64,41 @@ function SaveProjectForm(props) {
             })
     }
 
-    return <>
-        <p id="headerSave">Save your Track?</p>
-        <form id="saveForm">
-            <label id="labelUsername">Username</label>
-            <input name="username" id="username" maxLength="5" required></input>
-            <label id="labelProjectname">Project name</label>
-            <input name="projectname" id="projectname" maxLength="255" required></input>
-        </form>
-        <button id="saveButton" onClick={() => { handleSaveButtonClick() }}>Save</button>
-    </>
+    const copyText = () => {
+        var copyTextContent = document.getElementById("shareLink");
+        copyTextContent.select();
+        copyTextContent.setSelectionRange(0, 99999)
+        document.execCommand("copy");
+    }
+
+   const createShareLink = (username, projectName) => { 
+       let shareLink = `${frontendURL}/share/${username}/${projectName}`;
+        let linkContainer = document.getElementById("shareLink");
+        linkContainer.value = shareLink;
+    }
+
+  
+
+    return (
+        showShareLink ? <>
+            <p id="headerSave">Share your project?</p>
+            <div id="shareLinkContainer">
+            <input readOnly type="text" id="shareLink"></input>
+                <CopyLinkIcon id="copyLinkIcon" onClick={() => { copyText() }} ></CopyLinkIcon>
+            </div>
+
+        </> :
+            <>
+                <p id="headerSave">Save your track?</p>
+                <form id="saveForm">
+                    <label id="labelUsername">Username</label>
+                    <input name="username" id="username" maxLength="5" required></input>
+                    <label id="labelProjectname">Project name</label>
+                    <input name="projectname" id="projectname" maxLength="255" required></input>
+                </form>
+                <button id="saveButton" onClick={() => { handleSaveButtonClick() }}>Save</button>
+            </>
+    )
 }
 
 

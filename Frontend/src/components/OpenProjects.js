@@ -108,7 +108,7 @@ function OpenProject({ user, projectName }) {
     }
 
     return <>
-        <p id="headerOpen">Open a Track?</p>
+        <p id="headerOpen">Open a track?</p>
         <form>
             <label id="findProject">Find a project</label>
             <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
