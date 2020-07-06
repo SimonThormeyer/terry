@@ -17,9 +17,9 @@ function Menu(props) {
     const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
     const [randomNotes,] = useGlobalState('randomNotes');
     const [randomNotesRunning, setRandomNotesRunning] = useGlobalState('randomNotesRunning');
+    const [canvasId] = useGlobalState('canvasId');
 
     // state of Component (used for appearance of buttons)
-    const [random, setRandom] = useState(true)
     const [loop, setLoop] = useState(true)
 
 
@@ -39,8 +39,10 @@ function Menu(props) {
     
 
     const randomFunction = () => {
-        randomNotes.toggleRandomNotes();
-        setRandomNotesRunning(!randomNotesRunning);
+        randomNotes[canvasId].toggleRandomNotes();
+        let randomNotesArray = [...randomNotesRunning];
+        randomNotesArray[canvasId] = !randomNotesArray[canvasId];
+        setRandomNotesRunning([...randomNotesArray]);
     }
 
 
@@ -73,9 +75,9 @@ function Menu(props) {
                 {loop ?
                     <LooperIcon id="loopbutton" title="record loop" onClick={() => { loopFunction(loop); setLoop(!loop); }} /> :
                     <StopIcon id="loopbutton" title="stop record loop" onClick={() => { loopFunction(loop); setLoop(!loop); if (activeHelpDialogue === "loop") { setActiveHelpDialogue("loopIcons") } }} />}
-                {random ?
-                    <RandomIcon id="randombutton" title="play random music" onClick={() => { setRandom(false); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }} /> :
-                    <PauseIcon id="randombutton" title="pause random music" onClick={() => { setRandom(true); randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }}/>}
+                {!randomNotesRunning[canvasId] ?
+                    <RandomIcon id="randombutton" title="play random music" onClick={() => { randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }} /> :
+                    <PauseIcon id="randombutton" title="pause random music" onClick={() => { randomFunction(); if (activeHelpDialogue === "random") { setActiveHelpDialogue("record") } }}/>}
             </div>
 
         </>

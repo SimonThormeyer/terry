@@ -87,9 +87,9 @@ function Scene(props) {
     //give Canvas Click to randomNotes-Object
     useEffect(() => {
         if (!musicCtrl[id]) return;
-        if (randomNotes && !randomNotes._simulateCanvasClick) {
-            randomNotes._simulateCanvasClick = (coordinates, canvasId = id, playback = true) => canvasClick(coordinates, canvasId, playback);
-        };
+        for (let i = 0; i < randomNotes.length; i++) {
+                randomNotes[i]._simulateCanvasClick = (coordinates, canvasId = i, playback = true) => canvasClick(coordinates, canvasId, playback);
+            }
     }, [randomNotes, musicCtrl, id, canvasClick]);
 
     //CLICK FUNCTION ON CANVAS
@@ -208,13 +208,13 @@ function Scene(props) {
     )
 }
 
-export default () => {
-    return <Canvas
-            camera={{
-                position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
-                aspect: 16 / 9,
-            }}
-        >
-            <Scene />
-        </Canvas>
-}
+
+export default () =>
+    <Canvas
+        camera={{
+            position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
+            aspect: 16 / 9,
+        }}
+    >
+        <Scene />
+    </Canvas>
