@@ -123,13 +123,22 @@ function Scene(props) {
     //     // }
     // }, [canvasClick]);
 
+
+
+
+
+
     // make lights disappear over time
     useFrame(() => {
         lightForRegularClick.current.intensity = Math.max(0, lightForRegularClick.current.intensity - .005);
         for (let i = 0; i < looperLights.length; i++) {
             looperLights[i].current.intensity = Math.max(0, looperLights[i].current.intensity - .005)
         }
+
     });
+
+
+
 
     // texture for backgroundimage
     const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), []);

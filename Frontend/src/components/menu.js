@@ -16,6 +16,7 @@ function Menu(props) {
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
     const [nextLooperID, setNextLooperID] = useGlobalState('nextLooperId');
     const [randomNotes,] = useGlobalState('randomNotes');
+    const [randomNotesRunning, setRandomNotesRunning] = useGlobalState('randomNotesRunning');
 
     // state of Component (used for appearance of buttons)
     const [random, setRandom] = useState(true)
@@ -39,6 +40,7 @@ function Menu(props) {
 
     const randomFunction = () => {
         randomNotes.toggleRandomNotes();
+        setRandomNotesRunning(!randomNotesRunning);
     }
 
 
