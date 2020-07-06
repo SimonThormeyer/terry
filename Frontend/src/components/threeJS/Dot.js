@@ -48,12 +48,12 @@ const Dot = forwardRef((props, ref) => {
     useSpring({
         posX: position[0], posY: position[1],
         config: { mass: 5, tension: 1000, friction: 50, precision: 0.0000001 },
-        pause: !(randomNotesRunning || dragAnimationRunning.current || switchingCanvas),
+        pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || switchingCanvas),
         onRest: () => {
             saveCurrentPositionInGlobalState(canvasId);
             dragAnimationRunning.current = false;
             setSwitchingCanvas(false);
-            if (randomNotesRunning && !dragging) {
+            if (randomNotesRunning[canvasId] && !dragging) {
                 let x = Math.random() * viewport.width - viewport.width / 2;
                 let y = Math.random() * viewport.height - viewport.height / 2;
                 setPosition([x, y, 0]);
@@ -69,12 +69,12 @@ const Dot = forwardRef((props, ref) => {
     })
 
     useEffect(() => {
-        if (randomNotesRunning) {
+        if (randomNotesRunning[canvasId]) {
             let x = Math.random() * viewport.width - viewport.width / 2;
             let y = Math.random() * viewport.height - viewport.height / 2;
             setPosition([x, y, 0]);
         }
-    }, [randomNotesRunning, viewport.height, viewport.width])
+    }, [randomNotesRunning, canvasId, viewport.height, viewport.width])
 
 
     // when canvas changes, change position accordingly
