@@ -8,10 +8,7 @@ import canvasBackground2 from "../../img/canvasBackground2.png";
 import canvasBackground3 from "../../img/canvasBackground3.png";
 import { TextureLoader, RepeatWrapping } from 'three';
 
-
 function Scene(props) {
-
-
     //HOW TO GET CANVAS INFO
     /**
      * const [canvases] = useGlobalState('canvases');
@@ -49,13 +46,8 @@ function Scene(props) {
             looperLights[counter.current].current.position.y = intersections[0].point.y;
             looperLights[counter.current].current.intensity = 0.2;
 
-            // more elegant: use modulo instead of if / else
-            if (counter.current >= looperLights.length - 1) {
-                counter.current = 0;
-            }
-            else {
-                counter.current++;
-            }
+            counter.current++;
+            counter.current = counter.current % looperLights.length;
 
         } else if (!playback) {
             //Changing lightForRegularClick position and brightness
@@ -109,24 +101,9 @@ function Scene(props) {
         let x = event.clientX - size.left;
         let y = event.clientY - size.top;
         x = x / size.width;
-        y = y / size.height; 
+        y = y / size.height;
         canvasClick([x, y])
     }, [canvasClick, size]);
-
-    // -> use useGesture() for all the click events -> native touch support
-    //Touch on display (mobile/tablet) 
-    // const onTouch = useCallback((event) => {
-    //     event.preventDefault();
-    //     // calculate mouse position in relative Coordinates: top left: 0, 0 / bottom right: 1, 1
-    //     canvasClick([event.touches[0].clientX / window.innerWidth, event.touches[0].clientY / window.innerHeight]);
-
-    //     // }
-    // }, [canvasClick]);
-
-
-
-
-
 
     // make lights disappear over time
     useFrame(() => {
@@ -137,14 +114,10 @@ function Scene(props) {
 
     });
 
-
-
-
     // texture for backgroundimage
     const texture1 = useMemo(() => new TextureLoader().load(canvasBackground1), []);
     const texture2 = useMemo(() => new TextureLoader().load(canvasBackground2), []);
     const texture3 = useMemo(() => new TextureLoader().load(canvasBackground3), []);
-
 
     texture1.wrapS = RepeatWrapping;
     texture1.wrapT = RepeatWrapping;
@@ -164,7 +137,6 @@ function Scene(props) {
     texture3.repeat.set(22, 22);
     //texture3.repeat.set(window.innerWidth * 0.011458, window.innerHeight * 0.020370);
 
-
     return (
         <>
             <ambientLight color='white' intensity={0.8} />
@@ -173,7 +145,7 @@ function Scene(props) {
                 ref={background}
                 position={[0, -5, -1]}
                 receiveShadow={true}
-                onClick={onMouseClick}
+                onPointerDown={onMouseClick}
             >
 
                 {/*<planeBufferGeometry attach="geometry" args={[window.innerWidth, window.innerHeight]} />*/}
@@ -236,16 +208,13 @@ function Scene(props) {
     )
 }
 
-function Cnvs() {
-    return (
-        <Canvas
+export default () => {
+    return <Canvas
             camera={{
                 position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
-                aspect: 16 / 9, // 16 / 9 ??
+                aspect: 16 / 9,
             }}
         >
             <Scene />
         </Canvas>
-    );
 }
-export default Cnvs;
