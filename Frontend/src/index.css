@@ -21,6 +21,20 @@ canvas {
   height: 100% !important;
   z-index: -1;
   display: block;
+  position: absolute;
+}
+
+.canvasContainer {
+  overflow: hidden;
+  width: 100%
+}
+
+.canvasContainer > div {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
 

@@ -28,24 +28,17 @@ const CanvasContainer = () => {
         height: '100%',
         'z-index': '-1'
     }
-    let hideStyle = {
-        position: 'fixed',
-        left: 10000,
-        top: 10000,
-        width: '100%',
-        height: '100%'
-    }
 
-    const left0 = x.to([0, 2], [0, window.innerWidth * 2])
-    const left1 = x.to([0, 2], [-window.innerWidth, window.innerWidth])
-    const left2 = x.to([0, 2], [-window.innerWidth * 2, 0])
+    const left0 = x.to([0, 2], [0, -window.innerWidth * 2])
+    const left1 = x.to([0, 2], [window.innerWidth, -window.innerWidth])
+    const left2 = x.to([0, 2], [window.innerWidth * 2, 0])
 
-    return <div className="simple-trans-main">
+    return <div className='canvasContainer'>
         {/* x.to([0, 1], [-1.2, 1.2] */}
 
-        <a.div style={{...showStyle, ...{left: left0, top: 0 }}} ><Canvas id={0} /></a.div>
-        <a.div  style={{...showStyle, ...{left: left1, top: 0 }}} ><Canvas id={1} /></a.div>
-        <a.div style={{...showStyle, ...{left: left2, top: 0 }}}><Canvas id={2} /></a.div>
+        <a.div style={{left: left0, top: 0 }} ><Canvas id={0} /></a.div>
+        <a.div style={{left: left1, top: 0 }} ><Canvas id={1} /></a.div>
+        <a.div style={{left: left2, top: 0 }}><Canvas id={2} /></a.div>
 
     </div>
 }
