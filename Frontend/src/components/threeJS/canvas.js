@@ -8,7 +8,8 @@ import canvasBackground2 from "../../img/canvasBackground2.png";
 import canvasBackground3 from "../../img/canvasBackground3.png";
 import { TextureLoader, RepeatWrapping } from 'three';
 
-function Scene(props) {
+function Scene({id}) {
+    console.log(`Scene id: ${id}`)
     //HOW TO GET CANVAS INFO
     /**
      * const [canvases] = useGlobalState('canvases');
@@ -20,7 +21,7 @@ function Scene(props) {
     const [listeningLooper,] = useGlobalState('listeningLooper');
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [randomNotes,] = useGlobalState('randomNotes');
-    const [id,] = useGlobalState('canvasId');
+    // const [id,] = useGlobalState('canvasId');
 
     // THREE-Objects
     const { camera, raycaster, size } = useThree();
@@ -209,12 +210,12 @@ function Scene(props) {
 }
 
 
-export default () =>
+export default ({id}) =>
     <Canvas
         camera={{
             position: [0, 0, 40], near: 0.1, far: 1000, fov: 35,
             aspect: 16 / 9,
         }}
     >
-        <Scene />
+        <Scene id={id} />
     </Canvas>

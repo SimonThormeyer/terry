@@ -11,7 +11,7 @@
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background-color: #777777;
+  background-color: transparent;
 }
 
 /************ CANVAS ****************/
@@ -22,6 +22,7 @@ canvas {
   z-index: -1;
   display: block;
 }
+
 
 .App {
   width: 100% !important;

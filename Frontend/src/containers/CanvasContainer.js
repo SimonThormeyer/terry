@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react'
 import Canvas from '../components/threeJS/canvas';
 import { useGlobalState } from "../GlobalState.js"
-import { useTransition, a } from 'react-spring'
+import { useSpring, a } from 'react-spring'
 
 const canvases = [
-    ({ style }) => <a.div style={{ ...style }} ><Canvas /></a.div>,
-    ({ style }) => <a.div style={{ ...style }} ><Canvas /></a.div>,
-    ({ style }) => <a.div style={{ ...style }} ><Canvas /></a.div>
+    ({ style }) => <a.div style={{ ...style }} ><Canvas id={0} /></a.div>,
+    ({ style }) => <a.div style={{ ...style }} ><Canvas id={1} /></a.div>,
+    ({ style }) => <a.div style={{ ...style }} ><Canvas id={2} /></a.div>
 ]
 
 
@@ -14,30 +14,38 @@ const CanvasContainer = () => {
 
     const [id,] = useGlobalState('canvasId');
 
-    const transitions = useTransition([canvases[id]], {
-        from: { transform: 'translate3d(100%,0,0)' },
-        enter: { transform: 'translate3d(0%,0,0)' },
-        leave: { transform: 'translate3d(-50%,0,0)' },
 
-        expires: 500,
+    const { x } = useSpring({
+        x: id,
+        config: { mass: 5, tension: 1000, friction: 50, precision: 0.0000001 },
     })
-    
 
+    useSpring()
+
+    let showStyle = {
+        position: 'fixed',
+        width: '100%',
+        height: '100%',
+        'z-index': '-1'
+    }
+    let hideStyle = {
+        position: 'fixed',
+        left: 10000,
+        top: 10000,
+        width: '100%',
+        height: '100%'
+    }
+
+    const left0 = x.to([0, 2], [0, window.innerWidth * 2])
+    const left1 = x.to([0, 2], [-window.innerWidth, window.innerWidth])
+    const left2 = x.to([0, 2], [-window.innerWidth * 2, 0])
 
     return <div className="simple-trans-main">
+        {/* x.to([0, 1], [-1.2, 1.2] */}
 
-        {/* {transitions.map(({ item, props, key }) => {
-            const Cvs = canvases[item]
-            return <Cvs key={key} style={props} />
-            console.log(transitions)
-            return <div/>
-        })} */}
-        {
-            transitions((style, Item) => {
-                // 3. Render each item
-                return <a.div style={style}>{<Item style={style}></Item>}</a.div>
-            })
-        }
+        <a.div style={{...showStyle, ...{left: left0, top: 0 }}} ><Canvas id={0} /></a.div>
+        <a.div  style={{...showStyle, ...{left: left1, top: 0 }}} ><Canvas id={1} /></a.div>
+        <a.div style={{...showStyle, ...{left: left2, top: 0 }}}><Canvas id={2} /></a.div>
 
     </div>
 }
