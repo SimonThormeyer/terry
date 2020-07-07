@@ -1,4 +1,4 @@
-import Canvas from '../components/threeJS/canvas';
+import Canvas from './CanvasContainer';
 import Menu from '../components/menu'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
