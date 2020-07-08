@@ -1,7 +1,6 @@
 Flask
 Flask-Cors
 Flask-PyMongo
-MongoEngine
 flask-api
 datetime
 pytz
