@@ -8,16 +8,20 @@ Start via `docker-compose up --build`
 
 ## Description
 
-**Terry ist ein “music creation playground”, der zum musikalischen Experimentieren einlädt. Er ist als WebApp über einen Browser nutzbar.**
+**Terry** ist ein “music creation playground”, der zum musikalischen Experimentieren einlädt. Er ist als **Webapp** über jeden Browser nutzbar. Wir empfehlen den Chrome-Browser.
 
-Durch **Klicken** auf dem Laptop oder **Drücken** auf einem Touchscreen können Töne ausgegeben werden, die je nach Eingabe verschieden klingen. Außerdem lassen sich mit **drei einfachen Steuerelementen** __Klänge, Soundeffekte und musikalische Stimmungen__ verändern.
-Die getätigte Eingabe von Tönen sowie das Verschieben der Steuerelemente lassen sich über die **Looper-Funktion** speichern und automatisieren, sodass besonders interessante Eingaben mit anderen Eingaben gemischt und überlagert werden oder einfach immer wieder angehört werden können. Dies ermöglicht es, mit einfachen Mitteln komplexe und sich organisch bewegende Klänge zu erzeugen und mit diesen spielerisch zu experimentieren.
-Ein **Klangbett** gibt dabei den musikalischen Kontext, indem es einen musikalischen Modus und die Tonart vorgibt. Auch die Eingaben des/der BenutzerIn sind aus diesem musikalischen Kontext, sodass jegliche Kombination von Eingaben stets zu einem ästhetisch schönen Resultat führt.
-So finden unerfahrene NutzerInnen einen spielerischen Zugang zu Musik. Musikalisch erfahrene hingegen können die App als unkonventionelles, experimentelles Inspirationsmittel verwenden.
+Durch *Klicken* auf dem **Canvas** können Töne ausgegeben werden. Außerdem lassen sich die **drei Kugeln** mit der Maus *verschieben*, um dadurch Sound- und Tonparameter zu beeinflussen. Dabei stellt die pinke Kugel die Tonauswahl ein, die blaue Kugel die Länge der Töne und die gelbe Kugel stellt den Hall der Töne ein.  
 
-Für spätere Versionen sind das **Exportieren, Teilen und Speichern** der erzeugten Kreationen, die Möglichkeit zum **Einstellen des musikalischen Kontextes (Skalen und Tonauswahl)** für erfahrene NutzerInnen, die Integration von **Computer- und MIDI-Keyboards als Eingabe-Interface**, das Hinzufügen von zuschaltbaren und editierbaren **rhythmischen Elementen, Metren und/oder Schlagzeug-Beats** und die **Automation der Eingaben**, sodass der Computer Musik zum Meditieren, Arbeiten etc. selbst erzeugt, geplant.
+Das zentrale Feature unserer App ist der **Looper**. Durch *Klicken* auf den großen Knopf am unteren Bildschirmrand startet der Looper und nimmt bis zum *erneuten Klicken* die eingegebenen Töne auf. Das erneute Klicken stoppt den Looper und fortan werden die eingegebenen Töne immer wieder als Loop wiedergegeben. In der oberen linken Ecke des Bildschirms sind die aufgenommenen Loops angezeigt und können dort *pausiert, gemutet und gelöscht* werden.
 
-[Prototype](https://drive.google.com/file/d/1gm64TbXG5aPSyDNHDO_jUL-H9dWNx2wp/view?usp=sharing)
+Mit dem Knopf rechts neben dem Loop-Knopf können durch *Klicken* das Spielen von **zufälligen Noten und automatische Steuerkugelbewegungen** aktiviert und wieder deaktiviert werden.
+
+Am oberen Rand des Canvas kann durch *Klicken auf die Pfeile* neben den Namen **zwischen drei Canvases gewechselt** werden. Auf ihnen kann jeweils ein anderes Instrument gespielt werden.
+
+Im Hamburger-Menü in der rechten oberen Ecke sind weitere Funktionen verfügbar:
+Das **Aufnehmen und anschließendes Herunterladen** der eigenen Komposition, ein **Mixer** zum *Steuern der Lautstärken* der drei Canvases, das **Suchen und Öffnen** von bereits gespeicherten Projekten, das **Teilen und Abspeichern** der Eingaben der eigenen Komposition und das **Starten des Tutorials**, welches auch beim Start der Anwendung über den Knopf *“Start with tutorial!”* gestartet werden kann.
+
+Musikalisch gesehen sind alle verfügbaren Töne aus dem **Kontext C-Dur**, sodass sämtliche möglichen Eingaben stets ein ansprechendes und ästhetisches Ergebnis bilden.
 
 ## Tools & Frameworks
 [Frontend](https://github.com/SimonThormeyer/beuthSoundGroup/wiki/Frontend-Struktur) <br/>
