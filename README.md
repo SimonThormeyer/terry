@@ -18,3 +18,8 @@ So finden unerfahrene NutzerInnen einen spielerischen Zugang zu Musik. Musikalis
 Für spätere Versionen sind das **Exportieren, Teilen und Speichern** der erzeugten Kreationen, die Möglichkeit zum **Einstellen des musikalischen Kontextes (Skalen und Tonauswahl)** für erfahrene NutzerInnen, die Integration von **Computer- und MIDI-Keyboards als Eingabe-Interface**, das Hinzufügen von zuschaltbaren und editierbaren **rhythmischen Elementen, Metren und/oder Schlagzeug-Beats** und die **Automation der Eingaben**, sodass der Computer Musik zum Meditieren, Arbeiten etc. selbst erzeugt, geplant.
 
 [Prototype](https://drive.google.com/file/d/1gm64TbXG5aPSyDNHDO_jUL-H9dWNx2wp/view?usp=sharing)
+
+## Tools & Frameworks
+[Frontend](https://github.com/SimonThormeyer/beuthSoundGroup/wiki/Frontend-Struktur) <br/>
+[Backend](https://github.com/SimonThormeyer/beuthSoundGroup/wiki/Backend-Struktur)<br/>
+[Deployment](https://github.com/SimonThormeyer/beuthSoundGroup/wiki/Server-Deployment)
