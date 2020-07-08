@@ -9,7 +9,7 @@ import canvasBackground3 from "../../img/canvasBackground3.png";
 import { TextureLoader, RepeatWrapping } from 'three';
 
 function Scene({id}) {
-    console.log(`Scene id: ${id}`)
+    //console.log(`Scene id: ${id}`)
     //HOW TO GET CANVAS INFO
     /**
      * const [canvases] = useGlobalState('canvases');
@@ -207,6 +207,9 @@ function Scene({id}) {
             <pointLight args={['white', 0.0, 6000]} ref={looperLights[3]} />
         </>
     )
+
+
+   
 }
 
 

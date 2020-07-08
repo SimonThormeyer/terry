@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
+import * as THREE from 'three';
 import { useGlobalState } from "../../GlobalState.js"
 import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
@@ -29,6 +30,14 @@ const Dot = forwardRef((props, ref) => {
     // bounds for dot positions that are used while dragging and animating 
     const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2];
 
+
+
+    const vector = new THREE.Vector3();
+    vector.set(100, 0, 0);
+    vector.unproject(camera);
+    console.log(vector);
+
+
     // save current dot position into canvas with the given id
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
         let newCanvases = Array.from(canvases);
@@ -37,6 +46,7 @@ const Dot = forwardRef((props, ref) => {
             x: animatedPosition[0],
             y: animatedPosition[1]
         }
+        console.log(animatedPosition)
         let newCanvas = { ...canvases[canvasId], ...newDot };
         newCanvases[canvasId] = newCanvas;
         setCanvases(newCanvases);
