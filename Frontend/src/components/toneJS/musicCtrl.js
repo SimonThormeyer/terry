@@ -1,5 +1,6 @@
 import { IsomorphicLayout } from "./scales/isomorphicLayout";
 import { SynthAndEffects } from "./synthAndEffects/synthAndEffects";
+import {Recorder} from "./Recorder";
 
 
 export class MusicCtrl {
@@ -7,6 +8,7 @@ export class MusicCtrl {
     constructor(callbackAfterInit) {
         this.isomorphicLayout = new IsomorphicLayout()
         this.synthAndEffects = new SynthAndEffects()
+        this.recorder = new Recorder()
     }
 
     initialize() {
@@ -16,6 +18,12 @@ export class MusicCtrl {
             ).catch(e =>
                 reject(e)
             )
+            this.recorder.initialize().then(() =>
+                resolve()
+            ).catch(e =>
+                reject(e)
+            )
+
         })
     }
 
@@ -44,11 +52,11 @@ export class MusicCtrl {
     }
 
     startStopRecorder() {
-        this.synthAndEffects.startStopRecording()
+        this.recorder.startStopRecording()
     }
 
     saveRecording() {
-        this.synthAndEffects.saveRecording()
+        this.recorder.saveRecording()
     }
 
     setVolume(value){

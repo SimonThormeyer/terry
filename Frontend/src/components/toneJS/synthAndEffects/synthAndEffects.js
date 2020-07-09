@@ -1,3 +1,6 @@
+import {Recorder} from "../Recorder";
+
+
 let Tone;
 
 const publicUrl = process.env.REACT_APP_PUBLIC_URL || "http://localhost:3000";
@@ -11,6 +14,7 @@ export class SynthAndEffects {
     constructor(soundType) {
         this.initialized = false;
         this.soundType = soundType
+
         // Settings
         this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
         this.waveforms = ["sine", "sawtooth6", "square"]
@@ -29,6 +33,8 @@ export class SynthAndEffects {
                 this.context.latencyHint = "balanced"
                 this.context.lookAhead = 0.1
 
+                this.recorder = new Recorder()
+                /*
                 //RECORDER
                 if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
                     this.recorderStarted = false
@@ -42,12 +48,17 @@ export class SynthAndEffects {
                     this.isChrome = false
                 }
 
+                 */
+
 
                 // INSTRUMENT_CHAIN
                 //Effects
                 this.limiter = new Tone.Limiter(-1).toMaster()
+
+                //this.limiter = new Tone.Limiter(-1).connect(this.recorder.masterVolume)
+
                 if (this.isChrome) {
-                    this.limiter.connect(this.destination)
+                    this.limiter.connect(this.recorder.destination)
                 }
                 this.controllableVolume = new Tone.Volume(-1)
                 this.compressor = new Tone.Compressor(-20, 12)
@@ -245,6 +256,7 @@ export class SynthAndEffects {
 
 
     /*** RECORDER FUNCTIONS ***/
+    /*
     startStopRecording() {
         if (this.isChrome) {
             if (!this.recorderStarted) {
@@ -276,6 +288,7 @@ export class SynthAndEffects {
 
 
     }
+    */
 }
 
 
