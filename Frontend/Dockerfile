@@ -8,8 +8,7 @@ RUN rm -rf node_modules
 
 RUN yarn install && \
     yarn global add \
-    react-scripts \
-    nodemon
+    react-scripts 
 
 
 COPY . .

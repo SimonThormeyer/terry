@@ -9,18 +9,12 @@ services:
       - "5000:5000"
     env_file:
       - ./Backend/.env
-    environment:
-      - FLASK_APP=Backend/api/__init__.py
-#      - WAIT_HOSTS=mongo:27017
-#      - MONGO_HOST=mongo
-      - URL_PREFIX=/projects
     volumes:
       - .:/code
 
   app:
     container_name: SoundGroup-Frontend
     image: sg-frontend
-    command: nodemon index.js
     build: ./Frontend/
     ports:
       - "3000:3000"
