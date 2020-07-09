@@ -221,8 +221,16 @@ export class SynthAndEffects {
 
     /*** VOLUME FUNCTIONS ***/
     setcontrollableVolume(value){
-        // expects value to be between 0 - 1
-        this.controllableVolume.volume.value = value * 100 - 100
+        var minp = 0;
+        var maxp = 1;
+        // The result should be between 100 an 100
+        var minv = Math.log(1);
+        var maxv = Math.log(100);
+
+        // calculate adjustment factor
+        var scale = (maxv-minv) / (maxp-minp);
+        var logarithmicValue = (Math.log(value)-minv) / scale + minp
+        this.controllableVolume.volume.value = logarithmicValue * 100
     }
 
 
