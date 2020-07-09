@@ -230,7 +230,16 @@ export class SynthAndEffects {
         // calculate adjustment factor
         var scale = (maxv-minv) / (maxp-minp);
         var logarithmicValue = (Math.log(value)-minv) / scale + minp
-        this.controllableVolume.volume.value = logarithmicValue * 100
+        console.log(value)
+
+        if(value === 0){
+            this.controllableVolume.mute = true
+        }
+        else{
+            this.controllableVolume.mute = false
+            this.controllableVolume.volume.value = logarithmicValue * 100
+        }
+
     }
 
 
