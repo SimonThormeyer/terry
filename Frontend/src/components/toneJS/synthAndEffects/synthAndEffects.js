@@ -19,21 +19,27 @@ export class SynthAndEffects {
         this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
         this.waveforms = ["sine", "sawtooth6", "square"]
         this.noteLength = this.noteLengthOptions[2]
+        this.recorder = new Recorder()
+
     }
 
     initialize() {
         return new Promise((resolve, reject) => {
             import('tone').then(module => {
 
-                Tone = module.default;
+                this.recorder.initialize().then(() =>
+                    resolve()
+                ).catch(e =>
+                    reject(e)
+                )
 
+                Tone = module.default;
 
                 //GENERAL TONEJS SETTINGS
                 this.context = Tone.context
                 this.context.latencyHint = "balanced"
                 this.context.lookAhead = 0.1
 
-                this.recorder = new Recorder()
                 /*
                 //RECORDER
                 if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
@@ -55,9 +61,8 @@ export class SynthAndEffects {
                 //Effects
                 this.limiter = new Tone.Limiter(-1).toMaster()
 
-                //this.limiter = new Tone.Limiter(-1).connect(this.recorder.masterVolume)
-
                 if (this.isChrome) {
+                    console.log(this.recorder.destination)
                     this.limiter.connect(this.recorder.destination)
                 }
                 this.controllableVolume = new Tone.Volume(-1)
