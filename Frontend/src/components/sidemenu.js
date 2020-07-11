@@ -26,7 +26,7 @@ function SideMenu() {
     const [sideMenu, setSideMenu] = useGlobalState('sideMenu');
 
     //local
-    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
+    const [, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
     const [saveOverlay, setSaveOverlay] = useState(false);
     const [openOverlay, setOpenOverlay] = useState(false);
     const [record, setRecord] = useState(true);

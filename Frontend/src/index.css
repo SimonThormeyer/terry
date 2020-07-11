@@ -6,6 +6,7 @@
   margin: 0;
   padding: 0;
   color: #282828;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -831,6 +832,15 @@ canvas {
   left: 80vw;
 }
 
+#doneTutorialDialogue {
+  top: 14vw;
+  left: 42vw;
+}
+
+.activeFocus .st0, .activeFocus .cls-1 {
+  fill: #FFB696;
+}
+
 /**MOBILE VERSION*/
 
 /*Landscape Modus */
@@ -1119,5 +1129,17 @@ canvas {
   }
   #volume2 {
     margin: 0 10vw;
+  }
+  /*********HELP FUNCTION********/
+  #startHelpButton {
+    display: none;
+    visibility: hidden;
+  }
+  #startButton {
+    margin-right: 0;
+  }
+  #helpIcon {
+    display: none;
+    visibility: hidden;
   }
 }
