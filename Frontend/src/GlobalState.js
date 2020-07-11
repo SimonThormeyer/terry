@@ -43,7 +43,8 @@ const initialState = {
     canvasId: 0,
     loading: true, // used to enable or disable certain elements while canvas is loading
     nextLooperId: 1,
-    activeHelpDialogue : "",
+    activeHelpDialogue: "",
+    sideMenu: false,
     randomNotes: [new RandomNotes(), new RandomNotes(), new RandomNotes()],
     randomNotesRunning: [false, false, false], 
     toneIsInitialized: false,

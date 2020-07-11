@@ -13,7 +13,6 @@ function Loopicon({ id, positionOnScreen }) {
   //globale State
   const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
   const [overlayIsOpen,] = useGlobalState('overlayIsOpen');
-  const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
 
   //local state to toogle icons
   const [play, setPlay] = useState(true);
@@ -106,7 +105,7 @@ function Loopicon({ id, positionOnScreen }) {
     <span className="loop" id={`loop_${id}`}>
       <ul>
         <li className="loopPausePlay" key={`loopPause_${id}`} onClick={() => {
-          setPlay(!play); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") }
+          setPlay(!play); 
         }} >
           {play ?
             <PauseIcon title="pause loop" key={`loopPauseButton_${id}`} onClick={() => {
@@ -117,7 +116,7 @@ function Loopicon({ id, positionOnScreen }) {
             }} />}
         </li>
 
-        <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute); if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") } }}>
+        <li className="loopMute" key={`loopMute_${id}`} onClick={() => { setMute(!mute);   }}>
           {mute ?
             <MuteIcon title="unmute loop" key={`loopMuteButton_${id}`} onClick={() => {
               runningLoopers.get(id).toggleMute();
@@ -129,7 +128,6 @@ function Loopicon({ id, positionOnScreen }) {
         </li>
         {/*set Timeout 600ms because of waiting the fade out animation is done and delete after*/}
         <li className="loopDelete" key={`loopDelete_${id}`} onClick={() => {
-          if (activeHelpDialogue === "loopIcons") { setActiveHelpDialogue("soundBed") };
           slide();
           setTimeout(() => {
             slideFinished();
