@@ -7,7 +7,11 @@ import { useGlobalState } from "../GlobalState"
 
 function OpenProject({ user, projectName }) {
 
+    //local
     const [loadedProjects, setLoadedProjects] = useState([]);
+    const [, setOpenOverlay] = useGlobalState('openOverlay');
+   
+    //global
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
@@ -49,6 +53,7 @@ function OpenProject({ user, projectName }) {
         }
         setRunningLoopers(new Map());
 
+
         // rehydrate canvases
         if (project.canvases && project.canvases.length > 0) {
             let canvasesCopy = Array.from(canvases);
@@ -77,7 +82,8 @@ function OpenProject({ user, projectName }) {
             }
             setNextLooperID(project.loopers.length);
         }
-    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers])
+       
+    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]); 
 
     //we search in the array (array includes the data from database) while typing and show the matching result
     const findProject = () => {
@@ -122,9 +128,9 @@ function OpenProject({ user, projectName }) {
                     let projectname = project.project_name;
                     let listElement = username + " - " + projectname;
                     return (
-                        <li key={`project__${index}`}
+                        <li key={`project__${index}`} title={listElement}
                             onClick={() => {
-                                openProjectFunction(index);
+                                openProjectFunction(index); setOpenOverlay(false);
                             }}>
                             {listElement}
                         </li>

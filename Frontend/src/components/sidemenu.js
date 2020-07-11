@@ -12,7 +12,7 @@ import { ReactComponent as DownloadIcon } from '../img/download.svg';
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { ReactComponent as MixerIcon } from '../img/mixer.svg';
 import SaveProject from './SaveProject';
-import OpenProjects from '../components/OpenProjects';
+import OpenProjectsContainer from '../containers/OpenProjectsContainer';
 import { useGlobalState } from "../GlobalState";
 
 
@@ -24,11 +24,12 @@ function SideMenu() {
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState('activeHelpDialogue');
     const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [openOverlay, setOpenOverlay] = useGlobalState('openOverlay');
+
 
     //local
     const [sideMenu, setSideMenu] = useState(false);
     const [saveOverlay, setSaveOverlay] = useState(false);
-    const [openOverlay, setOpenOverlay] = useState(false);
     const [record, setRecord] = useState(true);
     const [recordOverlay, setRecordOverlay] = useState(false);
     const [sideMenuUnderlay, setSideMenuUnderlay] = useState(true);
@@ -150,13 +151,7 @@ function SideMenu() {
 
             {
                 openOverlay &&
-                <>
-                    <div className="saveOpenUnderlay"></div>
-                    <div id="openOverlay">
-                        <DeleteIcon id="closeOpenOverlay" title="close overlay" onClick={() => { setOpenOverlay(false) }} />
-                        <OpenProjects />
-                    </div>
-                </>
+                <OpenProjectsContainer />
             }
 
 

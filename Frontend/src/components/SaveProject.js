@@ -92,7 +92,7 @@ function SaveProjectForm(props) {
                 <p id="headerSave">Save your track?</p>
                 <form id="saveForm">
                     <label id="labelUsername">Username</label>
-                    <input name="username" id="username" maxLength="5" required></input>
+                    <input name="username" id="username" maxLength="15" required></input>
                     <label id="labelProjectname">Project name</label>
                     <input name="projectname" id="projectname" maxLength="255" required></input>
                 </form>
