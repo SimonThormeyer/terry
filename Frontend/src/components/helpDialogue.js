@@ -37,7 +37,7 @@ function HelpDialogue(clickEvent) {
                 <div id="clickCanvasDialogue" className="dialogueStyle">
 
                     <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
-                    <p>Click everywhere on the canvas to play notes. Take your time and try out diffenrent positions.</p>
+                    <p>Click everywhere on the canvas to play notes. Take your time and try out different positions.</p>
                     <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("effects") }}>Next</div>
                 </div> :
                 ""
