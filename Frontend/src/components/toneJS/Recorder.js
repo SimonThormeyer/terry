@@ -1,5 +1,9 @@
 let Tone;
 
+let isFireFox =  typeof InstallTrigger !== 'undefined';
+let isChrome = (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime))
+
+
 export class Recorder {
     audio;
     chunks = []
@@ -24,14 +28,15 @@ export class Recorder {
                         //GENERAL TONEJS SETTING
                         this.context = Tone.context
 
-
                         //RECORDER
-                        if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
+                        if (isChrome || isFireFox) {
                             this.recorderStarted = false
                             this.destination = this.context.createMediaStreamDestination()
                             Tone.Master.connect(this.destination)
                             MediaRecorder.mimeType = "audio/mp3"
+
                             this.recorder = new MediaRecorder(this.destination.stream)
+
                             this.fileSaver = require('file-saver');
                             this.blob = undefined
                             this.isChrome = true
@@ -59,7 +64,7 @@ export class Recorder {
 
     /*** RECORDER FUNCTIONS ***/
     startStopRecording() {
-        if (this.isChrome) {
+        if (this.isChrome || isFireFox) {
             if (!this.recorderStarted) {
                 this.recorder.start()
                 this.recorderStarted = true

@@ -40,31 +40,9 @@ export class SynthAndEffects {
                 this.context.latencyHint = "balanced"
                 this.context.lookAhead = 0.1
 
-                /*
-                //RECORDER
-                if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
-                    this.recorderStarted = false
-                    this.destination = this.context.createMediaStreamDestination()
-                    MediaRecorder.mimeType = "audio/mp3"
-                    this.recorder = new MediaRecorder(this.destination.stream)
-                    this.fileSaver = require('file-saver');
-                    this.blob = undefined
-                    this.isChrome = true
-                } else {
-                    this.isChrome = false
-                }
-
-                 */
-
-
                 // INSTRUMENT_CHAIN
                 //Effects
                 this.limiter = new Tone.Limiter(-1).toMaster()
-
-                if (this.isChrome) {
-                    console.log(this.recorder.destination)
-                    this.limiter.connect(this.recorder.destination)
-                }
                 this.controllableVolume = new Tone.Volume(-1)
                 this.compressor = new Tone.Compressor(-20, 12)
                 this.volume = new Tone.Volume(-50)
@@ -75,17 +53,16 @@ export class SynthAndEffects {
                 //Synth
                 this.filter = new Tone.Filter(400, 'lowpass', -12)
 
-
                 if (this.soundType === "Marimba") {
                     this.mainSoundSource = new Tone.Sampler({
                         "C3": publicUrl + "/samples/marimbaC3.wav"
                     })
-                    this.mainSoundSource.volume.value = -6
+                    this.mainSoundSource.volume.value = -3
                 } else if (this.soundType === "Harp") {
                     this.mainSoundSource = new Tone.Sampler({
                         "C5": publicUrl + "/samples/harpc3.wav"
                     })
-                    this.mainSoundSource.volume.value = -8
+                    this.mainSoundSource.volume.value = -4
                 } else {
                     this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
                         oscillator: {
@@ -128,8 +105,6 @@ export class SynthAndEffects {
             }).catch(e => reject(e));
         })
     }
-
-
 
     /*** UTILITY FUNCTIONS ***/
     startContext() {
