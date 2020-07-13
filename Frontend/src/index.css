@@ -11,21 +11,16 @@
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background-color: #777777;
+  background-color: white;
 }
 
 /************ CANVAS ****************/
 
 canvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 56.25vw !important;
   z-index: -1;
   display: block;
-}
-
-.App {
-  width: 100% !important;
-  height: 100% !important;
 }
 
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
@@ -35,11 +30,11 @@ canvas {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  position: fixed;
+  position: absolute;
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 1.5vw;
+  top: 49vw;
   width: 15vw;
 }
 
@@ -255,6 +250,11 @@ canvas {
   z-index: 999999999999999;
 }
 
+#useChromeOverlay {
+  font-size: 1.25vw !important;
+  padding: 2vw 3vw;
+}
+
 #recordbutton {
   width: 3vw;
   height: 3vw;
@@ -380,6 +380,11 @@ canvas {
   margin-bottom: 2.75vw;
 }
 
+#headerShare {
+  font-size: 1.5vw;
+  margin-bottom: 1vw;
+}
+
 #username, #projectname {
   display: block;
   margin-left: calc(2.5vw - 1px);
@@ -436,7 +441,7 @@ canvas {
 }
 
 #shareLinkContainer {
-  margin-top: 4.5vw;
+  margin-top: 3.5vw;
 }
 
 /***********OPEN PROJECT OVERLAY****************/
@@ -657,7 +662,7 @@ canvas {
 /************* Start Overlay ***************/
 
 #startUnderlay {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   min-height: 33vw;
@@ -861,6 +866,9 @@ canvas {
   #credits {
     font-size: 1.8vw;
   }
+  #menu {
+    top: 46vw;
+  }
   /*MENU ICONS*/
   #randombutton {
     width: 5.5vw;
@@ -937,6 +945,11 @@ canvas {
   }
   /******OVERLAYS******/
   /*Record Overlay*/
+  #underlay {
+    background-color: white;
+    opacity: 1;
+    position: fixed;
+  }
   #overlay {
     position: absolute;
     width: 100%;
@@ -1027,6 +1040,11 @@ canvas {
     padding: 1vw 0 1vw 2vw;
   }
   /*Save Overlay*/
+  .saveOpenUnderlay {
+    background-color: white;
+    opacity: 1;
+    position: fixed;
+  }
   #saveOverlay {
     position: absolute;
     width: 100%;
@@ -1046,6 +1064,10 @@ canvas {
   }
   #headerSave {
     font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #headerShare {
+    font-size: 2.5vw;
     margin-top: 4vw;
   }
   #username, #projectname {
