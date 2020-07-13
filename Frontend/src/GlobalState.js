@@ -33,7 +33,14 @@ const initialState = {
     // containing all loopers that currently playback recorded actions (or are paused)
     runningLoopers: new Map(),
     musicCtrl: [],
+    // help dialogue
+    activeHelpDialogue: "",
+    openSaveHelpIcon: true,
+    sideMenuUnderlay: true,
+    record: true,
+   
     overlayIsOpen: false,
+    
     canvases: [
         Object.assign(initialCanvas),
         Object.assign(initialCanvas),
@@ -43,7 +50,7 @@ const initialState = {
     canvasId: 0,
     loading: true, // used to enable or disable certain elements while canvas is loading
     nextLooperId: 1,
-    activeHelpDialogue : "",
+    sideMenu: false,
     randomNotes: [new RandomNotes(), new RandomNotes(), new RandomNotes()],
     randomNotesRunning: [false, false, false], 
     toneIsInitialized: false,

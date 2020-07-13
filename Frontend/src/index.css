@@ -6,7 +6,9 @@
   margin: 0;
   padding: 0;
   color: #282828;
+  font-family: 'Montserrat', sans-serif;
   outline: none;
+
 }
 
 body {
@@ -419,8 +421,6 @@ canvas {
   margin-top: 2vw;
 }
 
-/****Share Overlay*****/
-
 /**Share Overlay***/
 
 #copyLinkIcon {
@@ -794,23 +794,18 @@ canvas {
 }
 
 #useEffects {
-  top: 5vw;
+  top: 20vw;
   left: 15vw;
 }
 
-#soundbedDialogue {
-  bottom: 4vw;
-  left: 26vw;
-}
-
-#randomDialogue {
-  bottom: 6vw;
-  left: 37vw;
+#mutlitTrackDialogue {
+  top: 4vw;
+  left: 44vw;
 }
 
 #loopDialogue {
   bottom: 5vw;
-  left: 46vw;
+  left: 37vw;
 }
 
 #loopIconsDialogue {
@@ -818,14 +813,38 @@ canvas {
   left: 3vw;
 }
 
-#RecordDialogue {
-  bottom: 5vw;
-  left: 58vw;
+#randomDialogue {
+  bottom: 6vw;
+  left: 48vw;
 }
 
-#SaveOpenDialogue {
+#RecordDialogue {
   top: 2vw;
-  left: 82vw;
+  left: 80vw;
+}
+
+#mixerDialogue {
+  top: 6vw;
+  left: 80vw;
+}
+
+#openDialogue {
+  top: 10vw;
+  left: 80vw;
+}
+
+#SavenDialogue {
+  top: 14vw;
+  left: 80vw;
+}
+
+#doneTutorialDialogue {
+  top: 14vw;
+  left: 42vw;
+}
+
+.activeFocus .st0, .activeFocus .cls-1 {
+  fill: #FFB696;
 }
 
 /**MOBILE VERSION*/
@@ -1116,5 +1135,17 @@ canvas {
   }
   #volume2 {
     margin: 0 10vw;
+  }
+  /*********HELP FUNCTION********/
+  #startHelpButton {
+    display: none;
+    visibility: hidden;
+  }
+  #startButton {
+    margin-right: 0;
+  }
+  #helpIcon {
+    display: none;
+    visibility: hidden;
   }
 }
