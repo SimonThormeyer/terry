@@ -24,16 +24,17 @@ function SideMenu() {
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [sideMenu, setSideMenu] = useGlobalState('sideMenu');
+    const [, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
+    const [openSaveHelpIcon, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
+    const [sideMenuUnderlay, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
+    const [record, setRecord] = useGlobalState("record");
+
 
     //local
-    const [, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
+    const [recordOverlay, setRecordOverlay] = useState(false);
     const [saveOverlay, setSaveOverlay] = useState(false);
     const [openOverlay, setOpenOverlay] = useState(false);
-    const [record, setRecord] = useState(true);
-    const [recordOverlay, setRecordOverlay] = useState(false);
-    const [sideMenuUnderlay, setSideMenuUnderlay] = useState(true);
     const [sideMenuIcon, setSideMenuIcon] = useState(true);
-    const [openSaveHelpIcon, setOpenSaveHelpIcon] = useState(true);
     const [mixerOverlay, setMixerOverlay] = useState(false);
     const [volume1, setVolume1] = useState(100);
     const [volume2, setVolume2] = useState(100);
@@ -99,7 +100,7 @@ function SideMenu() {
                             <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} /> 
                             </>}
                         {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
-                        {openSaveHelpIcon && !record ?
+                    {openSaveHelpIcon && !record ?
                             <>
                                 <OpenIcon id="openIcon" title="open project" />
                                 <SaveIcon id="saveIcon" title="save project" />

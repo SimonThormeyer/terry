@@ -8,6 +8,11 @@ function HelpDialogue(clickEvent) {
     //global
     const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
     const [sideMenu, setSideMenu] = useGlobalState('sideMenu');
+    const [, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
+    const [, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
+    const [record, ] = useGlobalState("record");
+
+
 
 
     //setFocus of the button in the dialogue
@@ -90,15 +95,15 @@ function HelpDialogue(clickEvent) {
 
             {activeHelpDialogue === "record" ?
                 <div id="RecordDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(false); unfocusHelp("recordbutton") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(true); unfocusHelp("recordbutton") }} />
                     <p>In the sidemenu you can record and download your composition...</p>
-                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); setActiveHelpDialogue("mixer"); unfocusHelp("recordbutton"); focusHelp("mixerIcon") }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setActiveHelpDialogue("mixer"); if (record) { unfocusHelp("recordbutton") }; focusHelp("mixerIcon") }}>Next</div>
                 </div> :
                 ""}
 
             {activeHelpDialogue === "mixer" ?
                 <div id="mixerDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(false); unfocusHelp("mixerIcon") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(true); unfocusHelp("mixerIcon") }} />
                     <p>adjust the volume of your instruments...</p>
                     <div className="styleSkipButton" onClick={() => { setSideMenu(true); setActiveHelpDialogue("openProject"); unfocusHelp("mixerIcon"); focusHelp("openIcon") }}>Next</div>
                 </div> :
