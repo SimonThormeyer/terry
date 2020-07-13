@@ -25,6 +25,9 @@ function App() {
           <Route path="share" element={<OpenProjectsContainer />} />
           <Route path="share/:user" element={<OpenProjectsContainer />} />
           <Route path="share/:user/:projectName" element={<OpenProjectsContainer />} />
+          <Route path="open" element={<OpenProjectsContainer />} />
+          <Route path="open/:user" element={<OpenProjectsContainer />} />
+          <Route path="open/:user/:projectName" element={<OpenProjectsContainer />} />
         </Routes>
         <StartOverlay />
       </Router>

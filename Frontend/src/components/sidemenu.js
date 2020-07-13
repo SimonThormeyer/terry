@@ -12,8 +12,8 @@ import { ReactComponent as DownloadIcon } from '../img/download.svg';
 import { ReactComponent as LogoIcon } from '../img/logo.svg';
 import { ReactComponent as MixerIcon } from '../img/mixer.svg';
 import SaveProject from './SaveProject';
-import OpenProjects from '../components/OpenProjects';
 import { useGlobalState } from "../GlobalState";
+import { Link } from "react-router-dom";
 
 
 
@@ -28,6 +28,7 @@ function SideMenu() {
     const [openSaveHelpIcon, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
     const [sideMenuUnderlay, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
     const [record, setRecord] = useGlobalState("record");
+
 
 
     //local
@@ -45,8 +46,8 @@ function SideMenu() {
 
     // set the global state 'overlayIsOpen' to true if an overlay is open
     useEffect(() => {
-        setOverlayIsOpen(saveOverlay || openOverlay || recordOverlay || mixerOverlay);
-    }, [saveOverlay, openOverlay, recordOverlay, mixerOverlay, setOverlayIsOpen])
+        setOverlayIsOpen(saveOverlay || recordOverlay || mixerOverlay);
+    }, [saveOverlay, recordOverlay, mixerOverlay, setOverlayIsOpen])
 
 
 
@@ -92,23 +93,30 @@ function SideMenu() {
                         <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
                     }
                     <div id="sideMenuIcons">
-                    {record ? <>
-                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> 
+                        {record ? <>
+                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} />
                             <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />
                         </> : <>
-                            <RecordStopIcon id="stoprecordbutton" title="stop record" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />
-                            <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} /> 
+                                <RecordStopIcon id="stoprecordbutton" title="stop record" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />
+                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
+                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
+                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
+                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
+                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
                             </>}
                         {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
                     {openSaveHelpIcon && !record ?
                             <>
                                 <OpenIcon id="openIcon" title="open project" />
-                                <SaveIcon id="saveIcon" title="save project" />
+                                <SaveIcon id="saveIcon" title="save and share project" />
                                 <Helpicon id="helpIcon" title="help dialogue" />
                             </> :
                             openSaveHelpIcon && <>
-                                <OpenIcon id="openIcon" title="open project" onClick={() => { setSideMenu(false); setOpenOverlay(true) }} />
+                                <Link as='li' to='/open'>
+                                    <OpenIcon id="openIcon" title="open project" onClick={() => { setSideMenu(false) }} />
+                                </Link>
                                 <SaveIcon id="saveIcon" title="save project" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
+
                                 <Helpicon id="helpIcon" title="help dialogue" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
                             </>}
 
@@ -150,19 +158,6 @@ function SideMenu() {
             }
 
             {
-                openOverlay &&
-                <>
-                    <div className="saveOpenUnderlay"></div>
-                    <div id="openOverlay">
-                        <DeleteIcon id="closeOpenOverlay" title="close overlay" onClick={() => { setOpenOverlay(false) }} />
-                        <OpenProjects />
-                    </div>
-                </>
-            }
-
-
-
-            {
                 mixerOverlay &&
                 <>
                     <div className="saveOpenUnderlay"></div>
@@ -176,7 +171,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume1}
-                                    onChange={value => { setVolume1(value); mixerFunction(0, value/100) }}
+                                    onChange={value => { setVolume1(value); mixerFunction(0, value / 100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume1}</div>
@@ -187,7 +182,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume2}
-                                    onChange={value => { setVolume2(value); mixerFunction(1, value/100) }}
+                                    onChange={value => { setVolume2(value); mixerFunction(1, value / 100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume2}</div>
@@ -198,7 +193,7 @@ function SideMenu() {
                                     maxValue={100}
                                     minValue={0}
                                     value={volume3}
-                                    onChange={value => { setVolume3(value); mixerFunction(2, value/100) }}
+                                    onChange={value => { setVolume3(value); mixerFunction(2, value / 100) }}
                                     orientation="vertical"
                                 />
                                 <div className='mixerValue'>{volume3}</div>
