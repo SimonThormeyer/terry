@@ -106,7 +106,7 @@ function SideMenu() {
                         {openSaveHelpIcon && !record ?
                             <>
                                 <OpenIcon id="openIcon" title="open project" />
-                                <SaveIcon id="saveIcon" title="save project" />
+                                <SaveIcon id="saveIcon" title="save and share project" />
                                 <Helpicon id="helpIcon" title="help dialogue" />
                             </> :
                             openSaveHelpIcon && <>
@@ -114,6 +114,7 @@ function SideMenu() {
                                     <OpenIcon id="openIcon" title="open project" onClick={() => { setSideMenu(false) }} />
                                 </Link>
                                 <SaveIcon id="saveIcon" title="save project" onClick={() => { setSideMenu(false); setSaveOverlay(true) }} />
+
                                 <Helpicon id="helpIcon" title="help dialogue" onClick={() => { setSideMenu(false); helpProjectFunction() }} />
                             </>}
 
