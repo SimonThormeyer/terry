@@ -6,12 +6,17 @@
   margin: 0;
   padding: 0;
   color: #282828;
+  outline: none;
 }
 
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   background-color: white;
+}
+
+a {
+  text-decoration: none; 
 }
 
 /************ CANVAS ****************/
