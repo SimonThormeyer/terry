@@ -1,3 +1,6 @@
+import ffmpeg from 'ffmpeg'
+
+
 let Tone;
 
 let isFireFox =  typeof InstallTrigger !== 'undefined';
@@ -75,21 +78,26 @@ export class Recorder {
             console.log(this.recorder)
             this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
             this.recorder.onstop = evt => {
-                this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
+                this.blob = new Blob(this.chunks, {type: 'audio/mpeg3'})
 
                 this.saveRecording = () => {
+                    let process = new ffmpeg(this.blob);
+                    process.then(function (audio) {
+                        audio.fnExtractSoundToMP3('terryexport.mp3', function(error, file){
+                            })
+                        })
+                    }
+
+                    /*
                     if (this.isChrome) {
                         if (this.blob) {
                             this.fileSaver.saveAs(this.blob)
                         }
-                    }
+                    } */
                 };
             }
-        } else {
-            alert("Recording is not supported in your browser.")
         }
 
-    }
 }
 
 
