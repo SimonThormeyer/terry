@@ -34,7 +34,6 @@ function SideMenu() {
     //local
     const [recordOverlay, setRecordOverlay] = useState(false);
     const [saveOverlay, setSaveOverlay] = useState(false);
-    const [openOverlay, setOpenOverlay] = useState(false);
     const [sideMenuIcon, setSideMenuIcon] = useState(true);
     const [mixerOverlay, setMixerOverlay] = useState(false);
     const [volume1, setVolume1] = useState(100);

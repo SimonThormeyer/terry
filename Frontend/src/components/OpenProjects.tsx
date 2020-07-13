@@ -4,13 +4,31 @@ import axios from 'axios';
 import { useGlobalState } from "../GlobalState"
 import { Link } from "react-router-dom";
 
+type Props = {
+    user: string,
+    projectName: string,
+}
 
+type Canvas = {
 
-function OpenProject({ user, projectName }) {
+}
+
+type Project = {
+    canvases: Canvas[]
+    loopers: any[]
+}
+
+type ProjectData = {
+    project_data: Project
+    user_ID: string
+    project_name: string
+}
+
+function OpenProject({ user, projectName }: Props) {
 
     //local
-    const [loadedProjects, setLoadedProjects] = useState([]);
-   
+    const [loadedProjects, setLoadedProjects] = useState<ProjectData[]>();
+
     //global
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [canvases, setCanvases] = useGlobalState('canvases');
@@ -46,7 +64,9 @@ function OpenProject({ user, projectName }) {
 
     //open project and reconstruct loopers and canvases
     const openProjectFunction = useCallback((listIndex) => {
+        if (!loadedProjects || !Array.isArray(loadedProjects)) return;
         let project = loadedProjects[listIndex].project_data;
+        console.log(project)
         for (let id of Array.from(runningLoopers.keys())) {
             runningLoopers.get(id).stop()
             runningLoopers.delete(id);
@@ -82,8 +102,8 @@ function OpenProject({ user, projectName }) {
             }
             setNextLooperID(project.loopers.length);
         }
-       
-    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]); 
+
+    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]);
 
     //we search in the array (array includes the data from database) while typing and show the matching result
     const findProject = () => {
@@ -106,8 +126,8 @@ function OpenProject({ user, projectName }) {
     }
 
     //prevent the data entered in a text field from being entered in the URL line by clicking Enter
-    const preventSubmit = function (e) {
-        var key = e.charCode || e.keyCode || 0;
+    const preventSubmit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        let key: number = e.charCode || e.keyCode || 0;
         if (key === 13) {
             e.preventDefault();
         }
@@ -120,28 +140,28 @@ function OpenProject({ user, projectName }) {
             <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
         </form>
         <ul id="databaseTable">
-            {loadedProjects.length <= 0 ?
+            {!loadedProjects || loadedProjects.length <= 0 ?
                 // if the array is empty, display error message in <li> tag
                 <li> {`No projects found`} {user && ` for user "${user}"`} {projectName && ` and project "${projectName}"`} </li> :
+                // display the list only if it has more than 1 element
                 loadedProjects.map((project, index) => {
                     let username = project.user_ID;
                     let projectname = project.project_name;
                     let listElement = username + " - " + projectname;
                     return (
-                        <Link as='li' to='/'>
-                        <li key={`project__${index}`} title={listElement}
-                            onClick={() => {
-                                openProjectFunction(index);
-                            }}>
-                            {listElement}
-                        </li>
+                        <Link to='/'>
+                            <li key={`project__${index}`} title={listElement}
+                                onClick={() => {
+                                    openProjectFunction(index);
+                                }}>
+                                {listElement}
+                            </li>
                         </Link>
                     )
                 })
             }
         </ul>
-    </>;
-
+    </>
 }
 
 export default OpenProject;

@@ -4,6 +4,7 @@ import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
 import { useSpring } from 'react-spring'
 import { a } from "@react-spring/three"
+import { Vector3 } from "three";
 
 import { clamp } from 'lodash'
 
@@ -14,6 +15,7 @@ const Dot = forwardRef((props, ref) => {
     const [canvasId] = useGlobalState('canvasId');
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [randomNotesRunning,] = useGlobalState('randomNotesRunning');
+    const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
 
     // local
     const [dragging, setDragging] = useState(false);
@@ -28,6 +30,33 @@ const Dot = forwardRef((props, ref) => {
     const [switchingCanvas, setSwitchingCanvas] = useState(false);
     // bounds for dot positions that are used while dragging and animating 
     const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2];
+
+    // this is an ugly fix to set correct musicCtrlParameters after project load also for others than the active canvas 
+    // - should be done in OpenProject.js but Dot position must be projected, thus it has to be done here. 
+    // Better would be to store and load relative coordinates not world coordinates
+    useEffect(() => {
+        if(!toneIsInitialized) return;
+        camera.updateMatrixWorld();
+        for (let i = 0; i < canvases.length; i++) {
+            if (props.name === 'effectSphere') {
+                let { x, y } = canvases[i].effectSphere;
+                let pos = new Vector3(x, y, 0);
+                pos.project(camera);
+                musicCtrl[i].setParameterEffect(pos.x, pos.y);
+            } else if (props.name === 'synthSphere') {
+                let { x, y } = canvases[i].synthSphere;
+                let pos = new Vector3(x, y, 0);
+                pos.project(camera);
+                musicCtrl[i].setParameterSynth(pos.x, pos.y);
+            } else if (props.name === 'musicSphere') {
+                let { x, y } = canvases[i].musicSphere;
+                let pos = new Vector3(x, y, 0);
+                pos.project(camera);
+                musicCtrl[i].setParameterMusic(pos.x, pos.y);
+            }
+        }
+    }, [camera, toneIsInitialized, canvases, musicCtrl, props.name])
+
 
     // save current dot position into canvas with the given id
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
