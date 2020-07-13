@@ -34,7 +34,6 @@ const initialState = {
     runningLoopers: new Map(),
     musicCtrl: [],
     overlayIsOpen: false,
-    openOverlay: false,
     canvases: [
         Object.assign(initialCanvas),
         Object.assign(initialCanvas),

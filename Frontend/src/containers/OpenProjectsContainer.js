@@ -8,7 +8,6 @@ import { useParams, Link } from "react-router-dom";
 export default function OpenProjectContainer() {
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [toneIsInitialized,] = useGlobalState("toneIsInitialized")
-    const [, setOpenOverlay] = useGlobalState('openOverlay');
     const { user, projectName } = useParams();
 
    
@@ -26,7 +25,7 @@ export default function OpenProjectContainer() {
             <div className="saveOpenUnderlay"></div>
             <div id="openOverlay">
                 <Link as='li' to='/'>
-                    <DeleteIcon id="closeOpenOverlay" title="close overlay" onClick={() => { setOpenOverlay(false)}}/>
+                    <DeleteIcon id="closeOpenOverlay" title="close overlay"/>
                 </Link>
                 <OpenProjects user={user} projectName={projectName} />
             </div>

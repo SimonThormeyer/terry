@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Looper } from './toneJS/Looper'
 import axios from 'axios';
 import { useGlobalState } from "../GlobalState"
+import { Link } from "react-router-dom";
 
 
 
@@ -9,7 +10,6 @@ function OpenProject({ user, projectName }) {
 
     //local
     const [loadedProjects, setLoadedProjects] = useState([]);
-    const [, setOpenOverlay] = useGlobalState('openOverlay');
    
     //global
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
@@ -128,12 +128,14 @@ function OpenProject({ user, projectName }) {
                     let projectname = project.project_name;
                     let listElement = username + " - " + projectname;
                     return (
+                        <Link as='li' to='/'>
                         <li key={`project__${index}`} title={listElement}
                             onClick={() => {
-                                openProjectFunction(index); setOpenOverlay(false);
+                                openProjectFunction(index);
                             }}>
                             {listElement}
                         </li>
+                        </Link>
                     )
                 })
             }

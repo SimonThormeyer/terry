@@ -15,6 +15,10 @@ body {
   background-color: #777777;
 }
 
+a {
+  text-decoration: none; 
+}
+
 /************ CANVAS ****************/
 
 canvas {
