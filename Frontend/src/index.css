@@ -92,7 +92,7 @@ canvas {
 
 .loopcontrols {
   position: absolute;
-  max-width: 92.5%;
+  max-width: 45%;
   height: 0;
   z-index: 999;
 }
