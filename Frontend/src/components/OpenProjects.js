@@ -117,7 +117,7 @@ function OpenProject({ user, projectName }) {
         <p id="headerOpen">Open a track?</p>
         <form>
             <label id="findProject">Find a project</label>
-            <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
+            <input name="usernameProject" autofocus id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit}></input>
         </form>
         <ul id="databaseTable">
             {loadedProjects.length <= 0 ?

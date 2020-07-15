@@ -40,8 +40,11 @@ function SideMenu() {
     const [volume1, setVolume1] = useState(100);
     const [volume2, setVolume2] = useState(100);
     const [volume3, setVolume3] = useState(100);
+    const [useChromeOverlay, setUseChromeOverlay] = useState(false);
 
 
+
+    let isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
 
     // set the global state 'overlayIsOpen' to true if an overlay is open
@@ -93,9 +96,14 @@ function SideMenu() {
                         <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
                     }
                     <div id="sideMenuIcons">
-                        {record ? <>
-                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} />
-                            <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />
+
+                    {record ? <>
+                        {isChromeBrowser ?
+                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> :
+                            <RecordIcon id="recordbutton" title="record" onClick={() => { setUseChromeOverlay(true) }} />
+                        }
+                        <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />
+
                         </> : <>
                                 <RecordStopIcon id="stoprecordbutton" title="stop record" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />
                                 <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
@@ -141,6 +149,17 @@ function SideMenu() {
                         <p>Download your Track?</p>
                         <DownloadIcon id="downloadbutton" title="download your track" onClick={() => { downloadFunction() }} />
 
+                    </div>
+                </>
+            }
+
+            {useChromeOverlay &&
+                <>
+                    <div id="underlay"></div>
+                    <div id="overlay">
+
+                    <DeleteIcon id="closeOverlay" title="close overlay" onClick={() => { setUseChromeOverlay(false); }} />
+                    <p id="useChromeOverlay">Recording is not supported in your browser. For full functionality we recommend the use of Google Chrome.</p>
                     </div>
                 </>
             }

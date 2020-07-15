@@ -81,7 +81,8 @@ function SaveProjectForm(props) {
 
     return (
         showShareLink ? <>
-            <p id="headerSave">Share your project?</p>
+            <p id="headerShare">Saved successfully!</p>
+            <p id="headerSave"> Share your project?</p>
             <div id="shareLinkContainer">
             <input readOnly type="text" id="shareLink"></input>
                 <CopyLinkIcon id="copyLinkIcon" onClick={() => { copyText() }} ></CopyLinkIcon>
@@ -92,7 +93,8 @@ function SaveProjectForm(props) {
                 <p id="headerSave">Save your track?</p>
                 <form id="saveForm">
                     <label id="labelUsername">Username</label>
-                    <input name="username" id="username" maxLength="15" required></input>
+
+                    <input name="username" id="username" maxLength="15" required autoFocus></input>
                     <label id="labelProjectname">Project name</label>
                     <input name="projectname" id="projectname" maxLength="255" required></input>
                 </form>
