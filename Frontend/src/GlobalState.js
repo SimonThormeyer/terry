@@ -1,5 +1,6 @@
 import { createGlobalState } from 'react-hooks-global-state';
 import { RandomNotes } from './components/toneJS/randomNotes/randomNotes';
+import { PerspectiveCamera } from 'three';
 
 /*
  USED LIKE THIS IN ANY FUNCTIONAL COMPONENT:
@@ -53,7 +54,10 @@ const initialState = {
     sideMenu: false,
     randomNotes: [new RandomNotes(), new RandomNotes(), new RandomNotes()],
     randomNotesRunning: [false, false, false], 
+    trackVolumes: [100, 100, 100],
     toneIsInitialized: false,
+    camera: new PerspectiveCamera(),
+    loadingProject: false
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 import { ReactComponent as SideMenuIcon } from '../img/sidemenu.svg';
@@ -28,6 +28,8 @@ function SideMenu() {
     const [openSaveHelpIcon, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
     const [sideMenuUnderlay, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
     const [record, setRecord] = useGlobalState("record");
+    const [trackVolumes, setTrackVolumes] = useGlobalState("trackVolumes");
+    const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
 
 
 
@@ -36,9 +38,9 @@ function SideMenu() {
     const [saveOverlay, setSaveOverlay] = useState(false);
     const [sideMenuIcon, setSideMenuIcon] = useState(true);
     const [mixerOverlay, setMixerOverlay] = useState(false);
-    const [volume1, setVolume1] = useState(100);
-    const [volume2, setVolume2] = useState(100);
-    const [volume3, setVolume3] = useState(100);
+    // const [volume1, setVolume1] = useState(trackVolumes[0]);
+    // const [volume2, setVolume2] = useState(trackVolumes[1]);
+    // const [volume3, setVolume3] = useState(trackVolumes[2]);
 
 
 
@@ -49,6 +51,9 @@ function SideMenu() {
     }, [saveOverlay, recordOverlay, mixerOverlay, setOverlayIsOpen])
 
 
+    useEffect(() => {
+        
+    })
 
     //fade out side menu icons (open, save, help) when record is active
     const fadeOpenSaveHelp = () => {
@@ -77,9 +82,19 @@ function SideMenu() {
         musicCtrl[0].saveRecording()
     }
 
-    const mixerFunction = (canvas, volume) => {
-        musicCtrl[canvas].setVolume(volume);
-    }
+    // save a value for a track in global state
+    const setTrackVolume = useCallback((track, percentage) => {
+        let newArray = Array.from(trackVolumes);
+        newArray[track] = percentage;
+        setTrackVolumes(newArray);
+    },[trackVolumes, setTrackVolumes])
+
+    // set volumes to values from global state
+    useEffect(() => {
+        if(!toneIsInitialized) return;
+        for(let i = 0; i < musicCtrl.length; i++)
+            musicCtrl[i].setVolume(trackVolumes[i] / 100);
+    },[toneIsInitialized, musicCtrl, trackVolumes])
 
 
 
@@ -165,38 +180,19 @@ function SideMenu() {
                         <DeleteIcon id="closeSaveOverlay" title="close overlay" onClick={() => { setMixerOverlay(false) }} />
                         <p id="headerSave">Mixer</p>
                         <div id="mixer">
-                            <div id="volume1">
+                            {trackVolumes.map((trackVolume, i) => {
+                                return <div id={`volume${i+1}`}>
                                 <Slider
+                                    key={`volume__${i}`}
                                     maxValue={100}
                                     minValue={0}
-                                    value={volume1}
-                                    onChange={value => { setVolume1(value); mixerFunction(0, value / 100) }}
+                                    value={trackVolume}
+                                    onChange={value => setTrackVolume(i, value) }
                                     orientation="vertical"
                                 />
-                                <div className='mixerValue'>{volume1}</div>
+                                <div className='mixerValue'>{trackVolume}</div>
                             </div>
-
-                            <div id="volume2">
-                                <Slider
-                                    maxValue={100}
-                                    minValue={0}
-                                    value={volume2}
-                                    onChange={value => { setVolume2(value); mixerFunction(1, value / 100) }}
-                                    orientation="vertical"
-                                />
-                                <div className='mixerValue'>{volume2}</div>
-                            </div>
-
-                            <div id="volume3">
-                                <Slider
-                                    maxValue={100}
-                                    minValue={0}
-                                    value={volume3}
-                                    onChange={value => { setVolume3(value); mixerFunction(2, value / 100) }}
-                                    orientation="vertical"
-                                />
-                                <div className='mixerValue'>{volume3}</div>
-                            </div>
+                            })}
                         </div>
                     </div>
                 </>
