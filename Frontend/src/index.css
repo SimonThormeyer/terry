@@ -16,7 +16,7 @@ body {
 }
 
 a {
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 /************ CANVAS ****************/
@@ -696,7 +696,7 @@ canvas {
   min-height: 10vw;
   width: 10vw;
   height: 10vw;
-  margin: 10vh 0;
+  margin: 10vh 0 5vh 0;
 }
 
 #startOverlay p {
@@ -845,7 +845,7 @@ canvas {
   #startLogo {
     width: 15vw;
     height: 15vw;
-    margin: 5vh 0;
+    margin: 0.5vh 0;
   }
   #startOverlay p {
     margin-bottom: 1vw;
@@ -858,19 +858,20 @@ canvas {
     border-radius: 4vw;
     font-size: 2.5vw;
     padding: 1.25vw 3vw;
-    margin: 3vw 2vw 5vw 0;
+    margin: 1vw 2vw 5vw 0;
     display: inline-block;
   }
   #startHelpButton {
     border-radius: 4vw;
     font-size: 2.5vw;
     padding: 1.25vw 3vw;
-    margin: 3vw 0 5vw 2vw;
+    margin: 1vw 0 5vw 2vw;
     display: inline-block;
   }
   #credits {
     font-size: 1.8vw;
   }
+
   #menu {
     top: 46vw;
   }
