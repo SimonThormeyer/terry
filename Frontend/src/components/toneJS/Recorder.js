@@ -13,12 +13,11 @@ export class Recorder {
         this.initialized = false;
 
     }
-
     initialize() {
         // checking if instace has already been created
         return new Promise((resolve, reject) => {
-                if (Recorder.instace instanceof Recorder) {
-                    return Recorder.instace;
+                if (Recorder.instance instanceof Recorder) {
+                    return Recorder.instance;
                 } else {
 
                     import('tone').then(module => {
@@ -41,8 +40,6 @@ export class Recorder {
                                 options = { mimeType: 'audio/ogg; codecs=opus'};
                             }
 
-                            console.log(options)
-                            console.log(MediaRecorder.isTypeSupported(options))
                             this.recorder = new MediaRecorder(this.destination.stream, options)
 
                             this.fileSaver = require('file-saver');
@@ -61,7 +58,7 @@ export class Recorder {
                             reject(error);
                         })
 
-                        Recorder.instace = this
+                        Recorder.instance = this
 
                     }).catch(e => reject(e));
                 }
@@ -88,15 +85,15 @@ export class Recorder {
                 this.saveRecording = () => {
                     if (this.isChrome) {
                         if (this.blob) {
-                            this.fileSaver.saveAs(this.blob)
+                            let date = new Date();
+                            let today = `${date.getYear()+1900}-${date.getMonth()+1}-${date.getDate()}`
+                            this.fileSaver.saveAs(this.blob,"terry-recording" + today + ".ogg")
+                            this.chunks = []
                         }
                     }
                 };
             }
-        } else {
-            alert("Recording is not supported in your browser.")
         }
-
     }
 }
 

@@ -207,7 +207,6 @@ export class SynthAndEffects {
     _setVolumeForAll() {
         this.volume.volume.value =
             this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
-        //console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
     /*** VOLUME FUNCTIONS ***/
@@ -231,43 +230,6 @@ export class SynthAndEffects {
         }
 
     }
-
-
-
-    /*** RECORDER FUNCTIONS ***/
-    /*
-    startStopRecording() {
-        if (this.isChrome) {
-            if (!this.recorderStarted) {
-                this.recorder.start()
-                this.recorderStarted = true
-            } else {
-                this.recorder.stop()
-                this.recorderStarted = false
-            }
-
-            this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
-            this.recorder.onstop = evt => {
-                this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' })
-
-                this.saveRecording = () => {
-                    if (this.isChrome) {
-                        if (this.blob) {
-                            this.fileSaver.saveAs(this.blob)
-                        }
-                    }
-
-
-                };
-            }
-        }
-        else {
-            alert("Recording is not supported in your browser.")
-        }
-
-
-    }
-    */
 }
 
 
