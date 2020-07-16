@@ -1,12 +1,12 @@
-import React, { useState, forwardRef, useRef, useEffect, useCallback } from 'react';
-import { useGlobalState } from "../../GlobalState.js"
-import { useThree } from 'react-three-fiber'
-import { useGesture } from "react-use-gesture"
-import { useSpring } from 'react-spring'
-import { a } from "@react-spring/three"
+import React, {useState, forwardRef, useRef, useEffect, useCallback} from 'react';
+import {useGlobalState} from "../../GlobalState.js"
+import {useThree} from 'react-three-fiber'
+import {useGesture} from "react-use-gesture"
+import {useSpring} from 'react-spring'
+import {a} from "@react-spring/three"
 import useStore from '../../store'
 
-import { clamp } from 'lodash'
+import {clamp} from 'lodash'
 
 const Dot = forwardRef((props, ref) => {
 
@@ -23,7 +23,7 @@ const Dot = forwardRef((props, ref) => {
     const [position, setPosition] = useState(animatedPosition);
     const beforeDragPosition = useRef(
         [canvases[canvasId][props.name].x, canvases[canvasId][props.name].y])
-    const { camera, size, viewport } = useThree();
+    const {camera, size, viewport} = useThree();
     const aspect = size.width / viewport.width;
     const oldCanvasId = useRef(0);
     const [loadingDotPosition, setLoadingDotPosition] = useState(false);
@@ -33,7 +33,7 @@ const Dot = forwardRef((props, ref) => {
     // store.js
     const hasLoaded = useStore(state => state.functions.dotHasLoaded);
     const loadingProject = useStore(state => state.loadingProject);
-    
+
 
     // save current dot position into canvas with the given id
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
@@ -43,17 +43,21 @@ const Dot = forwardRef((props, ref) => {
             x: animatedPosition[0],
             y: animatedPosition[1]
         }
-        let newCanvas = { ...canvases[canvasId], ...newDot };
+        let newCanvas = {...canvases[canvasId], ...newDot};
         newCanvases[canvasId] = newCanvas;
         setCanvases(newCanvases);
     }, [animatedPosition, canvases, props.name, setCanvases])
 
 
-
-
     useSpring({
         posX: position[0], posY: position[1],
-        config: { mass: 5, tension: 1000, friction: 50, precision: 0.0000001 },
+        config: {
+            mass: 5,
+            tension: dragging ? 1000 : randomNotesRunning[canvasId] ? 20 : 1000,
+            friction: dragging ? 50 : randomNotesRunning[canvasId] ? 50 : 50,
+            precision: 0.01
+        },
+
         // position change will be canceled or not be exectued if this is true
         pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || loadingDotPosition || !loadingProject),
         onRest: () => {
@@ -67,7 +71,7 @@ const Dot = forwardRef((props, ref) => {
                 setPosition([x, y, 0]);
             }
         },
-        onChange: ({ posX, posY }) => {
+        onChange: ({posX, posY}) => {
             const [left, right, top, bottom] = bounds;
             setAnimatedPosition([
                 clamp(posX, left, right),
@@ -88,7 +92,7 @@ const Dot = forwardRef((props, ref) => {
     useEffect(() => {
         let switchingCanvas = (canvasId !== oldCanvasId.current)
         if (switchingCanvas || loadingProject) {
-            if(switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
+            if (switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
             setLoadingDotPosition(true);
             oldCanvasId.current = canvasId;
             setPosition([
@@ -109,19 +113,19 @@ const Dot = forwardRef((props, ref) => {
                 [position.x, position.y]
 
         },
-        onDrag: (({ movement: [mx, my] }) => {
+        onDrag: (({movement: [mx, my]}) => {
             const [left, right, top, bottom] = bounds;
             dragAnimationRunning.current = true;
             setPosition([
                 clamp(beforeDragPosition.current[0] + mx / aspect, left, right),
-                clamp(- my / aspect + beforeDragPosition.current[1], top, bottom),
+                clamp(-my / aspect + beforeDragPosition.current[1], top, bottom),
                 0]);
         }),
         onDragEnd: () => {
             setDragging(false);
             saveCurrentPositionInGlobalState(canvasId);
         }
-    }, { pointerEvents: true, eventOptions: { capture: true } });
+    }, {pointerEvents: true, eventOptions: {capture: true}});
 
     // changeParameters: useEffect called when position changes (e.g.) on drag event
     useEffect(() => {
@@ -137,7 +141,6 @@ const Dot = forwardRef((props, ref) => {
             musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
         }
     }, [animatedPosition, camera, canvasId, musicCtrl, props.name, ref])
-
 
 
     return (
