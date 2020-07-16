@@ -57,7 +57,6 @@ const Dot = forwardRef((props, ref) => {
         // position change will be canceled or not be exectued if this is true
         pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || loadingDotPosition || !loadingProject),
         onRest: () => {
-            console.log(`rest!`)
             saveCurrentPositionInGlobalState(canvasId);
             dragAnimationRunning.current = false;
             setLoadingDotPosition(false);
