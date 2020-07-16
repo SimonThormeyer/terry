@@ -45,7 +45,8 @@ function SideMenu() {
 
 
 
-    let isChromeBrowser = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+    let browserIsChromeOrFirefox = (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)) 
+    || navigator.userAgent.indexOf("Firefox") > 0;
 
 
     // set the global state 'overlayIsOpen' to true if an overlay is open
@@ -111,7 +112,7 @@ function SideMenu() {
                     <div id="sideMenuIcons">
 
                     {record ? <>
-                        {isChromeBrowser ?
+                        {browserIsChromeOrFirefox ?
                             <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); setSideMenuIcon(false); recordFunction()  }} /> :
                             <RecordIcon id="recordbutton" title="record" onClick={() => { setUseChromeOverlay(true) }} />
                         }
@@ -169,7 +170,7 @@ function SideMenu() {
                     <div id="overlay">
 
                     <DeleteIcon id="closeOverlay" title="close overlay" onClick={() => { setUseChromeOverlay(false); }} />
-                    <p id="useChromeOverlay">Recording is not supported in your browser. For full functionality we recommend the use of Google Chrome.</p>
+                    <p id="useChromeOverlay">Recording is not supported in your browser. For full functionality we recommend the use of Firefox or Google Chrome.</p>
                     </div>
                 </>
             }

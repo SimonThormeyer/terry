@@ -1,3 +1,6 @@
+import {Recorder} from "../Recorder";
+
+
 let Tone;
 
 const publicUrl = process.env.REACT_APP_PUBLIC_URL || "http://localhost:3000";
@@ -11,44 +14,35 @@ export class SynthAndEffects {
     constructor(soundType) {
         this.initialized = false;
         this.soundType = soundType
+
         // Settings
         this.noteLengthOptions = ["32n", "16n", "8n", "4n", "2n", "1n"]
         this.waveforms = ["sine", "sawtooth6", "square"]
         this.noteLength = this.noteLengthOptions[2]
+        this.recorder = new Recorder()
+
     }
 
     initialize() {
         return new Promise((resolve, reject) => {
             import('tone').then(module => {
 
-                Tone = module.default;
+                this.recorder.initialize().then(() =>
+                    resolve()
+                ).catch(e =>
+                    reject(e)
+                )
 
+                Tone = module.default;
 
                 //GENERAL TONEJS SETTINGS
                 this.context = Tone.context
                 this.context.latencyHint = "balanced"
                 this.context.lookAhead = 0.1
 
-                //RECORDER
-                if (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime)) {
-                    this.recorderStarted = false
-                    this.destination = this.context.createMediaStreamDestination()
-                    MediaRecorder.mimeType = "audio/mp3"
-                    this.recorder = new MediaRecorder(this.destination.stream)
-                    this.fileSaver = require('file-saver');
-                    this.blob = undefined
-                    this.isChrome = true
-                } else {
-                    this.isChrome = false
-                }
-
-
                 // INSTRUMENT_CHAIN
                 //Effects
                 this.limiter = new Tone.Limiter(-1).toMaster()
-                if (this.isChrome) {
-                    this.limiter.connect(this.destination)
-                }
                 this.controllableVolume = new Tone.Volume(-1)
                 this.compressor = new Tone.Compressor(-20, 12)
                 this.volume = new Tone.Volume(-50)
@@ -59,17 +53,16 @@ export class SynthAndEffects {
                 //Synth
                 this.filter = new Tone.Filter(400, 'lowpass', -12)
 
-
                 if (this.soundType === "Marimba") {
                     this.mainSoundSource = new Tone.Sampler({
                         "C3": publicUrl + "/samples/marimbaC3.wav"
                     })
-                    this.mainSoundSource.volume.value = -6
+                    this.mainSoundSource.volume.value = -3
                 } else if (this.soundType === "Harp") {
                     this.mainSoundSource = new Tone.Sampler({
                         "C5": publicUrl + "/samples/harpc3.wav"
                     })
-                    this.mainSoundSource.volume.value = -8
+                    this.mainSoundSource.volume.value = -4
                 } else {
                     this.mainSoundSource = new Tone.PolySynth(8, Tone.FMSynth, {
                         oscillator: {
@@ -112,8 +105,6 @@ export class SynthAndEffects {
             }).catch(e => reject(e));
         })
     }
-
-
 
     /*** UTILITY FUNCTIONS ***/
     startContext() {
@@ -216,7 +207,6 @@ export class SynthAndEffects {
     _setVolumeForAll() {
         this.volume.volume.value =
             this.volumeValue + this.volumeFilterAdj + this.volumeADSRAdj + this.volumeReverbAdj
-        //console.log("ALL VOLUMES:  "+this.volume.volume.value)
     }
 
     /*** VOLUME FUNCTIONS ***/
@@ -238,41 +228,6 @@ export class SynthAndEffects {
             this.controllableVolume.mute = false
             this.controllableVolume.volume.value = logarithmicValue * 100
         }
-
-    }
-
-
-
-    /*** RECORDER FUNCTIONS ***/
-    startStopRecording() {
-        if (this.isChrome) {
-            if (!this.recorderStarted) {
-                this.recorder.start()
-                this.recorderStarted = true
-            } else {
-                this.recorder.stop()
-                this.recorderStarted = false
-            }
-
-            this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
-            this.recorder.onstop = evt => {
-                this.blob = new Blob(this.chunks, { type: 'audio/ogg; codecs=opus' })
-
-                this.saveRecording = () => {
-                    if (this.isChrome) {
-                        if (this.blob) {
-                            this.fileSaver.saveAs(this.blob)
-                        }
-                    }
-
-
-                };
-            }
-        }
-        else {
-            alert("Recording is not supported in your browser.")
-        }
-
 
     }
 }
