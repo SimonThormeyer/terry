@@ -8,7 +8,6 @@
   color: #282828;
   font-family: 'Montserrat', sans-serif;
   outline: none;
-
 }
 
 body {
@@ -800,16 +799,11 @@ canvas {
 
 #useEffects {
   top: 20vw;
-  left: 15vw;
-}
-
-#mutlitTrackDialogue {
-  top: 4vw;
-  left: 44vw;
+  left: 13vw;
 }
 
 #loopDialogue {
-  bottom: 5vw;
+  bottom: -8vw;
   left: 37vw;
 }
 
@@ -818,8 +812,13 @@ canvas {
   left: 3vw;
 }
 
+#mutlitTrackDialogue {
+  top: 4vw;
+  left: 44vw;
+}
+
 #randomDialogue {
-  bottom: 6vw;
+  bottom: -8vw;
   left: 48vw;
 }
 
@@ -848,7 +847,7 @@ canvas {
   left: 42vw;
 }
 
-.activeFocus .st0, .activeFocus .cls-1 {
+.activeFocus .st0, .activeFocus .cls-1, .activeFocus .cls-1A {
   fill: #FFB696;
 }
 
@@ -890,7 +889,6 @@ canvas {
   #credits {
     font-size: 1.8vw;
   }
-
   #menu {
     top: 46vw;
   }
