@@ -26,7 +26,7 @@ export class RandomNotes {
             if (this._simulateCanvasClick) {
                 this._simulateCanvasClick([xAxis, yAxis]);
             }
-            let time = Math.floor((Math.random() * 1000) + 50);
+            let time = Math.floor((Math.random() * 3000) + 50);
             this.timeout = setTimeout(() => this.playRandomNote(), time);
     };
     
