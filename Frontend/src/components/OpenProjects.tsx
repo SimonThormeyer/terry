@@ -18,7 +18,7 @@ type Canvas = {
         'y': number,
     },
     synthSphere: {
-        'x': number, 
+        'x': number,
         'y': number
     },
     musicSphere: {
@@ -115,59 +115,59 @@ function OpenProject({ user, projectName }: Props) {
     }
 
     //open project and reconstruct loopers and canvases
-    const openProjectFunction = 
-    // useCallback(
+    const openProjectFunction =
+        // useCallback(
         (listIndex) => {
-        if (!loadedProjects || !Array.isArray(loadedProjects)) return;
-        startLoading();
-        let project = loadedProjects[listIndex].project_data;
-        for (let id of Array.from(runningLoopers.keys())) {
-            runningLoopers.get(id).stop()
-            runningLoopers.delete(id);
-        }
-        setRunningLoopers(new Map());
+            if (!loadedProjects || !Array.isArray(loadedProjects)) return;
+            startLoading();
+            let project = loadedProjects[listIndex].project_data;
+            for (let id of Array.from(runningLoopers.keys())) {
+                runningLoopers.get(id).stop()
+                runningLoopers.delete(id);
+            }
+            setRunningLoopers(new Map());
 
 
-        // rehydrate canvases
-        if (project.canvases && project.canvases.length > 0) {
-            let canvasesCopy = Array.from(canvases);
-            let randomNotesRunningCopy = [...randomNotesRunning]
-            let trackVolumesCopy = [...trackVolumes]
-            for (let i = 0; i < project.canvases.length; i++) {
-                let loadedCanvas = project.canvases[i];
-                canvasesCopy[i] = loadedCanvas;
-                trackVolumesCopy[i] = project.trackVolumes ? project.trackVolumes[i] : 100;
-                randomNotesRunningCopy[i] = project.randomNotesRunning ? project.randomNotesRunning[i] : false;
-                if(project.randomNotesRunning && project.randomNotesRunning[i]) {
-                    randomNotes[i].toggleRandomNotes();
+            // rehydrate canvases
+            if (project.canvases && project.canvases.length > 0) {
+                let canvasesCopy = Array.from(canvases);
+                let randomNotesRunningCopy = [...randomNotesRunning]
+                let trackVolumesCopy = [...trackVolumes]
+                for (let i = 0; i < project.canvases.length; i++) {
+                    let loadedCanvas = project.canvases[i];
+                    canvasesCopy[i] = loadedCanvas;
+                    trackVolumesCopy[i] = project.trackVolumes ? project.trackVolumes[i] : 100;
+                    randomNotesRunningCopy[i] = project.randomNotesRunning ? project.randomNotesRunning[i] : false;
+                    if (project.randomNotesRunning && project.randomNotesRunning[i]) {
+                        randomNotes[i].toggleRandomNotes();
+                    }
                 }
+                setCanvases(canvasesCopy);
+                setRandomNotesRunning(randomNotesRunningCopy);
+                setTrackVolumes(trackVolumesCopy);
+                setDotParameters(canvasesCopy as Canvas[]);
             }
-            setCanvases(canvasesCopy);
-            setRandomNotesRunning(randomNotesRunningCopy);
-            setTrackVolumes(trackVolumesCopy);
-            setDotParameters(canvasesCopy as Canvas[]);
-        }
 
-        // rehydrate loopers
-        if (project.loopers && project.loopers.length > 0) {
-            for (let i = 0; i < project.loopers.length; i++) {
-                let loadedLooper = project.loopers[i];
-                let looper = new Looper();
-                looper.events = Array.from(loadedLooper.events);
-                looper.startTime = loadedLooper.currentTime;
-                looper.duration = loadedLooper.duration;
-                looper.muted = loadedLooper.muted;
-                looper.pauseTime = loadedLooper.pauseTime;
-                looper.playStartTime = loadedLooper.playStartTime;
-                looper.setCanvasId(loadedLooper.canvasId);
-                runningLoopers.set(i + 1, looper);
-                setRunningLoopers(new Map(runningLoopers))
-                if (!loadedLooper.stopped) looper.play();
+            // rehydrate loopers
+            if (project.loopers && project.loopers.length > 0) {
+                for (let i = 0; i < project.loopers.length; i++) {
+                    let loadedLooper = project.loopers[i];
+                    let looper = new Looper();
+                    looper.events = Array.from(loadedLooper.events);
+                    looper.startTime = loadedLooper.currentTime;
+                    looper.duration = loadedLooper.duration;
+                    looper.muted = loadedLooper.muted;
+                    looper.pauseTime = loadedLooper.pauseTime;
+                    looper.playStartTime = loadedLooper.playStartTime;
+                    looper.setCanvasId(loadedLooper.canvasId);
+                    runningLoopers.set(i + 1, looper);
+                    setRunningLoopers(new Map(runningLoopers))
+                    if (!loadedLooper.stopped) looper.play();
+                }
+                setNextLooperID(project.loopers.length);
             }
-            setNextLooperID(project.loopers.length);
-        }
 
-    }//), [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]);
+        }//), [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]);
 
     //we search in the array (array includes the data from database) while typing and show the matching result
     const findProject = () => {
@@ -201,7 +201,7 @@ function OpenProject({ user, projectName }: Props) {
         <p id="headerOpen">Open a track?</p>
         <form>
             <label id="findProject">Find a project</label>
-            <input name="usernameProject" autofocus id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit}></input>
+            <input name="usernameProject" autoFocus id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit}></input>
         </form>
         <ul id="databaseTable">
             {!loadedProjects || loadedProjects.length <= 0 ?
