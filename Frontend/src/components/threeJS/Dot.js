@@ -89,7 +89,6 @@ const Dot = forwardRef((props, ref) => {
     useEffect(() => {
         let switchingCanvas = (canvasId !== oldCanvasId.current)
         if (switchingCanvas || loadingProject) {
-            console.log(`canvas switch or loading project!`)
             if(switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
             setLoadingDotPosition(true);
             oldCanvasId.current = canvasId;

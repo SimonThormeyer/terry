@@ -52,7 +52,7 @@ function SideMenu() {
 
 
     useEffect(() => {
-        
+
     })
 
     //fade out side menu icons (open, save, help) when record is active
@@ -87,14 +87,14 @@ function SideMenu() {
         let newArray = Array.from(trackVolumes);
         newArray[track] = percentage;
         setTrackVolumes(newArray);
-    },[trackVolumes, setTrackVolumes])
+    }, [trackVolumes, setTrackVolumes])
 
     // set volumes to values from global state
     useEffect(() => {
-        if(!toneIsInitialized) return;
-        for(let i = 0; i < musicCtrl.length; i++)
+        if (!toneIsInitialized) return;
+        for (let i = 0; i < musicCtrl.length; i++)
             musicCtrl[i].setVolume(trackVolumes[i] / 100);
-    },[toneIsInitialized, musicCtrl, trackVolumes])
+    }, [toneIsInitialized, musicCtrl, trackVolumes])
 
 
 
@@ -119,7 +119,7 @@ function SideMenu() {
                                 <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
                             </>}
                         {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
-                    {openSaveHelpIcon && !record ?
+                        {openSaveHelpIcon && !record ?
                             <>
                                 <OpenIcon id="openIcon" title="open project" />
                                 <SaveIcon id="saveIcon" title="save and share project" />
@@ -140,7 +140,7 @@ function SideMenu() {
             <div id="sidemenu">
                 {/* if record is active, the side menu may not be closed, so the stop record button is always reachable. */}
                 {sideMenuIcon ?
-                    <SideMenuIcon id="sideMenuIcon" title="side menu" onClick={() => { setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setSideMenu(!sideMenu)  }} /> :
+                    <SideMenuIcon id="sideMenuIcon" title="side menu" onClick={() => { setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setSideMenu(!sideMenu) }} /> :
                     <SideMenuIcon id="sideMenuIcon" title="side menu" />
                 }
             </div>
@@ -150,7 +150,7 @@ function SideMenu() {
                     <div id="underlay"></div>
                     <div id="overlay">
 
-                        <DeleteIcon id="closeOverlay" title="close overlay" onClick={() => { setRecordOverlay(false)}} />
+                        <DeleteIcon id="closeOverlay" title="close overlay" onClick={() => { setRecordOverlay(false) }} />
                         <LogoIcon id="logoIcon" />
                         <p>Download your Track?</p>
                         <DownloadIcon id="downloadbutton" title="download your track" onClick={() => { downloadFunction() }} />
@@ -181,17 +181,17 @@ function SideMenu() {
                         <p id="headerSave">Mixer</p>
                         <div id="mixer">
                             {trackVolumes.map((trackVolume, i) => {
-                                return <div id={`volume${i+1}`}>
-                                <Slider
-                                    key={`volume__${i}`}
-                                    maxValue={100}
-                                    minValue={0}
-                                    value={trackVolume}
-                                    onChange={value => setTrackVolume(i, value) }
-                                    orientation="vertical"
-                                />
-                                <div className='mixerValue'>{trackVolume}</div>
-                            </div>
+                                return <div key={`volume__${i}`}
+                                    id={`volume${i + 1}`}>
+                                    <Slider
+                                        maxValue={100}
+                                        minValue={0}
+                                        value={trackVolume}
+                                        onChange={value => setTrackVolume(i, value)}
+                                        orientation="vertical"
+                                    />
+                                    <div className='mixerValue'>{trackVolume}</div>
+                                </div>
                             })}
                         </div>
                     </div>

@@ -7,6 +7,8 @@ function SaveProjectForm(props) {
 
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [canvases,] = useGlobalState('canvases');
+    const [trackVolumes,] = useGlobalState('trackVolumes');
+    const [randomNotesRunning,] = useGlobalState('randomNotesRunning');
 
     const [showShareLink, setShowShareLink] = useState(false);
 
@@ -22,7 +24,9 @@ function SaveProjectForm(props) {
         }
         return {
             loopers: loopers,
-            canvases: canvases
+            canvases: canvases,
+            randomNotesRunning: randomNotesRunning,
+            trackVolumes: trackVolumes
         }
     }
 

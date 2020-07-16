@@ -30,6 +30,8 @@ type Canvas = {
 type Project = {
     canvases: any[]
     loopers: any[]
+    trackVolumes?: number[];
+    randomNotesRunning?: boolean[];
 }
 
 type ProjectData = {
@@ -50,6 +52,9 @@ function OpenProject({ user, projectName }: Props) {
     const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
     const [camera,] = useGlobalState('camera');
     const [musicCtrl,] = useGlobalState('musicCtrl');
+    const [trackVolumes, setTrackVolumes] = useGlobalState('trackVolumes');
+    const [randomNotes,] = useGlobalState('randomNotes');
+    const [randomNotesRunning, setRandomNotesRunning] = useGlobalState('randomNotesRunning');
 
     const startLoading = useStore(state => state.functions.startLoading);
 
@@ -114,10 +119,8 @@ function OpenProject({ user, projectName }: Props) {
     // useCallback(
         (listIndex) => {
         if (!loadedProjects || !Array.isArray(loadedProjects)) return;
-        console.log(`loading project from DB`)
         startLoading();
         let project = loadedProjects[listIndex].project_data;
-        console.log(project)
         for (let id of Array.from(runningLoopers.keys())) {
             runningLoopers.get(id).stop()
             runningLoopers.delete(id);
@@ -128,11 +131,20 @@ function OpenProject({ user, projectName }: Props) {
         // rehydrate canvases
         if (project.canvases && project.canvases.length > 0) {
             let canvasesCopy = Array.from(canvases);
+            let randomNotesRunningCopy = [...randomNotesRunning]
+            let trackVolumesCopy = [...trackVolumes]
             for (let i = 0; i < project.canvases.length; i++) {
                 let loadedCanvas = project.canvases[i];
                 canvasesCopy[i] = loadedCanvas;
+                trackVolumesCopy[i] = project.trackVolumes ? project.trackVolumes[i] : 100;
+                randomNotesRunningCopy[i] = project.randomNotesRunning ? project.randomNotesRunning[i] : false;
+                if(project.randomNotesRunning && project.randomNotesRunning[i]) {
+                    randomNotes[i].toggleRandomNotes();
+                }
             }
             setCanvases(canvasesCopy);
+            setRandomNotesRunning(randomNotesRunningCopy);
+            setTrackVolumes(trackVolumesCopy);
             setDotParameters(canvasesCopy as Canvas[]);
         }
 
