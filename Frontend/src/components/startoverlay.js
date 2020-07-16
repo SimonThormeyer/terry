@@ -41,11 +41,13 @@ function StartOverlay() {
                     <div id="startUnderlay"></div>
                     <div id="startOverlay">
                         <LogoIcon id="startLogo" />
-                        <p>Terry is a playground to create and share beautiful soundscapes without effort. {
-                            isChromeBrowser || "For the best music experience we recommend the use of Google Chrome."
+                        <p>“I had always been more interested in playing and improvising than sitting down at a
+                            desk and writing out a piece. I'd always found it more fun to play, and the other a little bit tedious.” - Terry Riley </p>
+                        <p>  Terry is a playground to create and share beautiful soundscapes without effort.
+                        {
+                            isChromeBrowser || " For the best music experience we recommend the use of Google Chrome."
                         }
                         </p>
-
                         <p id="credits">Created by: Chantal, Freddy, Luca, Malte, Maluna, Niklas, Simon.</p>
                         {/* display loading text when overlay should be disabled already but toneJS has not yet been initialized */}
                         {startOverlay ?
