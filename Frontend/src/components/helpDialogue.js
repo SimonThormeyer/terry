@@ -70,7 +70,7 @@ function HelpDialogue(clickEvent) {
             {activeHelpDialogue === "loopIcons" ?
                 <div id="loopIconsDialogue" className="dialogueStyle">
                     <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
-                    <p>Mute, pause or delete your loops here. Keys 1-5 also do the job for one loop respectively!</p>
+                    <p>Mute, pause or delete your loops here. Pressing a numeric key will mute a looper!</p>
                     <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("random"); focusHelp("randombutton") }}>Next</div>
                 </div> :
                 ""}
