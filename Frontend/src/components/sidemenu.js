@@ -14,6 +14,7 @@ import { ReactComponent as MixerIcon } from '../img/mixer.svg';
 import SaveProject from './SaveProject';
 import { useGlobalState } from "../GlobalState";
 import { Link } from "react-router-dom";
+//import HelpDialogue from './helpDialogue';
 
 
 
@@ -28,8 +29,10 @@ function SideMenu() {
     const [openSaveHelpIcon, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
     const [sideMenuUnderlay, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
     const [record, setRecord] = useGlobalState("record");
+    const [activeHelpDialogue, ] = useGlobalState("activeHelpDialogue");
     const [trackVolumes, setTrackVolumes] = useGlobalState("trackVolumes");
     const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
+
 
 
 
@@ -66,9 +69,8 @@ function SideMenu() {
         help.style.opacity = 0;
         setTimeout(() => {
             setOpenSaveHelpIcon(false);
-        }, 500);
+        }, 1);
     }
-
 
 
     const helpProjectFunction = () => {
@@ -104,25 +106,22 @@ function SideMenu() {
             {sideMenu &&
                 <>
                     {/* if record is active, the side menu may not be closed, so the stop record button is always reachable. */}
-                    {sideMenuUnderlay &&
+                {sideMenuUnderlay && activeHelpDialogue === "" &&
                         <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
                     }
                     <div id="sideMenuIcons">
 
                     {record ? <>
                         {browserIsChromeOrFirefox ?
-                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); recordFunction(); setSideMenuIcon(false) }} /> :
+                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); setSideMenuIcon(false); recordFunction()  }} /> :
                             <RecordIcon id="recordbutton" title="record" onClick={() => { setUseChromeOverlay(true) }} />
                         }
-                        <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />
+                            <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />
 
                         </> : <>
                                 <RecordStopIcon id="stoprecordbutton" title="stop record" onClick={() => { setSideMenu(false); setRecordOverlay(true); setRecord(true); setSideMenuIcon(true); recordFunction() }} />
                                 <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
-                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
-                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
-                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
-                                <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setMixerOverlay(true) }} />
+                                
                             </>}
                         {/* if record is active, the other side menu buttons fade out. code below prevents click actions during outfade */}
                         {openSaveHelpIcon && !record ?
