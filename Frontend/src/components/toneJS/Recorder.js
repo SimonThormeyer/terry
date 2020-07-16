@@ -18,7 +18,6 @@ export class Recorder {
         // checking if instace has already been created
         return new Promise((resolve, reject) => {
                 if (Recorder.instace instanceof Recorder) {
-                    console.log("constructor")
                     return Recorder.instace;
                 } else {
 
@@ -33,8 +32,17 @@ export class Recorder {
                             this.destination = this.context.createMediaStreamDestination()
                             Tone.Master.connect(this.destination)
 
-                            let options = { mimeType: "audio/webm; codecs=opus" };
+                            let options = null
 
+                            if (isChrome) {
+                                options = { mimeType: "audio/webm" };
+                            }
+                            else {
+                                options = { mimeType: 'audio/ogg; codecs=opus'};
+                            }
+
+                            console.log(options)
+                            console.log(MediaRecorder.isTypeSupported(options))
                             this.recorder = new MediaRecorder(this.destination.stream, options)
 
                             this.fileSaver = require('file-saver');
