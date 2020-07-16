@@ -16,8 +16,6 @@ from bson.json_util import dumps,loads
 
 class UserSchema(Schema):
     # this class validates the incoming json and creates hyperlinks to connected routes and states
-    # class Meta:
-    #     fields = ('user_ID', 'amount_of_projects', 'items', '_links')
     user_ID = fields.Str()
     amount_of_projects = fields.Integer()
     items = fields.Raw()
@@ -59,11 +57,6 @@ class UserSchema(Schema):
 
 
 class ProjectSchema(Schema):
-    # this class validates the incoming json and creates hyperlinks to connected routes and states
-    # class Meta:
-    #     # fields = ("timestamp", "user_ID", "project_name", "project")
-    #     fields = ('timestamp', 'user_ID', 'project_name', 'project_data', 'user', '_links')
-
     _id = fields.Str()
     timestamp = fields.Str()
     user_ID = fields.Str(required=True)
@@ -75,37 +68,6 @@ class ProjectSchema(Schema):
         'owner': URLFor("projects.getUser", user_ID='<user_ID>')
     })
 
-# class ResponseSchema(Schema):
-#     # this class creates dynamic hyperlinks for all responses
-#     items = fields.Raw()
-#     # case if the route contains 1, 2 or no param
-#     # param1 is user_ID and param2 is project_name
-#     if (len(param1) != 0) & (len(param2) == 0):
-#         _links = Hyperlinks({
-#             'self': URLFor(dynamic_route, user_ID='<'+ param1 + '>')
-#         })
-#     elif (len(param2) != 0) & (len(param1) == 0):
-#         _links = Hyperlinks({
-#             'self': URLFor(dynamic_route, project_name='<' + param2 + '>')
-#         })
-#     elif (len(param2) != 0) & (len(param1) != 0):
-#         _links = Hyperlinks({
-#             'self': URLFor(dynamic_route, user_ID='<'+ param1 + '>', project_name='<' + param2 + '>')
-#         })
-#     else:
-#         _links = Hyperlinks({
-#             'self': URLFor(dynamic_route)
-#         })
-#
-#     def __init__(self, param1, param2, route="projects.get_withUser"):
-#         self.dynamic_route = route
-#         self.param1 = param1
-#         self.param2 = param2
-#
-# def generateOutputLinks(data, actuell_route, param1="", param2=""):
-#     resSchema = ResponseSchema(actuell_route, param1,param2)
-#     res = resSchema.dumps(data)
-#     return loads(res)
 
 def generateUserlinks(data):
     log.info('data before Userschema dump')
