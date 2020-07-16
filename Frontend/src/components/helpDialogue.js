@@ -111,7 +111,7 @@ function HelpDialogue(clickEvent) {
 
             {activeHelpDialogue === "openProject" ?
                 <div id="openDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); unfocusHelp("openIcon") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu) { unfocusHelp("openIcon") } }} />
                     <p>find projects of others...</p>
                     <div className="styleSkipButton" onClick={() => { setSideMenu(true); setActiveHelpDialogue("saveProject"); unfocusHelp("openIcon"); focusHelp("saveIcon") }}>Next</div>
                 </div> :
@@ -119,7 +119,7 @@ function HelpDialogue(clickEvent) {
 
             {activeHelpDialogue === "saveProject" ?
                 <div id="SavenDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); unfocusHelp("saveIcon") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu) { unfocusHelp("saveIcon") } }} />
                     <p>and share your work with others and your friends!</p>
                     <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("doneTutorial"); if (sideMenu) { unfocusHelp("saveIcon") } }}>Next</div>
                 </div> :
