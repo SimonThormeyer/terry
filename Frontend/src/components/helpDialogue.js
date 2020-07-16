@@ -88,40 +88,56 @@ function HelpDialogue(clickEvent) {
                 <div id="mutlitTrackDialogue" className="dialogueStyle">
                     <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(false) }} />
                     <p>Now it's time to layer more sounds. Click on the arrows to switch to a different instrument.</p>
-                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); focusHelp("recordbutton"); setActiveHelpDialogue("record"); }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); if (record) { focusHelp("recordbutton") }; setActiveHelpDialogue("record"); }}>Next</div>
                 </div> :
                 ""}
 
 
             {activeHelpDialogue === "record" ?
                 <div id="RecordDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(true); unfocusHelp("recordbutton") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); }} />
                     <p>In the sidemenu you can record and download your composition...</p>
-                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setActiveHelpDialogue("mixer"); if (record) { unfocusHelp("recordbutton") }; focusHelp("mixerIcon") }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => {    
+                        if (record) {
+                            setSideMenu(true); setOpenSaveHelpIcon(true); setSideMenuUnderlay(true); setActiveHelpDialogue("mixer"); if (sideMenu) { unfocusHelp("recordbutton") }; focusHelp("mixerIcon")
+                        } else {alert("Please stop record to continue.")}
+                    }}>Next</div>
                 </div> :
                 ""}
 
             {activeHelpDialogue === "mixer" ?
                 <div id="mixerDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); setSideMenu(true); unfocusHelp("mixerIcon") }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu) { unfocusHelp("mixerIcon") }}} />
                     <p>adjust the volume of your instruments...</p>
-                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); setActiveHelpDialogue("openProject"); unfocusHelp("mixerIcon"); focusHelp("openIcon") }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => {
+                        if (record) {
+                            setSideMenu(true); setActiveHelpDialogue("openProject"); if (sideMenu) { unfocusHelp("mixerIcon") }; focusHelp("openIcon")
+                        } else { alert("Please stop record to continue.") }
+                    }}>Next</div>
                 </div> :
                 ""}
 
             {activeHelpDialogue === "openProject" ?
                 <div id="openDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu) { unfocusHelp("openIcon") } }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu && record) { unfocusHelp("openIcon") } }} />
                     <p>find projects of others...</p>
-                    <div className="styleSkipButton" onClick={() => { setSideMenu(true); setActiveHelpDialogue("saveProject"); unfocusHelp("openIcon"); focusHelp("saveIcon") }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => {
+                        if (record) {
+                            setSideMenu(true); setActiveHelpDialogue("saveProject"); if (sideMenu) { unfocusHelp("openIcon") }; focusHelp("saveIcon")
+                        } else { alert("Please stop record to continue.") }
+                    }}>Next</div>
                 </div> :
                 ""}
 
             {activeHelpDialogue === "saveProject" ?
                 <div id="SavenDialogue" className="dialogueStyle">
-                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu) { unfocusHelp("saveIcon") } }} />
+                    <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue(""); if (sideMenu && record) { unfocusHelp("saveIcon") } }} />
                     <p>and share your work with others and your friends!</p>
-                    <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue("doneTutorial"); if (sideMenu) { unfocusHelp("saveIcon") } }}>Next</div>
+                    <div className="styleSkipButton" onClick={() => {
+                        if (record) {
+                            setActiveHelpDialogue("doneTutorial"); if (sideMenu) { unfocusHelp("saveIcon") }
+                        } else { alert("Please stop record to continue.") }
+                    }}>Next</div>
                 </div> :
                 ""}
 
@@ -129,7 +145,11 @@ function HelpDialogue(clickEvent) {
                 <div id="doneTutorialDialogue" className="dialogueStyle">
                     <DeleteIcon className="closeDialogue" onClick={() => { setActiveHelpDialogue("") }} />
                     <p>Now you can create your own piece of music. Have fun!</p>
-                    <div className="styleSkipButton" onClick={() => { setActiveHelpDialogue(""); setSideMenu(false) }}>Done</div>
+                    <div className="styleSkipButton" onClick={() => {
+                        if (record) {
+                            setActiveHelpDialogue(""); setSideMenu(false)
+                        } else { alert("Please stop record to continue.") }
+                        }}>Done</div>
                 </div> :
                 ""}
 

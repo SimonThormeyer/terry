@@ -14,7 +14,7 @@ import { ReactComponent as MixerIcon } from '../img/mixer.svg';
 import SaveProject from './SaveProject';
 import { useGlobalState } from "../GlobalState";
 import { Link } from "react-router-dom";
-import HelpDialogue from './helpDialogue';
+//import HelpDialogue from './helpDialogue';
 
 
 
@@ -25,17 +25,18 @@ function SideMenu() {
     const [, setOverlayIsOpen] = useGlobalState('overlayIsOpen');
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [sideMenu, setSideMenu] = useGlobalState('sideMenu');
-    const [activeHelpDialogue, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
+    const [, setActiveHelpDialogue] = useGlobalState("activeHelpDialogue");
     const [openSaveHelpIcon, setOpenSaveHelpIcon] = useGlobalState("openSaveHelpIcon");
     const [sideMenuUnderlay, setSideMenuUnderlay] = useGlobalState("sideMenuUnderlay");
     const [record, setRecord] = useGlobalState("record");
+    const [activeHelpDialogue, ] = useGlobalState("activeHelpDialogue");
 
 
 
     //local
     const [recordOverlay, setRecordOverlay] = useState(false);
     const [saveOverlay, setSaveOverlay] = useState(false);
-    const [openOverlay, setOpenOverlay] = useState(false);
+    //const [openOverlay, setOpenOverlay] = useState(false);
     const [sideMenuIcon, setSideMenuIcon] = useState(true);
     const [mixerOverlay, setMixerOverlay] = useState(false);
     const [volume1, setVolume1] = useState(100);
@@ -65,7 +66,7 @@ function SideMenu() {
         help.style.opacity = 0;
         setTimeout(() => {
             setOpenSaveHelpIcon(false);
-        }, 5);
+        }, 1);
     }
 
 
@@ -92,14 +93,14 @@ function SideMenu() {
             {sideMenu &&
                 <>
                     {/* if record is active, the side menu may not be closed, so the stop record button is always reachable. */}
-                    {sideMenuUnderlay &&
+                {sideMenuUnderlay && activeHelpDialogue === "" &&
                         <div id="closeSideMenuDiv" onClick={() => { setSideMenu(false) }}></div>
                     }
                     <div id="sideMenuIcons">
 
                     {record ? <>
                         {isChromeBrowser ?
-                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); if (!activeHelpDialogue) { fadeOpenSaveHelp() }; if (activeHelpDialogue) { setSideMenuIcon(false) } else setSideMenuIcon(true); recordFunction()  }} /> :
+                            <RecordIcon id="recordbutton" title="record" onClick={() => { setSideMenuUnderlay(false); setRecord(false); fadeOpenSaveHelp(); setSideMenuIcon(false); recordFunction()  }} /> :
                             <RecordIcon id="recordbutton" title="record" onClick={() => { setUseChromeOverlay(true) }} />
                         }
                             <MixerIcon id="mixerIcon" title="mixer" onClick={() => { setSideMenu(false); setMixerOverlay(true) }} />

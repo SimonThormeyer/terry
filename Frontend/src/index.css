@@ -803,7 +803,7 @@ canvas {
 }
 
 #loopDialogue {
-  bottom: -8vw;
+  top: 33vw;
   left: 37vw;
 }
 
@@ -818,7 +818,7 @@ canvas {
 }
 
 #randomDialogue {
-  bottom: -8vw;
+  top: 33vw;
   left: 48vw;
 }
 

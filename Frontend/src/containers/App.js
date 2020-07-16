@@ -17,8 +17,8 @@ function App() {
       <Router>
         <MultitrackNav />
         <Loopcontrols />
-        <SideMenu />
         <HelpDialogue />
+        <SideMenu />
         <Canvas className='Canvas' />
         <Menu />
         <Routes>
