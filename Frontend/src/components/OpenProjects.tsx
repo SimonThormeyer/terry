@@ -1,14 +1,30 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Looper } from './toneJS/Looper'
 import axios from 'axios';
 import { useGlobalState } from "../GlobalState"
+import useStore from '../store'
 import { Link } from "react-router-dom";
-// import { Vector3 } from 'three'
-// import { MusicCtrl } from '../components/toneJS/musicCtrl'
+import { Vector3 } from 'three'
+import { MusicCtrl } from '../components/toneJS/musicCtrl'
 
 type Props = {
     user: string,
     projectName: string,
+}
+
+type Canvas = {
+    effectSphere: {
+        'x': number,
+        'y': number,
+    },
+    synthSphere: {
+        'x': number, 
+        'y': number
+    },
+    musicSphere: {
+        'x': number,
+        'y': number
+    }
 }
 
 type Project = {
@@ -31,10 +47,11 @@ function OpenProject({ user, projectName }: Props) {
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
-    // const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
-    // const [camera,] = useGlobalState('camera');
-    // const [musicCtrl,] = useGlobalState('musicCtrl');
-    const [,setLoadingProject] = useGlobalState('loadingProject');
+    const [toneIsInitialized,] = useGlobalState('toneIsInitialized');
+    const [camera,] = useGlobalState('camera');
+    const [musicCtrl,] = useGlobalState('musicCtrl');
+
+    const startLoading = useStore(state => state.functions.startLoading);
 
     const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
@@ -67,33 +84,38 @@ function OpenProject({ user, projectName }: Props) {
     // - Dot position must be projected, thus the camera and THREE.Vector3 is needed. 
     // Better would be to store and load relative coordinates not world coordinates
 
-    // const setDotParameters = useCallback(() => {
-    //     if (!toneIsInitialized) return;
-    //     camera.updateMatrixWorld();
-    //     for (let i = 0; i < canvases.length; i++) {
+    const setDotParameters = (canvases: Canvas[]) => {
+        if (!toneIsInitialized) return;
+        camera.updateMatrixWorld();
+        for (let i = 0; i < canvases.length; i++) {
 
-    //         let { xEffect, yEffect } = canvases[i].effectSphere;
-    //         let pos = new Vector3(xEffect, yEffect, 0);
-    //         pos.project(camera);
-    //         (musicCtrl[i] as MusicCtrl).setParameterEffect(pos.x, pos.y);
+            let { x, y } = canvases[i].effectSphere;
+            let pos = new Vector3(x, y, 0);
+            pos.project(camera);
+            (musicCtrl[i] as MusicCtrl).setParameterEffect(pos.x, pos.y);
 
-    //         let { xSynth, ySynth } = canvases[i].synthSphere;
-    //         pos = new Vector3(xSynth, ySynth, 0);
-    //         pos.project(camera);
-    //         (musicCtrl[i] as MusicCtrl).setParameterSynth(pos.x, pos.y);
+            x = canvases[i].synthSphere.x;
+            y = canvases[i].synthSphere.y;
+            pos = new Vector3(x, y, 0);
+            pos.project(camera);
+            (musicCtrl[i] as MusicCtrl).setParameterSynth(pos.x, pos.y);
 
-    //         let { xMusic, yMusic } = canvases[i].musicSphere;
-    //         pos = new Vector3(xMusic, yMusic, 0);
-    //         pos.project(camera);
-    //         (musicCtrl[i] as MusicCtrl).setParameterMusic(pos.x, pos.y);
+            x = canvases[i].musicSphere.x;
+            y = canvases[i].musicSphere.y;
+            pos = new Vector3(x, y, 0);
+            pos.project(camera);
+            (musicCtrl[i] as MusicCtrl).setParameterMusic(pos.x, pos.y);
 
-    //     }
-    // }, [camera, toneIsInitialized, canvases, musicCtrl])
+        }
+    }
 
     //open project and reconstruct loopers and canvases
-    const openProjectFunction = useCallback((listIndex) => {
+    const openProjectFunction = 
+    // useCallback(
+        (listIndex) => {
         if (!loadedProjects || !Array.isArray(loadedProjects)) return;
-        setLoadingProject(true);
+        console.log(`loading project from DB`)
+        startLoading();
         let project = loadedProjects[listIndex].project_data;
         console.log(project)
         for (let id of Array.from(runningLoopers.keys())) {
@@ -111,8 +133,8 @@ function OpenProject({ user, projectName }: Props) {
                 canvasesCopy[i] = loadedCanvas;
             }
             setCanvases(canvasesCopy);
+            setDotParameters(canvasesCopy as Canvas[]);
         }
-        // setDotParameters();
 
         // rehydrate loopers
         if (project.loopers && project.loopers.length > 0) {
@@ -133,7 +155,7 @@ function OpenProject({ user, projectName }: Props) {
             setNextLooperID(project.loopers.length);
         }
 
-    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers, setLoadingProject])//, setDotParameters]);
+    }//), [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]);
 
     //we search in the array (array includes the data from database) while typing and show the matching result
     const findProject = () => {

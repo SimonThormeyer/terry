@@ -57,7 +57,6 @@ const initialState = {
     trackVolumes: [100, 100, 100],
     toneIsInitialized: false,
     camera: new PerspectiveCamera(),
-    loadingProject: false
 };
 
 export const { useGlobalState } = createGlobalState(initialState)

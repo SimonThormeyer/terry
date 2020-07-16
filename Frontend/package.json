@@ -30,7 +30,8 @@
     "three": "^0.116.1",
     "three-dragcontrols": "^0.88.2",
     "tone": "^13.8.25",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.6",
+    "zustand": "^2.2.3"
   },
   "scripts": {
     "start": "react-scripts start",

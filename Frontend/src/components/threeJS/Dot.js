@@ -4,6 +4,7 @@ import { useThree } from 'react-three-fiber'
 import { useGesture } from "react-use-gesture"
 import { useSpring } from 'react-spring'
 import { a } from "@react-spring/three"
+import useStore from '../../store'
 
 import { clamp } from 'lodash'
 
@@ -14,7 +15,6 @@ const Dot = forwardRef((props, ref) => {
     const [canvasId] = useGlobalState('canvasId');
     const [musicCtrl,] = useGlobalState('musicCtrl');
     const [randomNotesRunning,] = useGlobalState('randomNotesRunning');
-    const [loadingProject, setLoadingProject] = useGlobalState('loadingProject')
 
     // local
     const [dragging, setDragging] = useState(false);
@@ -26,9 +26,14 @@ const Dot = forwardRef((props, ref) => {
     const { camera, size, viewport } = useThree();
     const aspect = size.width / viewport.width;
     const oldCanvasId = useRef(0);
-    const [switchingCanvas, setSwitchingCanvas] = useState(false);
+    const [loadingDotPosition, setLoadingDotPosition] = useState(false);
     // bounds for dot positions that are used while dragging and animating 
     const bounds = [-viewport.width / 2, viewport.width / 2, -viewport.height / 2, viewport.height / 2];
+
+    // store.js
+    const hasLoaded = useStore(state => state.functions.dotHasLoaded);
+    const loadingProject = useStore(state => state.loadingProject);
+    
 
     // save current dot position into canvas with the given id
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
@@ -49,11 +54,14 @@ const Dot = forwardRef((props, ref) => {
     useSpring({
         posX: position[0], posY: position[1],
         config: { mass: 5, tension: 1000, friction: 50, precision: 0.0000001 },
-        pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || switchingCanvas),
+        // position change will be canceled or not be exectued if this is true
+        pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || loadingDotPosition || !loadingProject),
         onRest: () => {
+            console.log(`rest!`)
             saveCurrentPositionInGlobalState(canvasId);
             dragAnimationRunning.current = false;
-            setSwitchingCanvas(false);
+            setLoadingDotPosition(false);
+            hasLoaded();
             if (randomNotesRunning[canvasId] && !dragging) {
                 let x = Math.random() * viewport.width - viewport.width / 2;
                 let y = Math.random() * viewport.height - viewport.height / 2;
@@ -77,24 +85,21 @@ const Dot = forwardRef((props, ref) => {
         }
     }, [randomNotesRunning, canvasId, viewport.height, viewport.width])
 
-
     // when canvas changes, change position accordingly
     useEffect(() => {
-        if (canvasId !== oldCanvasId.current) {
-            saveCurrentPositionInGlobalState(oldCanvasId.current);
-            setSwitchingCanvas(true);
-            oldCanvasId.current = canvasId;
-        }
+        let switchingCanvas = (canvasId !== oldCanvasId.current)
         if (switchingCanvas || loadingProject) {
-            console.log(`setting Dot Position`)
+            console.log(`canvas switch or loading project!`)
+            if(switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
+            setLoadingDotPosition(true);
+            oldCanvasId.current = canvasId;
             setPosition([
                 canvases[canvasId][props.name].x,
                 canvases[canvasId][props.name].y,
                 0
             ])
-            setLoadingProject(false)
         }
-    }, [setSwitchingCanvas, switchingCanvas, loadingProject, saveCurrentPositionInGlobalState, canvasId, canvases, props.name, setLoadingProject])
+    }, [loadingProject, setLoadingDotPosition, saveCurrentPositionInGlobalState, canvasId, canvases, props.name])
 
     // drag event handlers bound to the mesh
     const bind = useGesture({
