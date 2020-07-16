@@ -1,6 +1,6 @@
 import Canvas from '../components/threeJS/canvas';
 import Menu from '../components/menu'
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loopcontrols from "./loopcontrols";
 import SideMenu from '../components/sidemenu';
@@ -8,12 +8,22 @@ import MultitrackNav from '../components/multitracknav';
 import StartOverlay from '../components/startoverlay';
 import HelpDialogue from '../components/helpDialogue';
 import OpenProjectsContainer from '../containers/OpenProjectsContainer';
+import useStore from '../store'
 
 
 function App() {
+  const appContainer = useRef(null)
+  const setAppRef = useStore(state => state.functions.setAppRef);
+  
+
+  useEffect(() => {
+    setAppRef(appContainer);
+  }, [setAppRef])
+
+  // const handleExitFullscreen = () => document.exitFullscreen();
 
   return (
-    <div className="App">
+    <div className="App" ref={appContainer}>
       <Router>
         <MultitrackNav />
         <Loopcontrols />
