@@ -1,8 +1,7 @@
 let Tone;
 
-let isFireFox =  typeof InstallTrigger !== 'undefined';
+let isFireFox = typeof InstallTrigger !== 'undefined';
 let isChrome = (!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime))
-
 
 export class Recorder {
     audio;
