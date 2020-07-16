@@ -155,12 +155,6 @@ def post_withUserAndProject(user_ID, project_name):
 
 
 
-
-@projects.route('/user/<user_ID>/project/<project_name>', methods=['DELETE'])
-def delete_withUserAndProject(user_ID, project_name):
-    res = Service.delete_ProjectWithProjectNameFromUser(user_ID, project_name)
-    return Standard200Response(res)
-
 #just for testing
 def initDB():
     projdata = {"loop": "first", "starttime": 30, "events": ["time1", "time2", "time3"]}
