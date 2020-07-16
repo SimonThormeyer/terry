@@ -21,6 +21,7 @@ function Scene(props) {
     const [runningLoopers,] = useGlobalState('runningLoopers');
     const [randomNotes,] = useGlobalState('randomNotes');
     const [id,] = useGlobalState('canvasId');
+    const [,setCamera] = useGlobalState('camera');
 
     // THREE-Objects
     const { camera, raycaster, size } = useThree();
@@ -32,6 +33,10 @@ function Scene(props) {
     const effectSphere = useRef(); //EFFECT SPHERE DOT
     const synthSphere = useRef();//SYNTH SPHERE DOT
     const musicSphere = useRef();//MUSIK SPHERE DOT
+
+    useEffect(() => {
+        setCamera(camera);
+    },[camera, setCamera])
 
     const canvasClick = useCallback((coordinates, canvasId = id, playback = false) => {
         mouse.current.x = (coordinates[0]) * 2 - 1;
