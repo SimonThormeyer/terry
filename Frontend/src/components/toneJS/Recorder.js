@@ -32,9 +32,10 @@ export class Recorder {
                             this.recorderStarted = false
                             this.destination = this.context.createMediaStreamDestination()
                             Tone.Master.connect(this.destination)
-                            MediaRecorder.mimeType = "audio/mp3"
 
-                            this.recorder = new MediaRecorder(this.destination.stream)
+                            let options = { mimeType: "audio/webm; codecs=opus" };
+
+                            this.recorder = new MediaRecorder(this.destination.stream, options)
 
                             this.fileSaver = require('file-saver');
                             this.blob = undefined
@@ -71,7 +72,7 @@ export class Recorder {
                 this.recorder.stop()
                 this.recorderStarted = false
             }
-            console.log(this.recorder)
+
             this.recorder.ondataavailable = evt => this.chunks.push(evt.data);
             this.recorder.onstop = evt => {
                 this.blob = new Blob(this.chunks, {type: 'audio/ogg; codecs=opus'})
