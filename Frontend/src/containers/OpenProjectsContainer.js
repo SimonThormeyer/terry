@@ -10,6 +10,8 @@ export default function OpenProjectContainer() {
     const [toneIsInitialized,] = useGlobalState("toneIsInitialized")
     const { user, projectName } = useParams();
 
+   
+
     // setOverlay is Open true when Component mounts, false when it unmounts
     useEffect(() => {
         setOverlayIsOpen(true);
@@ -23,7 +25,7 @@ export default function OpenProjectContainer() {
             <div className="saveOpenUnderlay"></div>
             <div id="openOverlay">
                 <Link as='li' to='/'>
-                    <DeleteIcon id="closeOpenOverlay" />
+                    <DeleteIcon id="closeOpenOverlay" title="close overlay"/>
                 </Link>
                 <OpenProjects user={user} projectName={projectName} />
             </div>

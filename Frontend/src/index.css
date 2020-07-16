@@ -6,26 +6,28 @@
   margin: 0;
   padding: 0;
   color: #282828;
+  font-family: 'Montserrat', sans-serif;
+  outline: none;
+
 }
 
 body {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
-  background-color: #777777;
+  background-color: white;
+}
+
+a {
+  text-decoration: none;
 }
 
 /************ CANVAS ****************/
 
 canvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 100vw !important;
+  height: 56.25vw !important;
   z-index: -1;
   display: block;
-}
-
-.App {
-  width: 100% !important;
-  height: 100% !important;
 }
 
 /*+++++++++++++MENU STYLE & ICONS+++++++++++++*/
@@ -35,11 +37,11 @@ canvas {
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  position: fixed;
+  position: absolute;
   margin: 0 auto;
   left: 0;
   right: 0;
-  bottom: 1.5vw;
+  top: 49vw;
   width: 15vw;
 }
 
@@ -92,7 +94,7 @@ canvas {
 
 .loopcontrols {
   position: absolute;
-  max-width: 92.5%;
+  max-width: 45%;
   height: 0;
   z-index: 999;
 }
@@ -255,6 +257,11 @@ canvas {
   z-index: 999999999999999;
 }
 
+#useChromeOverlay {
+  font-size: 1.25vw !important;
+  padding: 2vw 3vw;
+}
+
 #recordbutton {
   width: 3vw;
   height: 3vw;
@@ -380,6 +387,11 @@ canvas {
   margin-bottom: 2.75vw;
 }
 
+#headerShare {
+  font-size: 1.5vw;
+  margin-bottom: 1vw;
+}
+
 #username, #projectname {
   display: block;
   margin-left: calc(2.5vw - 1px);
@@ -414,8 +426,6 @@ canvas {
   margin-top: 2vw;
 }
 
-/****Share Overlay*****/
-
 /**Share Overlay***/
 
 #copyLinkIcon {
@@ -436,7 +446,7 @@ canvas {
 }
 
 #shareLinkContainer {
-  margin-top: 4.5vw;
+  margin-top: 3.5vw;
 }
 
 /***********OPEN PROJECT OVERLAY****************/
@@ -657,7 +667,7 @@ canvas {
 /************* Start Overlay ***************/
 
 #startUnderlay {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   min-height: 33vw;
@@ -686,7 +696,7 @@ canvas {
   min-height: 10vw;
   width: 10vw;
   height: 10vw;
-  margin: 10vh 0;
+  margin: 10vh 0 5vh 0;
 }
 
 #startOverlay p {
@@ -789,23 +799,18 @@ canvas {
 }
 
 #useEffects {
-  top: 5vw;
+  top: 20vw;
   left: 15vw;
 }
 
-#soundbedDialogue {
-  bottom: 4vw;
-  left: 26vw;
-}
-
-#randomDialogue {
-  bottom: 6vw;
-  left: 37vw;
+#mutlitTrackDialogue {
+  top: 4vw;
+  left: 44vw;
 }
 
 #loopDialogue {
   bottom: 5vw;
-  left: 46vw;
+  left: 37vw;
 }
 
 #loopIconsDialogue {
@@ -813,14 +818,38 @@ canvas {
   left: 3vw;
 }
 
-#RecordDialogue {
-  bottom: 5vw;
-  left: 58vw;
+#randomDialogue {
+  bottom: 6vw;
+  left: 48vw;
 }
 
-#SaveOpenDialogue {
+#RecordDialogue {
   top: 2vw;
-  left: 82vw;
+  left: 80vw;
+}
+
+#mixerDialogue {
+  top: 6vw;
+  left: 80vw;
+}
+
+#openDialogue {
+  top: 10vw;
+  left: 80vw;
+}
+
+#SavenDialogue {
+  top: 14vw;
+  left: 80vw;
+}
+
+#doneTutorialDialogue {
+  top: 14vw;
+  left: 42vw;
+}
+
+.activeFocus .st0, .activeFocus .cls-1 {
+  fill: #FFB696;
 }
 
 /**MOBILE VERSION*/
@@ -835,7 +864,7 @@ canvas {
   #startLogo {
     width: 15vw;
     height: 15vw;
-    margin: 5vh 0;
+    margin: 0.5vh 0;
   }
   #startOverlay p {
     margin-bottom: 1vw;
@@ -848,18 +877,22 @@ canvas {
     border-radius: 4vw;
     font-size: 2.5vw;
     padding: 1.25vw 3vw;
-    margin: 3vw 2vw 5vw 0;
+    margin: 1vw 2vw 5vw 0;
     display: inline-block;
   }
   #startHelpButton {
     border-radius: 4vw;
     font-size: 2.5vw;
     padding: 1.25vw 3vw;
-    margin: 3vw 0 5vw 2vw;
+    margin: 1vw 0 5vw 2vw;
     display: inline-block;
   }
   #credits {
     font-size: 1.8vw;
+  }
+
+  #menu {
+    top: 46vw;
   }
   /*MENU ICONS*/
   #randombutton {
@@ -937,6 +970,11 @@ canvas {
   }
   /******OVERLAYS******/
   /*Record Overlay*/
+  #underlay {
+    background-color: white;
+    opacity: 1;
+    position: fixed;
+  }
   #overlay {
     position: absolute;
     width: 100%;
@@ -1027,6 +1065,11 @@ canvas {
     padding: 1vw 0 1vw 2vw;
   }
   /*Save Overlay*/
+  .saveOpenUnderlay {
+    background-color: white;
+    opacity: 1;
+    position: fixed;
+  }
   #saveOverlay {
     position: absolute;
     width: 100%;
@@ -1046,6 +1089,10 @@ canvas {
   }
   #headerSave {
     font-size: 2.75vw;
+    margin-top: 4vw;
+  }
+  #headerShare {
+    font-size: 2.5vw;
     margin-top: 4vw;
   }
   #username, #projectname {
@@ -1111,5 +1158,17 @@ canvas {
   }
   #volume2 {
     margin: 0 10vw;
+  }
+  /*********HELP FUNCTION********/
+  #startHelpButton {
+    display: none;
+    visibility: hidden;
+  }
+  #startButton {
+    margin-right: 0;
+  }
+  #helpIcon {
+    display: none;
+    visibility: hidden;
   }
 }

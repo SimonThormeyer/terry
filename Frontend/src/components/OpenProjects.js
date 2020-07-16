@@ -2,12 +2,16 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Looper } from './toneJS/Looper'
 import axios from 'axios';
 import { useGlobalState } from "../GlobalState"
+import { Link } from "react-router-dom";
 
 
 
 function OpenProject({ user, projectName }) {
 
+    //local
     const [loadedProjects, setLoadedProjects] = useState([]);
+   
+    //global
     const [runningLoopers, setRunningLoopers] = useGlobalState('runningLoopers');
     const [canvases, setCanvases] = useGlobalState('canvases');
     const [, setNextLooperID] = useGlobalState('nextLooperId');
@@ -49,6 +53,7 @@ function OpenProject({ user, projectName }) {
         }
         setRunningLoopers(new Map());
 
+
         // rehydrate canvases
         if (project.canvases && project.canvases.length > 0) {
             let canvasesCopy = Array.from(canvases);
@@ -77,7 +82,8 @@ function OpenProject({ user, projectName }) {
             }
             setNextLooperID(project.loopers.length);
         }
-    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers])
+       
+    }, [canvases, loadedProjects, runningLoopers, setCanvases, setNextLooperID, setRunningLoopers]); 
 
     //we search in the array (array includes the data from database) while typing and show the matching result
     const findProject = () => {
@@ -111,7 +117,7 @@ function OpenProject({ user, projectName }) {
         <p id="headerOpen">Open a track?</p>
         <form>
             <label id="findProject">Find a project</label>
-            <input name="usernameProject" id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit} ></input>
+            <input name="usernameProject" autofocus id="usernameProject" onKeyUp={findProject} onKeyPress={preventSubmit}></input>
         </form>
         <ul id="databaseTable">
             {loadedProjects.length <= 0 ?
@@ -122,12 +128,14 @@ function OpenProject({ user, projectName }) {
                     let projectname = project.project_name;
                     let listElement = username + " - " + projectname;
                     return (
-                        <li key={`project__${index}`}
+                        <Link as='li' to='/'>
+                        <li key={`project__${index}`} title={listElement}
                             onClick={() => {
                                 openProjectFunction(index);
                             }}>
                             {listElement}
                         </li>
+                        </Link>
                     )
                 })
             }
