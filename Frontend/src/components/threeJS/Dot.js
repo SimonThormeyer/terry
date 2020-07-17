@@ -54,7 +54,7 @@ const Dot = forwardRef((props, ref) => {
         config: {
             mass: 5,
             tension: dragging ? 1000 : randomNotesRunning[canvasId] ? 20 : 1000,
-            friction: dragging ? 50 : randomNotesRunning[canvasId] ? 50 : 50,
+            friction: 50,
             precision: 0.01
         },
 
