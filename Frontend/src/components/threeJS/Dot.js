@@ -85,8 +85,11 @@ const Dot = forwardRef((props, ref) => {
             let x = Math.random() * viewport.width - viewport.width / 2;
             let y = Math.random() * viewport.height - viewport.height / 2;
             setPosition([x, y, 0]);
+        } else {
+           let posAfterRandomNotes = ref.current.position.clone();
+           setPosition([posAfterRandomNotes.x, posAfterRandomNotes.y, 0])
         }
-    }, [randomNotesRunning, canvasId, viewport.height, viewport.width])
+    }, [randomNotesRunning, canvasId, viewport.height, viewport.width, ref])
 
     // when canvas changes, change position accordingly
     useEffect(() => {
