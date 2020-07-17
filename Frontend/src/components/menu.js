@@ -29,6 +29,11 @@ function Menu(props) {
             if (startLoop) {
                 setListeningLooper(new Looper());
             } else {
+                // delay function call only if listeningLooper does not exist yet
+                if(!listeningLooper) { 
+                    setTimeout(() => loopFunction(startLoop), 100);
+                    return;
+                }
                 listeningLooper.stopRecording(performance.now());
                 setNextLooperID(nextLooperID + 1);
                 runningLoopers.set(nextLooperID, listeningLooper);
