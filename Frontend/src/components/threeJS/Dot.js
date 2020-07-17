@@ -19,6 +19,7 @@ const Dot = forwardRef((props, ref) => {
     // local
     const [dragging, setDragging] = useState(false);
     const dragAnimationRunning = useRef(false);
+    const randomNotesAnimationFinishing = useRef(false);
     const [animatedPosition, setAnimatedPosition] = useState([canvases[canvasId][props.name].x, canvases[canvasId][props.name].y, 0]);
     const [position, setPosition] = useState(animatedPosition);
     const beforeDragPosition = useRef(
@@ -33,7 +34,7 @@ const Dot = forwardRef((props, ref) => {
     // store.js
     const hasLoaded = useStore(state => state.functions.dotHasLoaded);
     const loadingProject = useStore(state => state.loadingProject);
-    
+
 
     // save current dot position into canvas with the given id
     const saveCurrentPositionInGlobalState = useCallback((canvasId) => {
@@ -49,16 +50,22 @@ const Dot = forwardRef((props, ref) => {
     }, [animatedPosition, canvases, props.name, setCanvases])
 
 
-
-
     useSpring({
         posX: position[0], posY: position[1],
-        config: { mass: 5, tension: 1000, friction: 50, precision: 0.0000001 },
+        config: {
+            mass: 5,
+            tension: (dragAnimationRunning.current || loadingDotPosition) ? 1000 :
+                randomNotesRunning[canvasId] || randomNotesAnimationFinishing.current ? 20 : 1000,
+            friction: 50,
+            precision: 0.01
+        },
+
         // position change will be canceled or not be exectued if this is true
         pause: !(randomNotesRunning[canvasId] || dragAnimationRunning.current || loadingDotPosition || !loadingProject),
         onRest: () => {
             saveCurrentPositionInGlobalState(canvasId);
             dragAnimationRunning.current = false;
+            randomNotesAnimationFinishing.current = false;
             setLoadingDotPosition(false);
             hasLoaded();
             if (randomNotesRunning[canvasId] && !dragging) {
@@ -81,14 +88,18 @@ const Dot = forwardRef((props, ref) => {
             let x = Math.random() * viewport.width - viewport.width / 2;
             let y = Math.random() * viewport.height - viewport.height / 2;
             setPosition([x, y, 0]);
+        } else {
+            let posAfterRandomNotes = ref.current.position.clone();
+            randomNotesAnimationFinishing.current = true; // careful, ugly quickfix
+            setPosition([posAfterRandomNotes.x, posAfterRandomNotes.y, 0])
         }
-    }, [randomNotesRunning, canvasId, viewport.height, viewport.width])
+    }, [randomNotesRunning, canvasId, viewport.height, viewport.width, ref])
 
     // when canvas changes, change position accordingly
     useEffect(() => {
         let switchingCanvas = (canvasId !== oldCanvasId.current)
         if (switchingCanvas || loadingProject) {
-            if(switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
+            if (switchingCanvas) saveCurrentPositionInGlobalState(oldCanvasId.current);
             setLoadingDotPosition(true);
             oldCanvasId.current = canvasId;
             setPosition([
@@ -114,7 +125,7 @@ const Dot = forwardRef((props, ref) => {
             dragAnimationRunning.current = true;
             setPosition([
                 clamp(beforeDragPosition.current[0] + mx / aspect, left, right),
-                clamp(- my / aspect + beforeDragPosition.current[1], top, bottom),
+                clamp(-my / aspect + beforeDragPosition.current[1], top, bottom),
                 0]);
         }),
         onDragEnd: () => {
@@ -137,7 +148,6 @@ const Dot = forwardRef((props, ref) => {
             musicCtrl[canvasId].setParameterMusic(pos.x, pos.y);
         }
     }, [animatedPosition, camera, canvasId, musicCtrl, props.name, ref])
-
 
 
     return (
