@@ -53,7 +53,7 @@ const Dot = forwardRef((props, ref) => {
         posX: position[0], posY: position[1],
         config: {
             mass: 5,
-            tension: dragging ? 1000 : randomNotesRunning[canvasId] ? 20 : 1000,
+            tension: (dragAnimationRunning.current || loadingDotPosition) ? 1000 : randomNotesRunning[canvasId] ? 20 : 1000,
             friction: 50,
             precision: 0.01
         },
