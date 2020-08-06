@@ -3,6 +3,7 @@ services:
 
   backend:
     container_name: SoundGroup-Backend
+    restart: unless-stopped
     image: sg-backend
     build: ./Backend/
     ports:
@@ -14,6 +15,7 @@ services:
 
   app:
     container_name: SoundGroup-Frontend
+    restart: unless-stopped
     image: sg-frontend
     build: ./Frontend/
     ports:
@@ -22,6 +24,7 @@ services:
 
   mongo:
     container_name: SoundGroup-MongoDB
+    restart: unless-stopped
     image: mongo
     volumes:
       - mongodata:/usr/share/mongodb/data
